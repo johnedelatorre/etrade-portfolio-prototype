@@ -1,0 +1,8 @@
+
+<div class="popover bottom-left quote" data-ng-controller="PortfolioController">
+    <div class="arrow"></div>
+    <div class="popover-auto" ng-include="'/modules/portfolio/views/partials/flyouts/security-stock.client.view.html'" ng-if="position.lots[0].lotType === 'stock'"></div>
+    <div class="popover-auto" ng-include="'/modules/portfolio/views/partials/flyouts/security-options.client.view.html'" ng-if="position.lots[0].lotType === 'option'"></div>
+    <div class="popover-sm" ng-include="'/modules/portfolio/views/partials/flyouts/security-mutual-funds.client.view.html'" ng-if="position.lots[0].lotType === 'mutual-fund'"></div>
+    <div class="popover-auto" ng-include="'/modules/portfolio/views/partials/flyouts/security-bonds.client.view.html'" ng-if="position.lots[0].lotType === 'bond'"></div>
+</div>

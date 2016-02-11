@@ -1,0 +1,25 @@
+<section data-ng-controller="GlobalheaderController">
+    <h3 style="margin-left:10px;">This is the Globalheader Tearsheet for Trading and Portfolios</h3>
+    <header class="page-header" style="padding-left:10px;padding-bottom:0;">
+        <h1 class="page-title">Portfolios</h1>
+    </header>
+    <div ng-include="'modules/globalheader/views/partials/brokerage.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/retirement.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/retirement-managed.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/margin.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/pattern-day-trader.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/margin-portfolio.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/brokerage-managed.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/external-account.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/brokerage-all-us-accounts.html'" class="global-header"></div>
+
+    <header class="page-header voffset5" style="padding-left:10px;padding-bottom:0;">
+        <h1 class="page-title">Stocks</h1>
+        <a id="#stocks" href=""></a>
+    </header>
+    <div ng-include="'modules/globalheader/views/partials/stock-daytrader.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/stock-margin.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/stock-cash.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/stock-portfolio-margin.html'" class="global-header"></div>
+    <div ng-include="'modules/globalheader/views/partials/stock-retirement-cash.html'" class="global-header"></div>
+</section>

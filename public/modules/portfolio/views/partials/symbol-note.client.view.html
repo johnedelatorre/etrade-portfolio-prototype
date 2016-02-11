@@ -1,0 +1,26 @@
+<div class="popover symbol-note">
+	<div class="arrow"></div>
+	<div class="panel">
+		<div>
+			<button class="pull-right close" ng-click="$hide()" aria-label="Close">×</button>
+			<h4>{{position._id}} note</h4>
+		</div>
+		<div class="panel-body voffset2">
+			<div class="row">
+				<div class="col-xs-12">
+					<textarea ng-model="note" class="form-control" name="{{position._id}}-note" id="{{position._id}}-note" rows="4" style="resize: none"></textarea>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="pull-left">
+						<button class="btn btn-default">Delete</button>
+					</div>
+					<div class="pull-right">
+						<button class="btn btn-success" ng-click="saveNote(note);$hide();">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

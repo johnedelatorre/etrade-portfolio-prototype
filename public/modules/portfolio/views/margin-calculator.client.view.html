@@ -1,0 +1,89 @@
+<section data-ng-controller="MarginCalculatorController">
+    <div class="panel trade-header">
+	<div class="row">
+	    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+		<div class="row">
+		    <div class="col-xs-6">
+			<label>Select your type of trade</label>
+			<div class="et-select-wrapper">
+			    <select name="orderType" ng-model="type" ng-init="type = 'stock'">
+				<option value="stock">Stocks</option>
+				<option value="option">Options</option>
+				<option value="mutual-fund">Mutual Funds</option>
+				<option value="conditional">Conditional</option>
+				<option value="bond">Bonds</option>
+			    </select>
+			</div>
+		    </div>
+		    <div class="col-xs-6">
+			<label for="symbol">Symbol</label>
+			<!-- The double $parent is a hack for quick prototype purposes -->
+			<input type="search" name="symbol" ng-model="$parent.$parent.symbol" ng-change="updateSearch(symbol); utils.upperCase();" class="form-control et-icon-search" placeholder="Enter Symbol">
+		    </div>
+		</div>
+	    </div>
+	    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+		<ul class="row list-horizontal flex">
+		    <li class="col-md-6" style="padding-left:9px;">
+			<div class="secondary text-left">{{transaction.companyName}}</div>
+			<div class="text-muted text-left"><time>Real Time Quote - Last Trade 1:06PM ET</time></div>
+		    </li>
+		    <li class="col-xs-auto col-md-auto">
+			<div class="text-muted text-right">Last</div>
+			<div class="secondary text-right value">{{transaction.last}}</div>
+			<div class="change text-right">{{transaction.changeClose}} ({{transaction.changeClosePercentage}})</div>
+		    </li>
+		    <li class="col-xs-2 col-md-auto">
+			<div class="text-muted text-right">Bid (Size)</div>
+			<div class="secondary value text-right">{{transaction.bid}}</div>
+			<div class="change text-right">()</div>
+		    </li>
+		    <li class="col-xs-2 col-md-auto">
+			<div class="text-muted text-right">Ask (Size)</div>
+			<div class="secondary value text-right">{{transaction.ask}}</div>
+			<div class="change text-right">()</div>
+		    </li>
+		    <li class="col-xs-2 col-md-auto">
+			<div class="text-muted text-right">&nbsp;</div>
+			<div class="secondary value text-right"><button class="btn btn-success">Trade</button></div>
+			<div class="change text-right">&nbsp;</div>
+		    </li>
+		</ul>
+	    </div>
+	</div>
+    </div>
+    <div class="clearfix voffset3">
+	<div class="col-xs-6 col-sm-2">
+	    <label for="orderType">Order Type</label>
+	    <div class="et-select-wrapper">
+		<select name="orderType" id="orderType" class="form-control">
+		    <option value="buy">Buy</option>
+		    <option value="sell">Sell</option>
+		</select>
+	    </div>
+	</div>
+	<div class="col-xs-6 col-sm-2">
+	    <label for="quantity">Quantity</label>
+	    <input type="number" class="form-control">
+	</div>
+	<div class="col-xs-6 col-sm-3 col-md-2">
+	    <label for="priceType">Price Type</label>
+	    <div class="et-select-wrapper">
+		<select name="priceType" id="priceType">
+		    <option value="" disabled selected>Select</option>
+		    <option value="market">Market</option>
+		</select>
+	    </div>
+	</div>
+    </div>
+    <div class="clearfix">
+	<div class="col-xs-12">
+	    <button class="btn btn-default">Add a Position</button>
+	</div>
+    </div>
+    <div class="clearfix voffset2">
+    	<div class="col-xs-12">
+    		<button class="btn btn-success" ng-click="$parent.$parent.hideData = false">Calculate</button>
+    	</div>
+    </div>
+</section>

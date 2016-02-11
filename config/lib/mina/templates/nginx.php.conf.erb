@@ -1,0 +1,49 @@
+<%
+# upstream main-nav-interstitial {
+#     server unix:///var/run/main-nav-interstitial.sock;
+# }
+
+# server {
+#     listen 80;
+#     server_name main-nav-interstitial.dev.etradecreative.com;
+#     root   /home/deploy/php/main-nav-interstitial/current;
+#     index index.php;
+#
+#     # serve static files directly
+#     location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
+#         access_log        off;
+#         expires           max;
+#     }
+#
+#     location ~ \.php$ {
+#         try_files $uri =404;
+#         fastcgi_pass main-nav-interstitial;
+#         fastcgi_index index.php;
+#         include /etc/nginx/fastcgi_params;
+#     }
+# }
+%>
+# <%= app_name %>
+upstream <%= app_name %> {
+    server unix:///var/run/<%= app_name %>.sock;
+}
+
+server {
+    listen 80;
+    server_name <%= app_name %>.<%= nginx_server_name %>;
+    root   <%= deploy_to %>/<%= current_path %>;
+    index index.php;
+
+    # serve static files directly
+    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico|html|xml|txt)$ {
+        access_log        off;
+        expires           max;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_pass <%= app_name %>;
+        fastcgi_index index.php;
+        include /etc/nginx/fastcgi_params;
+    }
+}

@@ -1,0 +1,79 @@
+/*
+ * Popovers corner placement
+ *
+ * Inherit exotic positionning from basic ones & fix arrow placement
+ */
+.popover.top-left {
+  margin-top: -10px; }
+
+.popover.top-left .arrow {
+  margin-left: -11px;
+  border-bottom-width: 0;
+  border-top-color: #999999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  bottom: -11px;
+  left: 2%; }
+
+.popover.top-left .arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -10px;
+  border-bottom-width: 0;
+  border-top-color: #ffffff; }
+
+.popover.top-right {
+  margin-top: -10px; }
+
+.popover.top-right .arrow {
+  margin-left: -11px;
+  border-bottom-width: 0;
+  border-top-color: #999999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  bottom: -11px;
+  left: 90%; }
+
+.popover.top-right .arrow:after {
+  content: " ";
+  bottom: 1px;
+  margin-left: -10px;
+  border-bottom-width: 0;
+  border-top-color: #ffffff; }
+
+.popover.bottom-left {
+  margin-top: 10px;
+  margin-left: -10px; }
+
+.popover.bottom-left .arrow {
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  top: -11px;
+  left: 2%; }
+
+.popover.bottom-left .arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -10px;
+  border-top-width: 0;
+  border-bottom-color: #ffffff; }
+
+.popover.bottom-right {
+  margin-top: 10px;
+  margin-left: 20px; }
+
+.popover.bottom-right .arrow {
+  margin-left: -11px;
+  border-top-width: 0;
+  border-bottom-color: #999999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  top: -11px;
+  right: 12px;
+  border-top-right-radius: 0px; }
+
+.popover.bottom-right .arrow:after {
+  content: " ";
+  top: 1px;
+  margin-left: -10px;
+  border-top-width: 0;
+  border-bottom-color: #ffffff; }

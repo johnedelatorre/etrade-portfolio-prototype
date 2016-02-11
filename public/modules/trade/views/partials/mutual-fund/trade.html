@@ -1,0 +1,385 @@
+<div class="row flex">
+    <div class="col-xs-8">
+        <div class="panel">
+            <div class="row">
+                <div class="col-xs-2">
+                    <span class="label">Order Type</span>
+                    <div class="et-select-wrapper">
+                        <select ng-model="transaction.orderType" ng-init="transaction.orderType = 'buy'">
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                            <option value="exchange">Exchange</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row flex">
+                <div class="col-xs-2">
+                    <label>Symbol</label>
+                    <input type="text" name="symbol" ng-model="transaction.tempSymbol" ng-change="setSymbolFromInput(); updateSearch(); utils.upperCase();" class="form-control et-icon-search" placeholder="Symbol" ng-disabled="transaction.mutualFunds !== 'Select'">
+                </div>
+                <div class="col-xs-auto clear-padding et-flex-center-horizontal text-center">or</div>
+                <div class="col-xs-12 col-md-5 col-lg-4">
+                    <label>Add to my existing Mutual Funds holdings</label>
+                    <div class="et-select-wrapper" ng-class=" { disabled: transaction.tempSymbol !== ''} ">
+                        <select name="mutualFunds" ng-model="transaction.mutualFunds" ng-init="transaction.mutualFunds = 'Select'; grabMutualFundList();" ng-disabled="transaction.tempSymbol !== ''" ng-change="setSymbolFromSelect(); updateSearch();">
+                            <option value="Select">Select</option>
+                            <option ng-repeat="fund in mutualFunds" value="{{fund.symbol}}">{{fund.symbol}} : {{fund.fundFamily}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-hide="transaction.symbol === ''">
+                <div class="col-md-3">
+                    <span class="label">Investment Amount</span>
+                    <input type="text" name="investmentAmount" ng-model="transaction.investmentAmount" ng-change="updateSearch(); utils.upperCase(); estimateTotalCost(); whenOrderPrice();" class="form-control et-icon-search" placeholder="0.00">
+                </div>
+                <div class="col-md-9">
+                    <span class="label">Reinvest dividends/capital gains</span>
+                    <div class="form-inline reinvest">
+                        <div class="form-group">
+                            <div class="radio">
+                                <input type="radio" name="reinvestment" id="optionsRadios1" value="Reinvest in Fund" ng-model="transaction.reinvestment" ng-checked="true">
+                                <label for="optionsRadios1">
+                                    Reinvest in Fund
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <input type="radio" name="reinvestment" id="optionsRadios2" value="Deposit in Account" ng-model="transaction.reinvestment">
+                                <label for="optionsRadios2">
+                                    Deposit in account
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="transaction.investmentAmount">
+                <div class="col-xs-12">
+                    <div class="panel panel-highlight">
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'buy'">
+                            <span class="label">Estimated Total Cost:</span> <span class="data-point">{{whenOrderPriceText}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-hide="transaction.investmentAmount === undefined">
+                <div class="col-xs-12 voffset3 trade-tab">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-5 col-lg-4">
+                             <div class="nav" ng-click="togglePurchasingPower = !togglePurchasingPower">
+                                <a class="trade-toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View impact to purchasing power</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="panel panel-default panel-supplemental trade-toggle-link" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"></th>
+                                                <th>Non-Marginable Securities/Options</th>
+                                                <th>Marginable Securities</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Purchasing power before open orders:</td>
+                                                <td>{{purchasingPower.beforeOpenOrders | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Reserve for other open orders:</td>
+                                                <td>{{purchasingPower.reserve | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Purchasing power impact of this order:</td>
+                                                <td>{{purchasingPowerImpactThisOrder | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="text-left" colspan="2"><strong>Purchasing power after this order:</strong></td>
+                                                <td><strong>{{purchasingPowerAfterThisOrder | currency}}</strong></td>
+                                                <td><strong>$10,777.69</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 trade-footer">
+                    <div class="pull-right voffset3">
+                        <span class="text-muted text-right">Review your order before placing the order.</span>
+                        <button class="btn btn-primary" ng-click="stopLiveUpdate(); calculateCost();" ng-disabled="transaction.symbol == ''">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-4 workspace" ng-show="transaction.symbol === ''" ng-init="utils.loadAccountData()">
+        <aside class="panel panel-default">
+            <header class="panel-heading">
+                <h2 class="panel-title">Investing Ideas</h2>
+            </header>
+            <div class="panel-body">
+                <div class="et-select-wrapper">
+                    <select name="">
+                        <option value="">All-Star Fund</option>
+                    </select>
+                </div>
+                <table class="table">
+                    <thead>
+                        <th>Symbol</th>
+                        <th>1 yr</th>
+                        <th>5 yr</th>
+                        <th>10 yr</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PRGTX</td>
+                            <td>45.19%</td>
+                            <td>23.13%</td>
+                            <td>15.27%</td>
+                        </tr>
+                        <tr>
+                            <td>JAGLX</td>
+                            <td>42.78%</td>
+                            <td>40.09%</td>
+                            <td>12.12%</td>
+                        </tr>
+                        <tr>
+                            <td>HIMVX</td>
+                            <td>45.19%</td>
+                            <td>23.13%</td>
+                            <td>15.27%</td>
+                        </tr>
+                        <tr>
+                            <td>HCAIX</td>
+                            <td>42.78%</td>
+                            <td>40.09%</td>
+                            <td>12.12%</td>
+                        </tr>
+                        <tr>
+                            <td>DODGX</td>
+                            <td>27.53%</td>
+                            <td>17.50%</td>
+                            <td>8.62%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul class="list-horizontal">
+                    <li class="text-center">Description for fund type lorem ipsum dolor sit amet...</li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <div class="col-xs-4 workspace" ng-show="transaction.symbol !== ''">
+        <aside class="panel panel-default">
+            <et-segmented-bar class="btn-group-justified" ng-init="segment = 'fund-info'" ng-model="segment" current="segment" segments='[{value:"fund-info",text:"Spanshot"},{value:"positions",text:"Positions"},{value:"orders", text:"Open Orders"}]'></et-segmented-bar>
+            <div ng-show="segment === 'fund-info'">
+                <div class="panel-body">
+                    <div class="row fund-family">
+                        <div class="col-xs-8">{{transaction.fundFamily}}</div>
+                        <div class="col-xs-4 text-right fund-family-item">{{transaction.symbol}}</div>
+                    </div>
+                    <hr>
+                    <div><strong>Minimum Purchase Requirements</strong></div>
+                    <div><span class="text-left">Initial</span> <span class="pull-right">{{transaction.initialInvestment | currency}}</span></div>
+                    <div><span class="text-left">Subsequent</span> <span class="pull-right">{{transaction.subsequentInvestment | currency}}</span></div>
+                    <hr>
+                    <div><strong>Front End Sales Charges</strong></div>
+                    <table class="table table-horizontal">
+                        <thead>
+                            <th>Investment Amount</th>
+                            <th class="text-right">Sales Charge</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="charge in transaction.frontEndSalesCharges">
+                                <td>{{charge.lowhigh}}</td>
+                                <td class="text-right">{{charge.percent}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div><strong>E*TRADE Details</strong></div>
+                    <div><span class="text-left">Trading Cut-Off Time</span> <span class="pull-right">{{transaction.orderCutoffTime}} {{transaction.timeZone}}</span></div>
+                    <div><span class="text-left">Transaction Fee</span> <span class="pull-right">{{transaction.fee}}</span></div>
+                    <span class="disclaimer"><a href="">View Detailed Quote</a></span>
+                </div>
+            </div>
+
+            <div ng-show="segment === 'positions'">
+                <!-- Positions {{transaction.symbol}} -->
+                <div ng-if="transaction.symbol !== ''">
+                    <span>{{accountDataForSymbol.positionsHeld.length}}</span> {{transaction.symbol}} Positions
+                    <table class="table">
+                        <thead>
+                            <th>Symbol</th>
+                            <th>Qty</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </thead>
+                        <tbody ng-repeat="position in accountDataForSymbol.positionsHeld">
+                            <tr ng-if="position.lotType === 'stock'">
+                                <td><a href="">{{position.symbol}}</a></td>
+                                <td>{{position.quantity}}</td>
+                                <td>{{position.bid}}</td>
+                                <td>{{position.ask}}</td>
+                            </tr>
+                            <tr ng-if="position.lotType === 'option'">
+                                <td colspan="4">
+                                    <div>{{position.displaySymbol}}</div>
+                                    <div ng-repeat="leg in position.lots[0].legs">
+                                        <p>{{leg.orderType}} {{leg.contracts}} {{leg.relatedStrikeInfo.displaySymbol}} @ {{leg.relatedStrikeInfo.strikePrice | currency}}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-if="position.lotType === 'mutual-fund'">
+                                <td>{{position.symbol}}</td>
+                                <td>{{position.investmentAmount}}</td>
+                                <td>{{position.lots.bid}}</td>
+                                <td>{{position.lots.ask}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div ng-if="transaction.symbol === ''">
+                    <p><span ng-if="accountData.positionsHeld.length < 5">{{accountData.positionsHeld.length}}</span>
+                        <span ng-if="accountData.positionsHeld.length >= 5">5</span> of <span>{{accountData.positionsHeld.length}}</span> positions in this account</p>
+                    <table class="table">
+                        <thead>
+                            <th>Symbol</th>
+                            <th>Qty</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="position in accountData.positionsHeld | limitTo: 5">
+                                <td>{{position.symbol}}</td>
+                                <td>{{position.quantity}}</td>
+                                <td>{{position.bid}}</td>
+                                <td>{{position.ask}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-right">
+                    <time>Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time>
+                </div>
+                <div class="text-right disclaimer"><a href="">View Positions in new window</a>
+                </div>
+            </div>
+
+            <div ng-show="segment === 'orders'">
+                <!-- Orders {{transaction.symbol}} -->
+                <div ng-if="transaction.symbol !== ''">
+                    <p><span ng-if="accountDataForSymbol.openOrders.length < 5">{{accountDataForSymbol.openOrders.length}}</span><span ng-if="accountDataForSymbol.openOrders.length >= 5">5</span> of {{accountDataForSymbol.openOrders.length}} recent open orders</p>
+                    <div class="panel card" ng-repeat="order in accountDataForSymbol.openOrders | limitTo: 5 | orderBy: created">
+                        <div ng-if="order.lotType === 'stock'">
+                            <div class="clearfix">
+                                <div class="secondary pull-left">{{order.symbol}}</div>
+                                <time class="pull-right">{{order.created | date: "MM/dd/yyyy"}}</time>
+                            </div>
+                            <div>
+                                <p>{{order.orderType}} {{order.quantity}} {{order.symbol}} @ {{order.pricePaid | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+
+                        <div ng-if="order.lotType === 'option'">
+                            <div class="secondary">{{order.symbol}}</div>
+                            <div ng-repeat="leg in order.legs">
+                                <p>{{leg.orderType}} {{leg.contracts}} {{leg.relatedStrikeInfo.displaySymbol}} {{leg.relatedStrikeInfo.optionType}} @ {{leg.relatedStrikeInfo.strikePrice | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+
+                        <div ng-if="order.lotType === 'mutual-fund'">
+                            <div class="clearfix">
+                                <div class="secondary pull-left">{{order.symbol}}</div>
+                                <time class="pull-right">{{order.created | date: "MM/dd/yyyy"}}</time>
+                            </div>
+                            <div>
+                                <p>{{order.orderType}} {{order.investmentAmount | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="transaction.symbol === ''">
+                    <p><span ng-if="accountData.openOrders.length < 5">{{accountData.openOrders.length}}</span>
+                        <span ng-if="accountData.openOrders.length >= 5">5</span> of {{accountData.openOrders.length}} {{transaction.symbol}} recent open orders</p>
+                    <div class="panel card" ng-repeat="order in accountData.openOrders | limitTo: 5 | orderBy: created">
+                        <div ng-if="order.lotType === 'stock'">
+                            <div class="clearfix">
+                                <div class="secondary pull-left">{{order.symbol}}</div>
+                                <time class="pull-right">{{order.created | date: "MM/dd/yyyy"}}</time>
+                            </div>
+                            <div>
+                                <p>{{order.orderType}} {{order.quantity}} {{order.symbol}} @ {{order.pricePaid | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+
+                        <div ng-if="order.lotType === 'option'">
+                            <div class="secondary">{{order.symbol}}</div>
+                            <div ng-repeat="leg in order.legs">
+                                <p>{{leg.orderType}} {{leg.contracts}} {{leg.relatedStrikeInfo.displaySymbol}} {{leg.relatedStrikeInfo.optionType}} @ {{leg.relatedStrikeInfo.strikePrice | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+
+                        <div ng-if="order.lotType === 'mutual-fund'">
+                            <div class="clearfix">
+                                <div class="secondary pull-left">{{order.symbol}}</div>
+                                <time class="pull-right">{{order.created | date: "MM/dd/yyyy"}}</time>
+                            </div>
+                            <div>
+                                <p>{{order.orderType}} {{order.investmentAmount | currency}}</p>
+                            </div>
+                            <div class="clearfix">
+                                <a class="pull-left" href="">Change</a>
+                                <a class="pull-right" href="">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <time>Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time>
+                </div>
+                <div class="text-right disclaimer"><a href="">View All Open Orders In A New Window</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

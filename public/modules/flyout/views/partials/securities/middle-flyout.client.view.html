@@ -1,0 +1,357 @@
+<div class="row voffset4">
+    <div class="col-xs-12 text-right">
+        <div class="panel" style="margin-bottom: 130px;">
+            <div class="primary">Flyout Position Middle</div>
+            <div class="disclaimer">*Note: all data is static - for demonstration porposes only</div>
+            <div class="clearfix">
+                <div class="tertiary">Angular animation</div>
+                <div class="label">Angular Motion</div>
+                <pre>http://mgcrea.github.io/angular-motion</pre>
+            </div>
+            <div class="tertiary">CSS classes</div>
+            <div class="clearfix">
+                <div class="label">animation class</div>
+                <pre><code>am-fade-and-slide-top</code></pre>
+            </div>
+            <div class="clearfix">
+                <div class="label">position class</div>
+                <pre><code>right</code></pre>
+            </div>
+        </div>
+    </div>
+</div>
+<table class="table table-expandable table-striped text-right" style="margin-bottom:90px;">
+    <thead>
+        <tr>
+            <th class="arrows">
+                <span class="et-icon-plus"></span>
+            </th>
+            <th class="active">Symbol</th>
+            <th class="text-right">Last Price $</th>
+            <th class="text-right">Change $</th>
+            <th class="text-right">Change %</th>
+            <th class="text-right">Quantity #</th>
+            <th class="text-right">Price Paid $</th>
+            <th class="text-right">Day's Gain $</th>
+            <th class="text-right">Day's Gain %</th>
+            <th class="text-right">Total Gain $</th>
+            <th class="text-right">Total Gain %</th>
+            <th class="text-right">Value $</th>
+            <th class="text-center open-orders-column">Open Orders</th>
+            <th class="text-left actions-column">Actions</th>
+        </tr>
+    </thead>  
+    <tbody>
+        <tr>
+            <td class="arrows">
+                <span class="arrow et-icon-chevron-right" ng-class="expandedRowsVisible[$index] ? 'rotate' : ''"></span>
+            </td>
+            <td class="text-left">
+                <a href="">FB</a>
+            </td>
+            <td class="text-right">
+                <span>127.10</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.54</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.43</span>
+            </td>
+            <td class="text-right">
+                <span>296</span>
+            </td>
+            <td class="text-right">
+                <span>123.03</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">159.84</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.43</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">1,204.72</span>
+            <td class="text-right">
+                <span class="pos">3.20</span>
+            </td>
+            <td class="text-right">
+                <span>37,621.60</span>
+            </td>
+            <td class="text-center">
+                <a>2</a>
+            </td>
+            <td class="btn-cell actions-column">
+                <span class="et-icon-bell-alt"></span>
+                <span class="et-icon-document-alt"></span>
+                <div class="btn-group" dropdown="">
+                    <button type="button" class="btn btn-success btn-xs" ui-sref="trade" href="">Trade</button>
+                    <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-click="" aria-haspopup="true">
+                        <span class="caret" ng-click=""></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ui-sref="trade" href="">Buy</a></li>
+                        <li><a ui-sref="trade" href="">Sell</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+        <tr class="panel panel-default" ng-if="expandedRowsVisible[$index]">
+            <td colspan="{{views[config.currentView].fields.length + 4}}" class="table-nested-content">
+                <table class="table" style="background-color: transparent;">
+                    <tbody>
+                        <tr ng-repeat="lot in position.lots">
+                            <td class="arrows borderless"></td>
+                            <td class="text-left">{{lot.created | date: 'MM/dd/yyyy'}}</td>
+                            <td ng-repeat="column in views[config.currentView].fields" ng-class="config.allOptions[column].align">
+                                <span et-change="lot[column]" data-type="config.allOptions[column].changeFormat"></span>
+                            </td>
+                            <td class="open-orders-column"></td>
+                            <td class="btn-cell text-right actions-column"><button class="btn btn-xs btn-default">Sell</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <tr ng-if="showQuote">
+            <td colspan="{{views[config.currentView].fields.length + 4}}">
+                <table>
+                    <ng-include src="'/modules/portfolio/views/partials/quick-quote.client.view.html'"></ng-include>
+                </table>
+            </td>
+        </tr>
+    </tbody>
+    
+    <tbody>
+        <tr>
+            <td class="arrows">
+                <span ng-class="expandedRowsVisible[$index] ? 'rotate' : ''" class="arrow et-icon-chevron-right"></span>
+            </td>
+            <td class="text-left">
+                <a href="">GE</a>
+            </td>
+            <td class="text-right">
+                <span>27.91</span>
+            </td><td class="text-right">
+                <span class="neg">-0.60</span>
+            </td><td class="text-right">
+                <span class="neg">-2.09</span>
+            </td><td class="text-right">
+                <span>71</span>
+            </td><td class="text-right">
+                <span >27.25</span>
+            </td><td class="text-right">
+                <span class="neg">-42.24</span>
+            </td><td class="text-right">
+                <span class="neg">-2.09</span>
+            </td><td class="text-right">
+                <span class="pos">136.58</span>
+            </td><td class=" text-right">
+                <span class="pos">6.89</span>
+            </td><td class="text-right">
+                <span>1,981.96</span>
+            </td>
+            <td class="text-center">
+
+            </td>
+            <td class="btn-cell actions-column">
+                <span class="et-icon-bell-alt"></span>
+                <span data-placement="bottom-right" class="et-icon-document"></span>
+                <div dropdown="" class="btn-group">
+                    <button ui-sref="trade" class="btn btn-success btn-xs" type="button" href="#!/trade">Trade</button>
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button" aria-haspopup="true">
+                    <span  class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a ui-sref="trade" href="#!/trade">Buy</a></li>
+                        <li><a ui-sref="trade" href="#!/trade">Sell</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>    
+
+    <tbody>
+        <tr>
+            <td class="arrows"><span ng-class="expandedRowsVisible[$index] ? 'rotate' : ''" class="arrow et-icon-chevron-right"></span></td>
+            <td class="text-left">
+                <a href="">AAPL</a>
+                <div ng-include=" 'modules/flyout/views/partials/flyouts/stock-position.client.view.html' " class="popover quote am-fade-and-slide-top right" style="top: -100px; left: 65px; display: block; visibility: visible;"></div>
+            </td>
+            <td class="text-right">
+                <span>83.38</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">1.34</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">1.63</span>
+            </td>
+            <td class="text-right">
+                <span>33</span>
+            </td>
+            <td class="text-right">
+                <span>82.05</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">44.22</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">1.63</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">163.03</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">5.93</span>
+            </td>
+            <td class="text-right">
+                <span>2,751.54</span>
+            </td>
+            <td class="text-center">
+                <a>1</a>
+            </td>
+            <td class="btn-cell actions-column">
+                <span class="et-icon-bell-alt"></span>
+                <span data-placement="bottom-right" class="et-icon-document"></span>
+                <div dropdown="" class="btn-group">
+                    <button ui-sref="trade" class="btn btn-success btn-xs" type="button" href="#!/trade">Trade</button>
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button" aria-haspopup="true">
+                    <span  class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a ui-sref="trade" href="#!/trade">Buy</a></li>
+                        <li><a ui-sref="trade" href="#!/trade">Sell</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+
+    <tbody>
+        <tr ng-click="toggleRow($event, $index)">
+            <td class="arrows"><span ng-class="expandedRowsVisible[$index] ? 'rotate' : ''" class="arrow et-icon-chevron-right"></span></td>
+            <td class="text-left">
+            <a href="">AIG</a>
+            </td>
+            <td class="text-right">
+                <span>56.90</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.31</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.54</span>
+            </td>
+            <td class="text-right">
+                <span>8</span>
+            </td>
+            <td class="text-right">
+                <span>55.53</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">2.44</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.54</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">10.92</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">2.40</span>
+            </td>
+            <td class="text-right">
+                <span>455.16</span>
+            </td>
+
+            <td class="text-center">
+              <a class="ng-binding">5</a>
+            </td>
+            <td class="btn-cell actions-column">
+                <span class="et-icon-bell-alt"></span>
+                <span data-placement="bottom-right" class="et-icon-document"></span>
+                <div dropdown="" class="btn-group">
+                    <button ui-sref="trade" class="btn btn-success btn-xs" type="button" href="#!/trade">Trade</button>
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button" aria-haspopup="true">
+                    <span  class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a ui-sref="trade" href="#!/trade">Buy</a></li>
+                        <li><a ui-sref="trade" href="#!/trade">Sell</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+
+    <tbody>
+        <tr ng-click="toggleRow($event, $index)">
+            <td class="arrows"><span ng-class="expandedRowsVisible[$index] ? 'rotate' : ''" class="arrow et-icon-chevron-right"></span></td>
+            <td class="text-left">
+                <a href="">TSLA</a>
+            </td>
+            <td class="text-right">
+                <span>211.09</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.19</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.09</span>
+            </td>
+            <td class="text-right">
+                <span>9</span>
+            </td>
+            <td class="text-right">
+                <span>197.67</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">1.71</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">0.09</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">120.78</span>
+            </td>
+            <td class="text-right">
+                <span class="pos">6.36</span>
+            </td>
+            <td class="text-right">
+                <span>1,899.81</span>
+            </td>
+
+            <td class="text-center">
+                
+            </td>
+            <td class="btn-cell actions-column">
+                <span class="et-icon-bell-alt"></span>
+                <span data-placement="bottom-right" class="et-icon-document"></span>
+                <div dropdown="" class="btn-group">
+                    <button ui-sref="trade" class="btn btn-success btn-xs" type="button" href="#!/trade">Trade</button>
+                    <button aria-expanded="false" data-toggle="dropdown" class="btn btn-success btn-xs dropdown-toggle" type="button" aria-haspopup="true">
+                    <span  class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a ui-sref="trade" href="#!/trade">Buy</a></li>
+                        <li><a ui-sref="trade" href="#!/trade">Sell</a></li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="14">
+                <div class="disclaimer text-left">Real Time Quotes *mutual fund quotes as of previous day</div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

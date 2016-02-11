@@ -1,0 +1,86 @@
+<tbody>
+            <tr>
+            <td class="borderless arrows"></td>
+            <td colspan="14" class="text-left">
+                <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <h5 class="col-xs-auto secondary">{{position.companyName}}</h5>
+                    <div class="clearfix voffset2">
+                    <div class="col-xs-4">
+                        <div class="label">Volume</div>
+                        <div class="tertiary">{{position.totalVolume}}</div>
+                    </div>
+                    <div class="col-xs-4">
+			<div class="label">Bid<small>(size)</small></div>
+			<div class="tertiary">{{position.bid}}<small>x 100</small></div>
+                    </div>
+                    <div class="col-xs-4">
+                        <div class="label">Ask</div>
+                        <div class="tertiary">{{position.ask}} x 100</div>
+                    </div>
+                    </div>
+                    <div class="col-xs-12">
+                    <table class="table-horizontal voffset2">
+                        <tr>
+			<th>52 Week Range</th>
+                        <td>{{position.low | number:2 }}-{{position.high | number:2}}</td>
+                        </tr>
+                        <tr>
+                        <th>P/E</th>
+                        <td>8.83x</td>
+                        </tr>
+                        <tr>
+                        <th>EPS</th>
+                        <td>6.121</td>
+                        </tr>
+                        <tr>
+                        <th>Next Earnings Date</th>
+                        <td>3/1/2015</td>
+                        </tr>
+			<tr>
+			<th>Next Dividend Date</th>
+			<td>3/22/2015</td>
+			</tr>
+			<tr ng-if="position._id==='AAPL'">
+			    <th class="special-event">Special Event</th>
+			    <td class="special-event">7 for 1 Split 12/21/2015</td>
+			</tr>
+                    </table>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4" style="overflow: hidden; transform: translateX(-20px)"><!--That translate is a hack because I'm using a static SVG. The real chart should be calculated to fit inside this colum properly.-->
+                <!-- <img src="/modules/portfolio/img/sampleChart.svg" height="150"> -->
+                <img src="http://dummyimage.com/600x400/cccccc/ffffff&text=Chart" alt="">
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                <ul class="list-unstyled" ng-controller="StoryController" ng-init="fetchStories(position._id)">
+                    <li ng-repeat="story in stories.NewsResponse.News | limitTo: 4" class="voffset2">
+                    <!-- {{position._id}} -->
+                    <a href="#" class="ng-binding">{{story.headline}}</a>
+                    <div class="disclaimer">
+                        <time datetime="article.time">{{story.dateTime*1000 | date: "MM/dd/yyyy hh:mm Z"}}</time>
+                        <span class="pipe">{{story.provider}}</span>
+                    </div>
+                    </li>
+                </ul>
+                </div>
+            </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="arrows borderless"></td>
+            <td colspan="14" class="text-left borderless">
+            <div class="col-xs-12 col-md-3">
+                <time>11:00 AM ET 12/31/14</time>
+                <div class="disclaimer">Real Time Quotes Provided by NASDAQ</div>
+            </div>
+            <div class="pull-right">
+                <div class="col-xs-12 col-sm-auto">
+                <button class="btn btn-default">Enroll in Dividend Reinvestment</button>
+                </div>
+                <div class="col-xs-12 col-sm-auto">
+                <button class="btn btn-default">Quote Detail</button>
+                </div>
+            </div>
+            </td></tr>
+        </tbody>

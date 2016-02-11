@@ -1,0 +1,24 @@
+<div class="popover confirm-drip" style="max-width:310px;">
+    <div class="arrow"></div>
+    <div class="panel">
+        <button class="close" aria-label="Close" ng-click="$hide()">×</button>
+        <div class="panel-body voffset3">
+            <div class="clearfix">
+                <span>This security allows you to invest your dividends automatically.</span>
+                <div class="checkbox">
+                    <input type="checkbox" value="" id="check2">
+                        <label for="check2">
+                        <strong>Enroll me in dividend reinvestment for {{transaction.symbol}} {{order.symbol}}</strong>
+                    </label>
+                </div>
+            </div>
+            <div class="clearfix">
+                <div class="col-xs-12">
+                    <div class="pull-right">
+                        <button class="btn btn-success" ng-click="saveDrip(drip); $hide();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

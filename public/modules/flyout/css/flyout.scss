@@ -1,0 +1,92 @@
+@import "../../../lib/etrade-bootstrap/src/variables";
+.flyout {
+    pre {
+        float: right;
+    }
+    .label {
+        // display: block;
+        // text-align: right;
+    }
+}
+.table-horizontal + .table-horizontal {
+    border:none;
+}
+.flyout-middle .popover.quote .arrow {
+     left: -11px;
+}
+.flyout-data {
+    padding-right: 20px;
+    border-right: 1px solid $gray-lighter;
+}
+.flyout-news {
+    padding-left: 20px;
+}
+.key-one,
+.key-two {
+    width: 12px;
+    height: 12px;
+    margin-top: 20px;
+    margin-left: 15px;
+    display: inline-block;
+    border: 1px solid $gray-light;
+}
+.key-one {
+    background: #8f2bfa;
+}
+.key-two {
+    background: #4e92df;
+}
+.label-success {
+    color:#fff;
+    padding:5px;
+}
+.flyout .et-icon-star-alt:before, 
+.flyout .et-icon-star-alt.after:after {
+    padding: 0;
+    position: relative;
+    top: 2px;
+    color: $gray;
+}
+.flyout .et-icon-star:before,
+.flyout .et-icon-star.after:after {
+    padding: 0;
+    position: relative;
+    top: 2px;
+    color: gold;
+}
+.flyout .panel {
+    padding: 10px!important;
+}
+.flyout .table-horizontal th,
+.flyout .table-horizontal td {
+    vertical-align:top;
+}
+.flyout-chart {
+    background-color: $off-white;
+    padding-bottom: 10px;
+    border: 1px solid $gray-lightest;
+    .pagination {
+        margin: 10px 0 5px 15px;
+    }
+    .et-icon-expand-window {
+        line-height: 50px;
+        margin-right: 10px;
+    }
+}
+.flyout .panel-footer {
+    border-top-width: 1px;  
+    padding: 20px 0 0 10px;  
+    margin-top: 10px;
+    .checkbox {
+        margin:10px 0;
+    }
+}
+.flyout {
+    h5 {
+        text-transform: uppercase;
+        span {
+            //white-space: nowrap;
+            text-transform: uppercase;
+        }
+    }
+}

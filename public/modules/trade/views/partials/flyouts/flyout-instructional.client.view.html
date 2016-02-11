@@ -1,0 +1,160 @@
+<div class="popover instructional" style="width:600px;">
+    <div class="arrow"></div>
+    <div class="panel" ng-if="transaction.type === 'option'">
+        <div class="panel-body">
+            <button aria-label="Close Strategy" style="top:0;" ng-click="$hide()" class="close">×</button>
+            <div class="row">    
+                <div class="col-md-6 voffset2">
+                    <div class="col-xs-6">
+                        <input class="radio-button" type="radio" value="basic" checked="" name="Position-template" id="basic" ng-click="transaction.strategy = 'basic'">
+                        <label for="basic">
+                            <span>Basic</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="coveredCall" name="Position-template" id="coveredCall" ng-click="transaction.strategy = 'covered-call'">
+                        <label for="coveredCall">
+                            <span>Covered Call</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="straddle" name="Position-template" id="straddle" ng-click="transaction.strategy = 'straddle'">
+                        <label for="straddle">
+                            <span>Straddle</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="diagonal" name="Position-template" id="diagonal" ng-click="transaction.strategy = 'diagonal'">
+                        <label for="diagonal">
+                            <span>Diagonal</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="condor" name="Position-template" id="condor" ng-click="transaction.strategy = 'condor'">
+                        <label for="condor">
+                            <span>Condor</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="callSpread" name="Position-template" id="callSpread" ng-click="transaction.strategy = 'call-spread'">
+                        <label for="callSpread">
+                            <span>Call Spread</span>
+                        </label>
+                        
+                        <input class="radio-button" type="radio" value="marriedPut" name="Position-template" id="marriedPut" ng-click="transaction.strategy = 'married-put'">
+                        <label for="marriedPut">
+                            <span>Married Puts</span>
+                        </label>
+                        
+                        <input class="radio-button" type="radio" value="strangle" name="Position-template" id="strangle" ng-click="transaction.strategy = 'strangle'">
+                        <label for="strangle">
+                            <span>Strangle</span>
+                        </label>
+                    </div>
+                    <div class="col-xs-6">
+                        <input class="radio-button" type="radio" value="butterfly" name="Position-template" id="butterfly" ng-click="transaction.strategy = 'butterfly'">
+                        <label for="butterfly">
+                            <span>Butterfly</span>
+                        </label>
+
+                         <input class="radio-button" type="radio" value="iron-condor" name="Position-template" id="iron-condor" ng-click="transaction.strategy = 'iron-condor'">
+                        <label for="iron-condor">
+                            <span>Iron Condor</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="putSpread" name="Position-template" id="putSpread" ng-click="transaction.strategy = 'put-spread'">
+                        <label for="putSpread">
+                            <span>Put Spread</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="collar" name="Position-template" id="collar" ng-click="transaction.strategy = 'collar'">
+                        <label for="collar">
+                            <span>Collar</span>
+                        </label>
+
+                        <input class="radio-button" type="radio" value="calendar" name="Position-template" id="calendar" ng-click="transaction.strategy = 'calendar'">
+                        <label for="calendar">
+                            <span>Calendar</span>
+                        </label>
+                       
+                        <input class="radio-button" type="radio" value="iron-butterfly" name="Position-template" id="iron-butterfly" ng-click="transaction.strategy = 'iron-butterfly'">
+                        <label for="iron-butterfly">
+                            <span>Iron Butterfly</span>
+                        </label>
+                        
+                        <input class="radio-button" type="radio" value="custom" name="Position-template" id="custom" ng-click="transaction.strategy = 'custom'">
+                        <label for="custom">
+                            <span>Custom</span>
+                        </label>
+                    </div>
+                </div>                
+                <div class="col-md-6 voffset2" style="border-left:1px solid #d6d6d6;">
+                    <div class="col-xs-12" ng-if="transaction.strategy === ''">
+                        <h5 style="text-transform:capitalize" class="secondary">Basic</h5>
+                    </div>
+                    <div class="col-xs-12" ng-if="transaction.strategy !== ''">
+                        <h5 style="text-transform:capitalize" class="secondary transaction-strategy">{{transaction.strategy}}</h5>
+                    </div>
+                    
+                    <div class="col-xs-12">
+                        <img ng-if="transaction.strategy === ''" alt="" src="http://dummyimage.com/400x250/cccccc/ffffff&amp;text=Chart%20for%20Basic">
+                        <img ng-if="transaction.strategy !== ''" alt="" src="http://dummyimage.com/400x250/cccccc/ffffff&amp;text=Chart%20for%20{{transaction.strategy}}">  
+                        <ul class="list-unstyled voffset2">
+                            <li><strong>Example</strong>: Buy Put</li>
+                            <li><strong>Market Outlook</strong>: Bearish</li>
+                            <li><strong>Risk</strong>: Limited</li>
+                            <li><strong>Rewards</strong>: Limited, but substantial</li>
+                            <li><strong>Increase in Volatility</strong>: Helps in position</li>
+                            <li><strong>Time Erosion</strong>: Hurts position</li>
+                            <li><strong>BEP</strong>: Strike Price minus premium paid</li>
+                        </ul>  
+                        <button class="btn btn-success voffset1" ng-click="setActiveStrategy(); $hide(); strategyInfo = false;">Use This Strategy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel" ng-if="transaction.type === 'conditional'" style="margin-bottom:0;">
+        <div class="panel-body">
+            <button aria-label="Close Instructional Content" style="top:0;" ng-click="$hide()" class="close">×</button>
+
+            <div class="row">
+                <div class="col-md-4 voffset2">
+                    <div class="col-md-12">
+                    <input class="radio-button" type="radio" value="bracketed" checked="" name="Position-template" id="basic" ng-click="transaction.conditional.tempType = 'bracketed'">
+                    <label for="basic">
+                        <span>Bracketed</span>
+                    </label>
+                    <input class="radio-button" type="radio" value="contingent" name="Position-template" id="call-spread" ng-click="transaction.conditional.tempType = 'contingent'">
+                    <label for="call-spread">
+                        <span>Contingent</span>
+                    </label>
+                    <input class="radio-button" type="radio" value="one-cancels-all" name="Position-template" id="put-spread" ng-click="transaction.conditional.tempType = 'one-cancels-all'">
+                    <label for="put-spread">
+                        <span>One-Cancels-All</span>
+                    </label>
+                    <input class="radio-button" type="radio" value="one-triggers-all" name="Position-template" id="covered-call" ng-click="transaction.conditional.tempType = 'one-triggers-all'">
+                    <label for="covered-call">
+                        <span>One-Triggers-All</span>
+                    </label>
+                    <input class="radio-button" type="radio" value="one-triggers-one-cancels-all" name="Position-template" id="married-put" ng-click="transaction.conditional.tempType = 'one-triggers-one-cancels-all'">
+                    <label for="married-put">
+                        <span>One-Triggers-OCO</span>
+                    </label>
+                    </div>
+                </div>
+
+                <div class="col-md-8 voffset2" style="border-left:1px solid #d6d6d6;">
+                    <div class="col-md-12">
+                        <div class="secondary" ng-if="transaction.conditional.tempType === undefined ">Bracketed</div>
+                        <div class="secondary" ng-if="transaction.conditional.tempType !== undefined " style="text-transform:capitalize">{{transaction.conditional.tempType}}</div>
+                        <img ng-if="transaction.conditional.tempType === undefined" alt="" src="http://dummyimage.com/400x250/cccccc/ffffff&amp;text=Chart%20for%20Bracketed">
+                        <img ng-if="transaction.conditional.tempType !== undefined" alt="" src="http://dummyimage.com/400x250/cccccc/ffffff&amp;text=Chart%20for%20{{transaction.conditional.tempType}}">
+                        <p class="voffset3">
+                            <span ng-if="transaction.conditional.tempType === undefined ">Bracketed</span>
+                            <span ng-if="transaction.conditional.tempType !== undefined " style="text-transform:capitalize;">{{transaction.conditional.tempType}}</span> 
+                            orders are designed to help limit your loss and lock in a profit by "bracketing" an order with two opposite-side orders. A BUY order is bracketed by a high-side sell limit order and a low-side sell stop order. A SELL order is bracketed by a high-side buy stop order and a low side buy limit order.
+                        </p>
+                        <button class="btn btn-success voffset3" ng-click="conditionalStrategyInfo = false; $hide(); applyConditionalStrategy();">Use This Ticket</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

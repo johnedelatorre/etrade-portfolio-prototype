@@ -1,0 +1,25 @@
+<%
+# CUSTOM EXAMPLE
+# 
+# server {
+#   listen 80;
+#   server_name bella-nav.dev.etradecreative.com;
+#   root /home/deploy/static/bella-nav/current;
+#   index index.html index.htm;
+#   gzip on;
+#   gzip_types text/plain text/xml application/xml application/xml+rss
+#              text/css text/javascript application/javascript application/json;
+# }
+%>
+# <%= app_name %>
+server {
+  listen 80;
+  server_name <%= app_name %>.<%= nginx_server_name %>;
+
+  root <%= deploy_to %>/<%= current_path %>;
+  index index.html index.htm;
+  
+  gzip on;
+  gzip_types text/plain text/xml application/xml application/xml+rss
+             text/css text/javascript application/javascript application/json;
+}

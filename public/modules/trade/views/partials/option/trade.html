@@ -1,0 +1,672 @@
+<div class="row flex" ng-init="utils.loadAccountData()">
+    <div ng-class="fullChainEnable === true ? 'col-xs-12' : 'col-xs-8'" id="legs">
+        <div class="panel">
+            <div class="row symbol">
+                <div class="col-sm-3" ng-class="fullChainEnable === true ? 'col-md-2' : 'col-md-2'">
+                    <label for="symbol">Symbol</label>
+                    <input type="text" name="symbol" ng-model="transaction.symbol" ng-change="updateSearch(); utils.upperCase();" class="form-control et-icon-search" placeholder="Symbol">
+                </div>
+                <div class="col-xs-9 symbol-item">
+                    <h4 class="voffset2">{{transaction.companyName}}</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div ng-class="fullChainEnable === true ? 'col-md-4' : 'col-xs-12 col-lg-5 col-md-6'">
+                    <div class="row flex" style="align-items:center;">
+                        <div ng-class="fullChainEnable === true ? 'col-md-5' : 'col-xs-12 col-sm-4 col-md-7'">
+                            <span class="label">Select a Strategy</span>
+                            <div class="et-select-wrapper" style="margin-top:5px" ng-class="{'disabled': strategyStatus === true}">
+                                <select ng-model="transaction.strategy" ng-init="transaction.strategy = ''" ng-disabled="strategyStatus" ng-change="setActiveStrategy()">
+                                    <option value="">Select</option>
+                                    <option value="basic">Basic</option>
+                                    <option value="call-spread">Call Spread</option>
+                                    <option value="put-spread">Put Spread</option>
+                                    <option value="covered-call">Covered Call</option>
+                                    <option value="married-put">Married Put</option>
+                                    <option value="collar">Collar</option>
+                                    <option value="straddle">Straddle</option>
+                                    <option value="strangle">Strangle</option>
+                                    <option value="calendar">Calendar</option>
+                                    <option value="diagonal">Diagonal</option>
+                                    <option value="butterfly">Butterfly</option>
+                                    <option value="iron-butterfly">Iron Butterfly</option>
+                                    <option value="condor">Condor</option>
+                                    <option value="iron-condor">Iron Condor</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-4">
+                            <span class="pull-left" ng-show="strategyStatus === false">
+                                <a href="" data-template="/modules/trade/views/partials/flyouts/flyout-instructional.client.view.html" data-placement="bottom-left" data-animation="am-fade-and-slide-top" data-auto-close="1" bs-popover style="font-size:12px;">Which Strategy should I choose?</a>
+                            </span>
+                        </div>
+
+                        <div class="col-xs-1 col-sm-auto flex clear-padding">
+                            <span class="label">&nbsp;</span>
+                            <div class="et-flex-center-horizontal" ng-show="strategyStatus === false">
+                                or
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-8 col-md-6 col-lg-5">
+                    <span class="label">Make a custom ticket</span>
+                    <div class="row" style="margin-top:5px">
+                        <div ng-class="fullChainEnable === true ? 'col-md-4' : 'col-xs-auto'">
+                            <button class="btn btn-default pull-left" ng-disabled="optionData.legs.length === 4 || transaction.symbol === ''">Add a Stock Leg</button>
+                        </div>
+                        <div ng-class="fullChainEnable === true ? 'col-md-4' : 'col-xs-auto'">
+                            <button class="btn btn-default pull-right" ng-disabled="optionData.legs.length === 4 || transaction.symbol === ''" ng-click="addLeg()">Add an Option Leg</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12" ng-show="transaction.strategy !== ''">
+                    <div class="row" style="border-bottom: 1px solid #b0b0b0;margin-bottom:10px">
+                        <div ng-class="fullChainEnable === true ? 'col-xs-2' : 'col-xs-3'">
+                            <label>Order Type</label>
+                        </div>
+                        <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                            <label>Contracts</label>
+                        </div>
+                        <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                            <label>Type</label>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Expiration</label>
+                        </div>
+                        <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                            <label>Strike</label>
+                        </div>
+                        <div class="col-xs-1" ng-if="fullChainEnable === true">
+                            <label>Last</label>
+                        </div>
+                        <div class="col-xs-1" ng-if="fullChainEnable === true">
+                            <label>Bid</label>
+                        </div>
+                        <div class="col-xs-1" ng-if="fullChainEnable === true">
+                            <label>Ask</label>
+                        </div>
+                        <div class="col-xs-1" ng-if="fullChainEnable === true">
+                            <label>Volume</label>
+                        </div>
+                        <div class="col-xs-1 flex" ng-if="fullChainEnable === true"></div>
+                    </div>
+                    <div class="legs" ng-repeat="value in strategy.defaults">
+                        <div class="row flex" ng-click="setSelectedLeg($index)" ng-class="{selected: selectedLegIndex === $index}">
+                            <div ng-class="fullChainEnable === true ? 'col-xs-2' : 'col-xs-3'">
+                                <div class="et-select-wrapper">
+                                    <select
+                                        ng-model="optionData.legs[$index].orderType"
+                                        ng-init="optionData.legs[$index].orderType = value.orderType"
+                                        ng-change="deduceStrikeHighlights(); setSelectedLeg($index); estimateTotalCost();">
+                                        <option value="buy-open">Buy Open</option>
+                                        <option value="buy-close">Buy Close</option>
+                                        <option value="sell-open">Sell Open</option>
+                                        <option value="sell-close">Sell Close</option>
+                                    </select>
+                                    <i class="leg-marker {{optionData.legs[$index].orderType}}"></i>
+                                </div>
+                            </div>
+                            <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                                <div class="form-group">
+                                    <input class="form-control" type="number" ng-model="optionData.legs[$index].contracts" ng-init="optionData.legs[$index].contracts = value.contracts" ng-change="estimateTotalCost();">
+                                </div>
+                            </div>
+                            <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                                <div class="et-select-wrapper">
+                                    <select name="" id="" ng-model="optionData.legs[$index].legType" ng-init="optionData.legs[$index].legType = value.legType" ng-change="deduceStrikeHighlights(); setSelectedLeg($index);">
+                                        <option value="call">Call</option>
+                                        <option value="put">Put</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="et-select-wrapper">
+                                    <select name="" id="" ng-model="optionData.legs[$index].expiration" ng-init="optionData.legs[$index].expiration = value.expiration" ng-change="deduceStrikeHighlights(); setSelectedLeg($index); estimateTotalCost();">
+                                        <option value="{{$index}}" ng-repeat="date in tempOptionsData.expirationDates" ng-selected="{{$index === value.expiration}}">{{date.month | monthName}} {{date.day}} {{date.year}} {{date.expiryType | limitTo: 1}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div ng-class="fullChainEnable === true ? 'col-xs-1' : 'col-xs-2'">
+                                <div ng-if="optionData.legs[$index].legType === 'call'">
+                                    <div class="et-select-wrapper">
+                                        <select name="" id="" ng-model="optionData.legs[$index].strikePriceIndex" ng-change="deduceStrikeHighlights(); setSelectedLeg($index); estimateTotalCost();">
+                                            <option value="{{$index}}" ng-repeat="strike in tempOptionsData.strikePrices" ng-selected="{{$index === optionData.legs[$parent.$index].strikePriceIndex}}">{{strike}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div ng-if="optionData.legs[$index].legType === 'put'">
+                                    <div class="et-select-wrapper">
+                                        <select name="" id="" ng-model="optionData.legs[$index].strikePriceIndex" ng-change="deduceStrikeHighlights(); setSelectedLeg($index); estimateTotalCost();">
+                                            <option value="{{$index}}" ng-repeat="strike in tempOptionsData.strikePrices" ng-selected="{{$index === optionData.legs[$parent.$index].strikePriceIndex}}">{{strike}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-if="fullChainEnable === true" class="col-xs-1 full-chain-legs">{{optionData.legs[$index].relatedStrikeInfo.lastPrice}}</div>
+                            <div ng-if="fullChainEnable === true" class="col-xs-1 full-chain-legs">{{optionData.legs[$index].relatedStrikeInfo.bid}} ({{optionData.legs[$index].relatedStrikeInfo.bidSize}})</div>
+                            <div ng-if="fullChainEnable === true" class="col-xs-1 full-chain-legs">{{optionData.legs[$index].relatedStrikeInfo.ask}} ({{optionData.legs[$index].relatedStrikeInfo.askSize}})</div>
+                            <div ng-if="fullChainEnable === true" class="col-xs-1 full-chain-legs">{{optionData.legs[$index].relatedStrikeInfo.volume}}</div>
+                            <div class="flex">
+                                <button type="button" class="close et-flex-center trade-remove" aria-label="Close" ng-click="removeLeg($index)">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row full-chain voffset2" ng-if="$parent.$parent.fullChainEnable === true">
+                <div class="col-xs-12">
+                    <div class="panel panel-default panel-full-chain" ng-if="!toggleFullChain">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <span class="label">Chain</span>
+                                <div class="et-select-wrapper">
+                                    <select>
+                                        <option value="">Calls &amp; Puts</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <span class="label" for="quantity">Quantity</span>
+                                <input style="" name="quantity" class="form-control" placeholder="Quantity" type="text">
+                            </div>
+                            <div class="col-xs-1">
+                                <span class="label">Strikes</span>
+                                <div class="et-select-wrapper">
+                                    <select>
+                                        <option value="5">5</option>
+                                        <option selected="" value="7">7</option>
+                                        <option value="9">9</option>
+                                        <option value="11">11</option>
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <span class="label">Near</span>
+                                <div class="et-select-wrapper">
+                                    <select>
+                                        <option value="">{{tempOptionsData.closestStrikePrice}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <a class="pull-right" href="" ng-click="hideFullChain()">Leave Full Chain</a><br>
+                                <a class="pull-right" href="">Risk Graph</a>
+                            </div>
+                        </div>
+                        <nav>
+                            <ul class="pagination et-pagination">
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <i class="et-icon-double-angle-left" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li class="pagination-item-center">
+                                    <a ng-repeat="optionExpiry in tempOptionsData.expirationDates | limitTo: 5" ng-click="updateActiveExpiration(tempOptionsData.expirationDates[$index]); setActiveExpiryClass($index)" ng-class="{'active-expiry': activeExpiry === $index}">{{optionExpiry.month | monthName}} {{optionExpiry.day}} {{optionExpiry.year}} {{optionExpiry.expiryType | limitTo: 1}}</a>
+                                </li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <i class="et-icon-double-angle-right" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div class="text-muted text-center">Calls</div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div class="text-muted text-center">Puts</div>
+                            </div>
+                        </div>
+                        <table class="table full-option-chain-table">
+                            <thead>
+                                <th>Open Interest</th>
+                                <th>Volume</th>
+                                <th>Net Change</th>
+                                <th>Last</th>
+                                <th>Bid</th>
+                                <th>Ask</th>
+                                <th class="et-icon-carat-up"></th>
+                                <th>Bid</th>
+                                <th>Ask</th>
+                                <th>Last</th>
+                                <th>Net Change</th>
+                                <th>Volume</th>
+                                <th>Open Interest</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="strike in tempOptionsData.optionChain.OptionChainResponse.OptionPair | miniOptionsLimit:transaction.last">
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">{{strike.Call.openInterest}}</td>
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">{{strike.Call.volume}}</td>
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">
+                                        <change-dollar>{{strike.Call.netChange}}</change-dollar>
+                                    </td>
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">{{strike.Call.lastPrice}}</td>
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">
+                                        <a ng-class="{'marked': strike.Call.markedBid === true,
+                                        'selected': selectedLegStrikePrice === strike.Call.strikePrice
+                                        && selectedLegType === 'call'
+                                        && (selectedLegOrderType === 'sell-open'
+                                        || selectedLegOrderType === 'sell-close') }"
+                                        href=""
+                                        ng-click="modifyActiveLeg(strike.Call.strikePrice, 'call', 'sell-open')"
+                                        class="call bid">{{strike.Call.bid}}</a>
+                                    </td>
+                                    <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">
+                                        <a href="" ng-class="{'marked': strike.Call.markedAsk === true, 'selected': selectedLegStrikePrice === strike.Call.strikePrice && selectedLegType === 'call' && (selectedLegOrderType === 'buy-open' || selectedLegOrderType === 'buy-close') }" ng-click="modifyActiveLeg(strike.Call.strikePrice, 'call', 'buy-open')" class="call ask">{{strike.Call.ask}}</a>
+                                    </td>
+
+                                    <td class="strike-price">{{strike.Call.strikePrice}}</td>
+
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">
+                                        <a href="" ng-class="{'marked': strike.Put.markedBid === true, 'selected': selectedLegStrikePrice === strike.Call.strikePrice && selectedLegType === 'put' && (selectedLegOrderType === 'sell-open' || selectedLegOrderType === 'sell-close') }" ng-click="modifyActiveLeg(strike.Put.strikePrice, 'put', 'sell-open')" class="put bid">{{strike.Put.bid}}</a>
+                                    </td>
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">
+                                        <a href="" ng-class="{'marked': strike.Put.markedAsk === true, 'selected': selectedLegStrikePrice === strike.Call.strikePrice && selectedLegType === 'put' && (selectedLegOrderType === 'buy-open' || selectedLegOrderType === 'buy-close')}" ng-click="modifyActiveLeg(strike.Put.strikePrice, 'put', 'buy-open')" class="put ask">{{strike.Put.ask}}</a>
+                                    </td>
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">{{strike.Put.lastPrice}}</td>
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">
+                                        <change-dollar>{{strike.Put.netChange}}</change-dollar>
+                                    </td>
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">{{strike.Put.volume}}</td>
+                                    <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">{{strike.Put.openInterest}}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <th colspan="6"></th>
+                                <th colspan="1" class="et-icon-carat-down"></th>
+                                <th colspan="6"></th>
+                            </tfoot>
+                        </table>
+                        <div class="clearfix">
+                            <div class="text-right voffset2">
+                                <time class="before et-icon-refresh">Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row voffset3 bid-ask-view" ng-show="transaction.strategy != ''">
+                <div class="col-xs-3"><span class="label">Bid</span>: {{netBid}} <span class="pull-right">CREDIT</span></div>
+                <div class="col-xs-3"><span class="label">Ask</span>: {{netAsk}} <span class="pull-right">DEBIT</span></div>
+                <div class="col-xs-3"><span class="label">Midpoint</span>: {{midPoint}}</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" ng-class="fullChainEnable === true ? 'col-md-2' : 'col-md-3'">
+                    <span class="label">Price Type</span>
+                    <div class="et-select-wrapper" ng-class="{disabled: transaction.symbol == ''}">
+                        <select ng-model="transaction.priceType" ng-init="transaction.priceType = 'market'" ng-disabled="transaction.symbol == ''">
+                            <option value="market">Market</option>
+                            <option value="limit">Limit</option>
+                            <option value="stop-on-quote">Stop on Quote</option>
+                            <option value="stop-limit-on-quote">Stop Limit on Quote</option>
+                            <option value="trailing-stop-dollar">Trailing Stop $</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12" ng-if="transaction.priceType === 'limit'" ng-class="fullChainEnable === true ? 'col-md-2' : 'col-md-3'">
+                    <span class="label">Limit Price</span>
+                    <input type="text" name="" class="form-control" placeholder="Limit Price">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12" ng-class="fullChainEnable === true ? 'col-md-2' : 'col-md-4'">
+                    <span class="label">Term</span>
+                    <div class="et-select-wrapper">
+                        <select ng-model="transaction.term" ng-init="transaction.term = 'good-for-the-day'">
+                            <option value="good-for-the-day">Good for the Day</option>
+                            <option value="good-for-60-days">Good for 60 days</option>
+                            <option value="fill-or-kill">Fill or Kill</option>
+                            <option value="immediate-or-cancel">Immediate or Cancel</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-3 col-md-4 voffset2">
+                    <div class="checkbox large">
+                        <input class="large" type="checkbox" id="all-or-none" ng-model="transaction.allNone">
+                        <label class="text-muted" for="all-or-none">All or none (if 300+)</label>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="row" ng-show="transaction.strategy != ''">
+                <div class="col-md-12">
+                    <a class="btn" href="">Add another order to this group (optional)</a>
+                </div>
+            </div> -->
+            <div class="row voffset3" ng-show="transaction.strategy != ''">
+                <div class="col-xs-12">
+                    <div class="panel panel-highlight">
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Commission:</span><span class="data-point"> {{transaction.commission | currency}}</span>
+                        </span>
+                        
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Fees:</span><span class="data-point"> 0.02</span>
+                        </span>
+
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'buy'">
+                            <span class="label">Estimated Total Cost:</span> <span class="data-point"> {{estimatedTotalCost | currency}}</span>
+                        </span>
+
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'sell'">
+                            <span class="label">Estimated Proceeds</span> <span class="data-point"> {{transaction.estimatedProceed | currency}}</span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="transaction.strategy != '' ">
+                <div class="col-xs-12 voffset3 trade-tab">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-5">
+                           <div class="nav" ng-click="togglePurchasingPower = !togglePurchasingPower">
+                                <a class="trade-toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View impact to purchasing power</a>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12">
+                            <div class="panel panel-default panel-supplemental trade-toggle-link" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr class="border">
+                                            <th colspan="2"></th>
+                                            <th >Non-Marginable Securities/Options</th>
+                                            <th >Marginable Securities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td  class="text-left" colspan="2">Purchasing power before open orders:</td>
+                                            <td >{{purchasingPower.beforeOpenOrders | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="2">Reserve for other open orders:</td>
+                                            <td>{{purchasingPower.reserve | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="2">Purchasing power impact of this order:</td>
+                                            <td>{{purchasingPowerImpactThisOrder | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-left" colspan="2"><strong>Purchasing power after this order:</strong>
+                                            </td>
+                                            <td><strong>{{purchasingPowerAfterThisOrder | currency}}</strong>
+                                            </td>
+                                            <td><strong>$10,777.69</strong>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 trade-footer">
+                    <div class="pull-right voffset3">
+                        <span class="text-muted text-right">Review your order before placing the order.</span>
+                        <button class="btn btn-primary" ng-click="stopLiveUpdate(); mergeOptionTransaction(); calculateCost();" ng-disabled="transaction.symbol == ''">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4 workspace" ng-hide="fullChainEnable">
+        <aside class="panel panel-default">
+            <et-segmented-bar ng-show="transaction.symbol !== ''" class="btn-group-justified" ng-init="segment = 'mini-chain'" ng-model="segment" current="segment" segments='[{value:"mini-chain",text:"Mini Chain"},{value:"positions",text:"Positions"},{value:"orders", text:"Open Orders"}]'></et-segmented-bar>
+
+            <div ng-show="segment === 'mini-chain' && transaction.symbol === ''">
+                <div ng-include="'modules/trade/views/partials/workspace/workspace.html'"></div>
+            </div>
+
+            <div ng-show="segment === 'mini-chain' && transaction.symbol !== ''">
+                <div class="snapshot-symbol et-center-horizontal" ng-if="step.current === 1">
+                    <div ng-include="'modules/trade/views/partials/workspace/snapshot-symbol.html'"></div>
+                </div>
+                <div ng-if="fullChainEnable === false">
+                    <nav class="row">
+                        <ul class="col-xs-12 pagination pagination-sm et-pagination">
+                            <li>
+                                <a ng-click="" href="#" aria-label="Previous">
+                                    <i class="et-icon-double-angle-left" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="pagination-item-center">
+                                <a ng-repeat="optionExpiry in tempOptionsData.expirationDates | limitTo:3" ng-click="updateActiveExpiration(tempOptionsData.expirationDates[$index]); setActiveExpiryClass($index)" ng-class="{'active-expiry': activeExpiry === $index}">{{optionExpiry.month | monthName}} {{optionExpiry.day}} '15 {{optionExpiry.expiryType | limitTo: 0}}</a>
+                            </li>
+                            <li>
+                                <a ng-click="" href="#" aria-label="Next">
+                                    <i class="et-icon-double-angle-right" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="chain-table-heading">Calls</div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="chain-table-heading">Puts</div>
+                        </div>
+                    </div>
+                    <table class="table table-hover mini-option-chain-table">
+                        <thead>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                            <th class="et-icon-carat-up"></th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="strike in tempOptionsData.optionChain.OptionChainResponse.OptionPair | miniOptionsLimit:transaction.last">
+                                <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">
+                                    <a ng-class="{'marked': strike.Call.markedBid === true,
+                                    'selected': selectedLegStrikePrice === strike.Call.strikePrice
+                                    && selectedLegType === 'call'
+                                    && (selectedLegOrderType === 'sell-open'
+                                    || selectedLegOrderType === 'sell-close') }"
+                                    href=""
+                                    ng-click="modifyActiveLeg(strike.Call.strikePrice, 'call', 'sell-open')"
+                                    class="call bid">{{strike.Call.bid}}</a>
+                                </td>
+                                <td ng-class="{'highlighted': strike.Call.inTheMoney === 'y'}">
+                                    <a href=""
+                                    ng-class="{'marked': strike.Call.markedAsk === true,
+                                    'selected': selectedLegStrikePrice === strike.Call.strikePrice
+                                    && selectedLegType === 'call'
+                                    && (selectedLegOrderType === 'buy-open'
+                                    || selectedLegOrderType === 'buy-close') }"
+                                    ng-click="modifyActiveLeg(strike.Call.strikePrice, 'call', 'buy-open')"
+                                    class="call ask">{{strike.Call.ask}}</a>
+                                </td>
+                                <td class="strike-price">{{strike.Call.strikePrice}}</td>
+                                <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">
+                                    <a href=""
+                                    ng-class="{'marked': strike.Put.markedBid === true, 'selected': selectedLegStrikePrice === strike.Call.strikePrice && selectedLegType === 'put' && (selectedLegOrderType === 'sell-open' || selectedLegOrderType === 'sell-close') }"
+                                    ng-click="modifyActiveLeg(strike.Put.strikePrice, 'put', 'sell-open')"
+                                    class="put bid">{{strike.Put.bid}}</a>
+                                </td>
+                                <td ng-class="{'highlighted': strike.Put.inTheMoney === 'y'}">
+                                    <a href=""
+                                    ng-class="{'marked': strike.Put.markedAsk === true, 'selected': selectedLegStrikePrice === strike.Call.strikePrice && selectedLegType === 'put' && (selectedLegOrderType === 'buy-open' || selectedLegOrderType === 'buy-close')}"
+                                    ng-click="modifyActiveLeg(strike.Put.strikePrice, 'put', 'buy-open')"
+                                    class="put ask">{{strike.Put.ask}}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <th></th>
+                            <th></th>
+                            <th class="et-icon-carat-down"></th>
+                            <th></th>
+                            <th></th>
+                        </tfoot>
+                    </table>
+                    <div class="chain-view" ng-hide="fullChainActive">
+                        <a class="btn btn-default btn-blank btn-blank" role="button" href="" ng-click="fullChainActive = !fullChainActive; showFullChain();" scroll-to="legs">Full Chain View</a>
+                    </div>
+                    <div class="chain-view" ng-show="fullChainActive">
+                        <a class="btn btn-default btn-blank" role="button" href="" ng-click="fullChainActive = !fullChainActive; hideFullChain();">Leave Full Chain</a>
+                    </div>
+                    <div class="text-center" style="margin: 15px auto;"><a href="">Risk Graph</a></div>
+                    <div class="text-right"><time>Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time></div>
+                    <div class="text-right disclaimer"><a href="">View Margin Maintenance Requirement</a></div>
+                </div>
+            </div>
+
+            <div ng-show="segment === 'positions'">
+                <!-- Positions {{transaction.symbol}} -->
+                <div ng-if="transaction.symbol !== ''">
+                    <span>{{accountDataForSymbol.positionsHeld.length}}</span> {{transaction.symbol}} Positions
+                    <table class="table">
+                        <thead>
+                            <th>Symbol</th>
+                            <th>Qty</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </thead>
+                        <tbody ng-repeat="position in accountDataForSymbol.positionsHeld">
+                            <tr ng-if="position.lotType === 'stock'">
+                                <td><a href="">{{position.symbol}}</a></td>
+                                <td>{{position.quantity}}</td>
+                                <td>{{position.bid}}</td>
+                                <td>{{position.ask}}</td>
+                            </tr>
+                            <tr ng-if="position.lotType === 'mutual-fund'">
+                                <td>{{position.symbol}}</td>
+                                <td>{{position.investmentAmount}}</td>
+                                <td>{{position.lots.bid}}</td>
+                                <td>{{position.lots.ask}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div ng-if="transaction.symbol === ''">
+                    <span ng-if="accountData.positionsHeld.length < 5">{{accountData.positionsHeld.length}}</span> <span ng-if="accountData.positionsHeld.length >= 5">5</span> of <span>{{accountData.positionsHeld.length}}</span> positions in this account
+                    <table class="table">
+                        <thead>
+                            <th>Symbol</th>
+                            <th>Qty</th>
+                            <th>Bid</th>
+                            <th>Ask</th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="position in accountData.positionsHeld | limitTo: 5">
+                                <td><a href="">{{position.symbol}}</a></td>
+                                <td>{{position.quantity}}</td>
+                                <td>{{position.bid}}</td>
+                                <td>{{position.ask}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p><a href="">View Positions in new window</a></p>
+            </div>
+
+
+
+                <div ng-show="segment === 'orders'">
+                    <!-- Orders {{transaction.symbol}} -->
+                    <div ng-if="transaction.symbol !== ''">
+                        <p><span ng-if="accountDataForSymbol.openOrders.length < 5">{{accountDataForSymbol.openOrders.length}}</span><span ng-if="accountDataForSymbol.openOrders.length >= 5">5</span> of {{accountDataForSymbol.openOrders.length}} recent open orders</p>
+                        <div class="panel card" ng-repeat="order in accountDataForSymbol.openOrders | limitTo: 5 | orderBy: created">
+                            <div ng-if="order.lotType === 'stock'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div><p>{{order.orderType}} {{order.quantity}} {{order.symbol}} @ {{order.pricePaid | currency}}</p></div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a> 
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="order.lotType === 'option'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div ng-repeat="leg in order.legs">
+                                    <p>{{leg.orderType}} {{leg.contracts}} {{leg.relatedStrikeInfo.displaySymbol}} {{leg.relatedStrikeInfo.optionType}} @ {{leg.relatedStrikeInfo.strikePrice | currency}}</p>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a> 
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="order.lotType === 'mutual-fund'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div><p>{{order.orderType}} {{order.investmentAmount | currency}}</p></div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a>
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="transaction.symbol === ''">
+                        <p><span ng-if="accountData.openOrders.length < 5">{{accountData.openOrders.length}}</span>
+                        <span ng-if="accountData.openOrders.length >= 5">5</span> of {{accountData.openOrders.length}} {{transaction.symbol}} recent open orders</p>
+                        <div class="panel card" ng-repeat="order in accountData.openOrders | limitTo: 5 | orderBy: created">
+                            <div ng-if="order.lotType === 'stock'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div><p>{{order.orderType}} {{order.quantity}} {{order.symbol}} @ {{order.pricePaid | currency}}</p></div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a>
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="order.lotType === 'option'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div ng-repeat="leg in order.legs">
+                                    <p>{{leg.orderType}} {{leg.contracts}} {{leg.relatedStrikeInfo.displaySymbol}} {{leg.relatedStrikeInfo.optionType}} @ {{leg.relatedStrikeInfo.strikePrice | currency}}</p>
+                                </div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a>
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+
+                            <div ng-if="order.lotType === 'mutual-fund'">
+                                <div class="secondary">{{order.symbol}}</div>
+                                <div><p>{{order.orderType}} {{order.investmentAmount | currency}}</p></div>
+                                <div class="clearfix">
+                                    <div class="pull-left">{{order.created | date: "MM/dd/yyyy"}}</div>
+                                    <a class="pull-left" href="">Change</a>
+                                    <a class="pull-right" href="">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right"><time>Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time></div>
+                    <div class="text-right disclaimer"><a href="">View All Open Orders In A New Window</a></div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

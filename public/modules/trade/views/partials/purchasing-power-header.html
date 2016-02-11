@@ -1,0 +1,122 @@
+<div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <div class="nav show-purchasing-power" style="margin-left:15px;" ng-init="purchasingPowerOpen = true" ng-hide="purchasingPowerOpen">
+                <a class="toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">Purchasing Power</a>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="purchasing-power" style="border-bottom: 1px solid #DBDBDB; margin-bottom: -2px;"></div>
+            <div class="panel purchasing-power" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+                <button class="close" ng-click="purchasingPowerOpen=false" aria-label="Hide Purchasing Power">&times;</button>
+                <h4 style="margin-left:10px;">See Global Header Tearsheet for Account Specfic Data Points</h4>
+                <a style="margin-left:10px;margin-bottom:10px;display:block;" href="http://trading-portfolio.trade.etradecreative.com/#!/global-header" name="stocks">http://trading-portfolio.trade.etradecreative.com/#!/global-header</a>
+                <!-- <div ng-if="step.current === 1">
+
+                    <div class="hidden-xs row et-flex" ng-if="accountId == accounts[0]._id">
+                        <div class="col-xs-12 col-sm-auto border-right et-flex-center-horizontal">
+                            <div class="et-purchasing-power-label">Net Account Value</div>
+                            <div class="primary">{{accountDetails[accountId].value | currency}}</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-3 et-flex-center-horizontal">
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Settled Cash</span>
+                                <span class="et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</span>
+                            </div>
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Unsettled Cash</span>
+                                <span class="et-purchasing-power-data">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hidden-xs flex row" ng-if="accountId == accounts[1]._id">
+                        <div class="col-xs-12 col-sm-auto border-right">
+                            <div class="et-purchasing-power-label">Net Account Value</div>
+                            <div class="primary">{{accountDetails[accountId].value | currency}}</div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-3 et-flex-center-horizontal">
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Intraday Marginable</span>
+                                <span class="et-purchasing-power-data">$11,489.49</span>
+                            </div>
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Intraday Non-Marginable</span>
+                                <span class="et-purchasing-power-data">$11,489.49</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-3 et-flex-center-horizontal">
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Overnight Marginable</span>
+                                <span class="et-purchasing-power-data">$11,489.49</span>
+                            </div>
+                            <div class="header-data-points">
+                                <span class="et-purchasing-power-label">Overnight Non-Marginable</span>
+                                <span class="et-purchasing-power-data">$11,489.49</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visible-xs-block">
+                        <div class="row" ng-if="accountId == accounts[0]._id">
+                            <div class="col-xs-12">
+                                <div class="et-purchasing-power-label">Net Account Value</div>
+                                <div class="primary">{{accountDetails[accountId].value | currency}}</div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Settled Cash</span>
+                                    <span class="et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</span>
+                                </div>
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Unsettled Cash</span>
+                                    <span class="et-purchasing-power-data">$0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="accountId == accounts[1]._id">
+                            <div class="col-xs-12">
+                                <div class="et-purchasing-power-label">Net Account Value</div>
+                                <div class="primary">{{accountDetails[accountId].value | currency}}</div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Intraday Marginable</span>
+                                    <span class="et-purchasing-power-data">$11,489.49</span>
+                                </div>
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Intraday Non-Marginable</span>
+                                    <span class="et-purchasing-power-data">$11,489.49</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Overnight Marginable</span>
+                                    <span class="et-purchasing-power-data">$11,489.49</span>
+                                </div>
+                                <div class="header-data-points">
+                                    <span class="et-purchasing-power-label">Overnight Non-Marginable</span>
+                                    <span class="et-purchasing-power-data">$11,489.49</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div> -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

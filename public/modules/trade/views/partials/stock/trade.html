@@ -1,0 +1,220 @@
+<div class="row et-flex">
+    <div class="col-xs-12 col-sm-8">
+        <div class="panel">
+            <div class="row symbol">
+                <div class="col-xs-5 col-sm-3 col-md-2">
+                    <label for="symbol">Symbol</label>
+                    <input type="text" name="symbol" ng-model="transaction.symbol" ng-change="updateSearch(); utils.upperCase();" class="form-control et-icon-search" placeholder="Symbol">
+                </div>
+                <div class="col-xs-7 col-sm-9 symbol-item">
+                    <h4 class="voffset2">{{transaction.companyName}}</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-2">
+                    <span class="label">Order Type</span>
+                    <div class="et-select-wrapper">
+                        <select ng-model="transaction.orderType" ng-init="transaction.orderType = 'select'">
+                            <option value="select">Select</option>
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                            <option value="sell-short">Sell Short</option>
+                            <option value="buy-to-cover">Buy to Cover</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-3 col-sm-2">
+                    <span class="label">Qty.</span>
+                    <input name="shares" ng-model="transaction.shares" ng-change="utils.removeDecimal(); estimateTotalCost();" class="form-control" placeholder="0">
+                </div>
+
+                <a href="" class="col-xs-5 col-sm-3 col-md-2 calculate" data-template="/modules/trade/views/partials/flyouts/flyout-calculator.client.view.html" data-placement="right" data-animation="am-fade-and-slide-top" data-auto-close="1" bs-popover>
+                    <div class="et-icon-calculator"></div>
+                    <div class="calculate-label">Calculate Quantity</div>
+                </a>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-3">
+                    <span class="label">Price Type</span>
+                    <div class="et-select-wrapper">
+                        <select ng-model="transaction.priceType" ng-init="transaction.priceType = 'select'">
+                            <option value="select">Select</option>
+                            <option value="market">Market</option>
+                            <option value="market-on-close">Market on Close</option>
+                            <option value="limit">Limit</option>
+                            <option value="stop-on-quote">Stop on Quote</option>
+                            <option value="stop-limit-on-quote">Stop Limit on Quote</option>
+                            <option value="trailing-stop-dollar">Trailing Stop $</option>
+                            <option value="trailing-stop-percent">Trailing Stop %</option>
+                            <option value="bracketed">Bracketed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-3" ng-if="transaction.priceType === 'limit'">
+                    <span class="label">Limit Price</span>
+                    <input type="text" name="" class="form-control" placeholder="Limit Price" ng-model="transaction.limitPrice">
+                </div>
+                <div class="col-xs-6 col-sm-3" ng-if="transaction.priceType === 'bracketed'">
+                    <span class="label">Bracketed Price Type</span>
+                    <div class="et-select-wrapper">
+                        <select ng-model="transaction.bracketedPriceType" ng-init="transaction.bracketedPriceType = 'trailing-stop-dollar'">
+                            <option value="trailing-stop-dollar">Trailing Stop $</option>
+                            <option value="trailing-stop-percent">Trailing Stop %</option>
+                            <option value="hidden-stop">Hidden Stop</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-2" ng-if="transaction.priceType === 'bracketed'">
+                    <span class="label">Upper Stop Value</span>
+                    <input type="text" name="" class="form-control" placeholder="" ng-model="transaction.upperStopValue">
+                </div>
+                <div class="col-xs-6 col-sm-2" ng-if="transaction.priceType === 'bracketed'">
+                    <span class="label">Lower Stop Value</span>
+                    <input type="text" name="" class="form-control" placeholder="" ng-model="transaction.lowerStopValue">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="label">Term</span>
+                            <div class="et-select-wrapper">
+                                <select ng-model="transaction.term" ng-init="transaction.term = 'good-for-the-day'">
+                                    <option value="good-for-the-day">Good for the Day</option>
+                                    <option value="good-for-sixty-days">Good for 60 Days</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 voffset2">
+                            <div class="checkbox large" ng-class="{'disabled': transaction.symbol !== 'AAPL'}">
+                                <input class="large" type="checkbox" id="all-or-none" ng-model="transaction.allNone" ng-disabled="transaction.symbol !== 'AAPL'">
+                                <label class="text-muted" for="all-or-none">All or none (if 300+)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-if="transaction.shares !== undefined">
+                <div class="col-xs-12">
+                    <div class="panel panel-highlight">
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Commission:</span><span> {{transaction.commission | currency}}</span>
+                        </span>
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'buy'">
+                            <span class="label">Estimated Total Cost:</span><span class="data-point"> {{estimatedTotalCost | currency}}</span>
+                        </span>
+                        
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'sell'">
+                            <span class="label">Estimated Fees:</span> <span class="data-point">$9.99</span>
+                        </span>
+                        <span class="panel-highlight-item" ng-if="transaction.orderType === 'sell'" ng-init="calculateCost(false)">
+                            <span class="label">Estimated Proceeds:</span> <span class="data-point"> {{transaction.estimatedProceed}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="transaction.shares !== undefined">
+                <div class="col-xs-12 voffset3 trade-tab">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-5 col-lg-4">
+                            <div class="nav" ng-click="togglePurchasingPower = !togglePurchasingPower">
+                                <a class="trade-toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View impact to purchasing power</a>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4" ng-if="transaction.orderType === 'sell'">
+                            <div class="nav" ng-click="toggles.toggleLotSelector()">
+                                <span ng-hide="toggleLotSelector" class="et-icon-chevron-right disclaimer"><a class="et-trigger-link" style="margin-left: 3px;" href="">Select Lots</a></span>
+                                <span ng-show="toggleLotSelector" class="et-icon-chevron-down disclaimer"><a class="et-trigger-link" href="">Select Lots</a></span>
+                            </div>
+                        </div>
+                            <div class="col-xs-12">
+                                <div class="panel panel-default panel-supplemental trade-toggle-link" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+                                    <table class="table table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"></th>
+                                                <th>Non-Marginable Securities/Options</th>
+                                                <th>Marginable Securities</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Purchasing power before open orders:</td>
+                                                <td>{{purchasingPower.beforeOpenOrders | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Reserve for other open orders:</td>
+                                                <td>{{purchasingPower.reserve | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-left" colspan="2">Purchasing power impact of this order:</td>
+                                                <td>{{purchasingPowerImpactThisOrder | currency}}</td>
+                                                <td>$10,777.69</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="text-left" colspan="2"><strong>Purchasing power after this order:</strong></td>
+                                                <td><strong>{{purchasingPowerAfterThisOrder | currency}}</strong></td>
+                                                <td><strong>$10,777.69</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="panel panel-default trade-toggle-link lots" ng-class=" { 'open-close': !toggleLotSelector } " ng-if="toggleLotSelector">
+                                    <p>We have selected the offsetting lot(s) based on your preference of Last In, First Out. To choose different lots, please use the lot selector below.</p>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Dates Acquired</th>
+                                                <th class="text-center">Price Paid</th>
+                                                <th class="text-center">Quantity</th>
+                                                <th class="text-center">Quantity for sale</th>
+                                                <th class="text-right">Term</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="lot in accountDataForSymbol.lots">
+                                                <td>{{lot.created | date: 'MM/dd/yyyy'}}</td>
+                                                <td class="text-center">{{lot.pricePaid | currency}}</td>
+                                                <td class="text-center">{{lot.quantity}}</td>
+                                                <td class="text-center">
+                                                    <input type="text" class="form-control" placeholder="">
+                                                </td>
+                                                <td class="text-right">{{lot.term}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 trade-footer">
+                    <div class="pull-right voffset3">
+                        <span class="text-muted text-right">Review your order before placing the order.</span>
+                        <button class="btn btn-primary" ng-click="stopLiveUpdate(); mergeOptionTransaction(); calculateCost(true);" ng-disabled="transaction.symbol == '' || transaction.priceType === 'default'">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden-xs col-sm-4 workspace">
+        <div class="panel panel-default" ng-include="'modules/trade/views/partials/workspace/workspace.html'"></div>
+    </div>
+</div>
+<div class="row visible-xs-block">
+    <div class="workspace" style="float:none;">
+        <div class="panel panel-default" ng-include="'modules/trade/views/partials/workspace/workspace.html'"></div>
+    </div>
+</div>

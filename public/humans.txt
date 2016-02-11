@@ -1,0 +1,18 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Patrick Ng -- Prototype Engineer -- @patrickkng
+    Alan Mooiman -- Prototype Engineer -- @alanmoo
+
+# THANKS
+
+    Batman
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
+    node.js, Express
+    AngularJS, MongoDB

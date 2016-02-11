@@ -1,0 +1,288 @@
+<section data-ng-controller="GainsLossesController" class="gains-losses" ng-init="loadGainsLosses($parent.accountId)">
+    <!-- <div class="panel-heading">
+		<h4>Gains & Losses Summary</h4>
+    </div> -->
+    <div class="clearfix voffset3">
+	<time-Filter start-date="filters.startDate" end-date="filters.endDate" ranges="filters.dateRanges"></time-Filter>
+    <div class="col-xs-12 col-sm-2">
+		<div class="form-control-labelless form-control-static">
+		    <a class="et-icon-chevron-right toggle-link" ng-click="showFilters= !showFilters" ng-init="showFilters = false" ng-class="{rotate:showFilters}">Filters</a>
+		</div>
+    </div>
+    </div>
+    <!-- <div class="col-xs-6 col-md-2">
+				<label for="dateFromFilter">Date From</label>
+				<input class="form-control" type="date" ng-model="dateFromFilter">
+			</div>
+			<div class="col-xs-6 col-md-2">
+				<label for="dateToFilter">Date To</label>
+				<input class="form-control" type="date" ng-model="dateToFilter">
+    </div> -->
+    <div class="clearfix animate-show-filters" ng-show="showFilters">
+		<div class="col-xs-12 col-sm-6 col-md-2">
+					<label for="symbolFilter">Symbol</label>
+					<input type="text" name="symbolFilter" ng-model="filters.symbolFilter" class="form-control" placeholder="Symbol">
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2" ng-show="timePeriod=='custom'">
+					<label for="dateFrom">Date From</label>
+					<input type="text" name="dateFrom" ng-model="filterDateFrom" class="form-control">
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2" ng-show="timePeriod == 'custom'">
+					<label for="dateTo">Date To</label>
+					<input type="text" name="dateTo" ng-model="filterDateTo" class="form-control">
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2">
+					<label for="term">Short/Long Term</label>
+					<div class="et-select-wrapper">
+					    <select name="term" id="term" ng-model="filters.term" class="form-control">
+						<option value="!">Short and Long</option>
+						<option value="Short">Short Term</option>
+						<option value="Long">Long Term</option>
+					    </select>
+					</div>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2">
+					<label for="securityType">Security Type</label>
+					<div class="et-select-wrapper">
+					    <select name="securityType" id="securityType" ng-model="securityType" ng-init="securityType ='!'" class="form-control">
+						<option value="!">All</option>
+						<option value="bonds">Bonds</option>
+						<option value="etfs">ETFs</option>
+						<option value="moneyMarket">Money Market Funds</option>
+						<option value="mutual">Mutual Funds</option>
+						<option value="options">Options</option>
+						<option value="stocks">Stocks</option>
+					    </select>
+					</div>
+		</div>
+		<div class="col-xs-12 col-sm-6 col-md-2">
+					<label for="coveredState">Covered/Non-Covered</label>
+					<div class="et-select-wrapper">
+					    <select name="coveredState" id="coveredState" ng-model="coveredState" ng-init="coveredState = '!'">
+						<option value="!">All</option>
+						<option value="covered">Covered</option>
+						<option value="non-covered">Non-Covered</option>
+					    </select>
+					</div>
+		</div>
+		<!-- <div class="col-xs-12 col-sm-6 col-md-2">
+								<div class="label inline-block">&nbsp;</div>
+								<div class="form-control-static">
+									<a href="">Reset</a>
+								</div>
+		</div> -->
+    </div>
+	<div class="row separated-columns voffset2">
+	    <div class="col-xs-12 col-md-auto">
+		<div class="col-xs-12 col-md-auto">
+		    <div class="label">Total Gain/Loss</div>
+		    <div class="primary" et-change="visiblePositionsTotal('gainLoss')" type="'dollar'"></div>
+		</div>
+	    </div>
+	    <div class="col-xs-12 col-md-6">
+		<div class="col-xs-12 col-md-auto">
+		    <div class="label">Total Short Term Gain</div>
+		    <div class="secondary" et-change="visiblePositionsTotal('shortTermGain')" type="'dollar'"></div>
+		</div>
+		<div class="col-xs-12 col-md-auto">
+		    <div class="label">Total Long Term Gain</div>
+		    <div class="secondary" et-change="visiblePositionsTotal('longTermGain')" type="'dollar'"></div>
+		</div>
+		<div class="col-xs-12 col-md-auto">
+		    <div class="label">Total Commissions/Fees</div>
+		    <div class="secondary">$9.69</div>
+		</div>
+	    </div>
+	</div>
+    <div class="row">
+	<table class="table table-expandable table-striped voffset2">
+	    <colgroup span="3"></colgroup>
+	    <colgroup span="3" class="opening-transaction"></colgroup>
+	    <colgroup span="3" class="closing-transaction"></colgroup>
+	    <colgroup span="4"></colgroup>
+	    <thead>
+		<tr>
+		    <th class="arrows"></th>
+		    <th></th>
+		    <th></th>
+		    <th colspan="3" class="text-center">Opening Transaction</th>
+		    <th colspan="3" class="text-center">Closing Transaction</th>
+		    <th colspan="4"></th>
+		</tr>
+		<tr>
+		    <th class="arrows"><span ng-class="expandIcon" ng-click="toggleAll()"></span></th>
+		    <th>Symbol</th>
+		    <th class="text-right">Qty#</th>
+		    <th>Date</th>
+		    <th>Cost/Share $</th>
+		    <th class="text-right">Total Cost $</th>
+		    <th>Date</th>
+		    <th>Price/Share $</th>
+		    <th class="text-right">Proceeds $</th>
+		    <th class="text-right">Gain/Loss $</th>
+		    <th class="text-right">Deferred Loss $</th>
+		    <th>Term</th>
+		    <th class="actions text-center">Action</th>
+		</tr>
+	    </thead>
+	    <tfoot>
+	    <tr class="totals-row">
+		<td colspan="3">Total</td>
+		<td colspan="3" class="borderless text-right">{{visiblePositionsTotal('totalCost') | currency}}</td>
+		<td colspan="3" class="text-right">{{visiblePositionsTotal('proceeds') | currency}}</td>
+		<td class="text-right">{{visiblePositionsTotal('gainLoss') | currency}}</td>
+	    </tr>
+	    <tr>
+		<td colspan="13" class="disclaimer">Real Time Quotes *mutual fund quotes as of previous day</td>
+	    </tr>
+	    </tfoot>
+	    <tbody ng-repeat="position in visiblePositions" ng-init="expandedRowsVisible[$index]=false;">
+		<tr ng-click="toggleRow($event,$index)">
+		    <td class="arrows"><span class="arrow et-icon-chevron-right" ng-class="expandedRowsVisible[$index] ? 'rotate' : ''"></span></td>
+		    <td><a ng-click et-quick-quote='position' symbol="position._id">{{position._id}}</a></td>
+		    <td class="text-right">{{position.quantity}}</td>
+		    <td></td>
+		    <td></td>
+		    <td class="text-right">{{position.totalCost | number:2}}</td>
+		    <td></td>
+		    <td></td>
+		    <td class="text-right">{{position.proceeds | number:2}}</td>
+		    <td et-change="position.gainLoss" class="gainloss text-right"></td>
+		    <td></td>
+		    <td></td>
+		    <td class="actions"></td>
+		</tr>
+		<tr ng-show="expandedRowsVisible[$parent.$index]" ng-repeat-start="lot in position.lots" ng-click="level2Expanded[$parent.$index][$index] = !level2Expanded[$parent.$index][$index]">
+		    <td class="arrows"></td>
+		    <td class=""><span class="arrow arrows et-icon-chevron-right" ng-class="level2Expanded[$parent.$index][$index] ? 'rotate' : ''"></span>Sell<sup ng-if="$index == 1" class="lot-note firm-edit">#</sup></td>
+		    <td class="text-right">{{lot.quantity}}</td>
+		    <td>{{lot.timeBought | date: "MM/dd/yy"}}</td>
+		    <td class="text-right">{{lot.priceBought}}</td>
+		    <td class="text-right">{{lot.totalCost | number:2}}</td>
+		    <td>{{lot.timeSold | date: "MM/dd/yy"}}</td>
+		    <td class="text-right">{{lot.priceSold}}</td>
+		    <td class="text-right">{{lot.proceeds}}</td>
+		    <td et-change="lot.gainLoss" class="text-right"></td>
+		    <td class="text-right">$0.00</td>
+		    <td>{{lot.term}}</td>
+		    <td class="actions btn-cell"><button class="btn btn-default btn-xs" ng-if="position._id=='AIG'"><span class="et-icon-edit"></span></button></td>
+		</tr>
+		<tr ng-show="level2Expanded[$parent.$index][$index]" ng-repeat-end>
+		    <td colspan="13">
+			<div class="clearfix lot-details">
+			    <div class="col-lg-10 col-lg-push-1 separated-columns">
+				<div class="col-xs-12 col-md-7 flex-center">
+				    <h4>Understanding your Cost Basis Information for Lots Sold after 2013</h4>
+				    <p class="voffset2">Your cost basis may be adjusted for wash sales, corporate actions, and cost basis provided by your prior firm. Please note sale proceeds are reported on your 1099B less commissions and fees</p>
+				    <table class="table table-auto table-condensed">
+					<colgroup></colgroup>
+					<colgroup class="numeric-column"></colgroup>
+					<colgroup class="numeric-column"></colgroup>
+					<thead>
+					    <th></th>
+					    <th class="text-right">Per Share</th>
+					    <th class="text-right">Total</th>
+					</thead>
+					<tbody>
+					    <tr>
+						<td>Proceeds</td>
+						<td class="text-right">11.00</td>
+						<td class="text-right">11.00</td>
+					    </tr>
+					    <tr>
+						<td>- Acquisition Cost<span class="et-icon-help"></span></td>
+						<td class="text-right">10.01</td>
+						<td class="text-right">10.01</td>
+					    </tr>
+					    <tr>
+						<td>- Ordinary Income Recognized<span class="et-icon-help"></span></td>
+						<td class="text-right">19.09</td>
+						<td class="text-right">19.09</td>
+					    </tr>
+					</tbody>
+					<tfoot>
+					<tr>
+					    <td>Total Adjusted Gain/Loss</td>
+					    <td class="neg text-right">(9.89)</td>
+					    <td class="neg text-right">(99.00)</td>
+					</tr>
+					</tfoot>
+				    </table>
+				</div>
+				<div class="col-xs-12 col-md-5">
+				    <h4 class="text-center">Additional Information about your securities</h4>
+				    <table class="table-horizontal voffset2 table-auto">
+					<tr>
+					    <th class="text-right">Lot Selection</th>
+					    <td>(FIFO) First in First Out</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Holding Term</th>
+					    <td>Short term on sale</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Commission</th>
+					    <td>$45.01</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Fees</th>
+					    <td>$99.00</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Interest</th>
+					    <td>$10.12</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Covered Status<span class="et-icon-help"></span></th>
+					    <td>Covered</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Order Number</th>
+					    <td><a href="#">123455</a></td>
+					</tr>
+					<tr>
+					    <th class="text-right">Transation Type</th>
+					    <td>Sell</td>
+					</tr>
+					<tr>
+					    <th class="text-right">Disposition Type</th>
+					    <td>Disqualifying Disposition</td>
+					</tr>
+				    </table>
+				</div>
+			    </div>
+			</div>
+		    </td>
+		</tr>
+	    </tbody>
+	</table>
+    </div>
+    <div class="clearfix">
+	<div class="col-xs-12">
+	    <p class="text-muted"><sup class="lot-note firm-edit">†</sup>Lot edited by firm</p>
+	    <p class="text-muted"><sup class="lot-note firm-edit2">‡</sup>Lot edited by firm</p>
+	    <p class="text-muted"><sup class="lot-note wash-sales">AVE</sup>This lot has been adjusted for wash sales <a href="#">Learn More</a></p>
+	    <p class="text-muted"><sup class="lot-note replacement-share">WS</sup>This lot is a replacement share that has been closed. When replacement shares are closed, prior deferred loss can now be realized for tax purposes <a href="#">Learn More</a></p>
+	    <p class="text-muted"><sup class="lot-note average-cost">WS<br>REV</sup>Average Cost Methodology will be used for all or some of the covered lots</p>
+	</div>
+    </div>
+    <div class="clearfix voffset3">
+	<div class="panel panel-default">
+	    <div class="panel-body flex-md flex-lg">
+		<div class="col-xs-12 col-md-5">
+		    <h3>Looking for more tax information?</h3>
+		    <p class="voffset2">We understand it's hard to find what you need to understand, plan, and manage your taxes during tax season. That's why we created the Tax Center - one place for all your tax needs.</p>
+		    <a href="" class="btn btn-info pull-right">Tax Center</a>
+		</div>
+		<div class="col-xs-12 col-sm-5 col-sm-push-1 ">
+		    <h3>Looking to learn more?</h3>
+		    <ul class="list-unstyled voffset2">
+			<li><a class="et-icon-carat-right after" href="#">10 Steps to Tax Preparation</a></li>
+			<li><a class="et-icon-carat-right after" href="#">Tax Planning for Specific Types of Investments</a></li>
+			<li><a class="et-icon-carat-right after" href="#">Tax Basis of Investments</a></li>
+		    </ul>
+		</div>
+	    </div>
+	</div>
+    </div>
+</section>

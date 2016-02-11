@@ -1,0 +1,13 @@
+//import one json into your db with a collection
+mongoimport --db trading-portfolios-dev --collection brokerageaccounts --file ~/Projects/etrade/trading-portfolios/seeds/brokerageaccounts.json --type json --stopOnError --journal --drop
+
+//export collections
+mongodump --out seeds/backup --db trading-portfolios-dev
+
+//drop collection and restore schema
+mongorestore --drop -d trading-portfolios-dev seeds/backup/trading-portfolios-dev
+
+
+ssh deploy@prototype02.etradecreative.com
+//Restore test database on the server (run from anywhere once SSH'ed in)
+mongorestore --drop -d trading-portfolios-test /home/deploy/nodejs/trading-portfolio/current/seeds/backup/trading-portfolios-dev

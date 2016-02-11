@@ -1,0 +1,141 @@
+<div data-ng-controller="PortfolioController" data-ng-init="loadPortfolio('all')">
+    <!-- {{customViews}} -->
+    <div class="row">
+        <header class="page-header ng-scope">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 pull-right text-right disclaimer page-refresh">
+                    <span ng-click class="et-icon-refresh">Last Refresh January, 01, 1970 12:00 AM ET</span>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <h1 class="page-title" ng-dblclick="clearLocalStorage();">Portfolios</h1>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <ul class="quick-nav list-horizontal pull-right">
+                        <li  ng-dblclick="clearLocalStorage();"><strong>Portfolios</strong></li>
+                        <li><a href="">Watch Lists</a></li>
+                        <li><a href="">Orders</a></li>
+                        <li><a href="">Transaction History</a></li>
+                        <li><a href="">Balances</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-auto">
+            <div class="et-select-wrapper" style="margin:0" data-ng-controller="AccountSelectorController">
+                <select name="account" id="account" ng-model="accountId" ng-init="loadAccounts()">
+                    <option ng-repeat="account in accounts" value="{{account._id}}">{{account.displayName}}</option>
+                    <option value="other">Other account types</option>
+                    <option value="all">All US Brokerage Accounts</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-6 pull-right text-right control voffset3">
+            <div class="inline-block" style="position: relative;" dropdown>
+                <span type="button" style="cursor:pointer" class="text-muted dropdown-toggle et-icon-help after" data-toggle="dropdown" aria-expanded="false">
+                Help
+                </span>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Learn More (Video)</a></li>
+                    <li><a href="#">Learn More (Video 2)</a></li>
+                    <li><a href="#">Definition of Terms</a></li>
+                    <li><a href="#">Tour This Page</a></li>
+                </ul>
+            </div>
+            <div class="inline-block" style="position:relative;" dropdown>
+                <span type="button" style="cursor: pointer;" class="text-muted dropdown-toggle et-icon-print after" data-toggle="dropdown" aria-expanded="false">
+                Print
+                </span>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Print Collapsed</a></li>
+                    <li><a href="#">Print Expanded</a></li>
+                </ul>
+            </div>
+            <!-- <span href="javascript:;" class="et-icon-help text-muted">Help</span> -->
+            <!-- <span href="javascript:;" class="et-icon-print text-muted">Print</span> -->
+            <span href="javascript:;" ng-click="open()" class="et-icon-download after text-muted">Download </span>
+            <span class="et-icon-settings after text-muted" style="position:relative;" bs-popover data-placement="bottom-right" data-template="/modules/portfolio/views/partials/flyouts/settings.client.view.html">Settings </span>
+        </div>
+            </div>
+        </header>
+    </div>
+    <div class="clearfix">
+        
+
+    </div>
+    <section class="clearfix" ng-init="purchasingPowerOpen = true" >
+        <div ng-show="!purchasingPowerOpen" class="show-purchasing-power col-xs-12"><a class="toggle-link et-icon-chevron-right col-xs-12" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View Balance Snapshot</a></div>
+	<div class="panel purchasing-power row flex" ng-show="portfolioLoaded && purchasingPowerOpen">
+            <button class="close" ng-click="purchasingPowerOpen=false" aria-label="Hide Purchasing Power">&times;</button>
+            <div class="col-xs-12 col-sm-4 column-separator">
+                <div class="clearfix et-purchasing-power">
+		    <div ng-hide="accountId === 'all'" class="voffset2 et-purchasing-power-label">Net Account Value</div>
+		    <div ng-show="accountId === 'all'" class="voffset2 et-purchasing-power-label">Net Assets</div>
+                    <div class="voffset2 tertiary pull-right">
+                        {{accountDetails[accountId].value | currency}}
+                    </div>
+                </div>
+		<div class="clearfix et-purchasing-power" ng-if="accountId !== 'all'">
+                    <div class="voffset2 et-purchasing-power-label">Total Gain</div>
+                    <div class="voffset2 et-purchasing-power-data pull-right">
+                        <span et-change="accountDetails[accountId].totalGainDollar" data-type="'signed-dollar'" ></span> <span data-type="'pairedPercent'" et-change="accountDetails[accountId].totalGainPercent"></span>
+                    </div>
+                </div>
+            </div>
+	    <!-- This ng-class is a quick hack -->
+	    <div class="col-xs-12 col-sm-4 datapoint-lg column-separator" ng-class="{'flex-center':accountId==='all', 'flex':accountId==='all'}">
+                <div class="clearfix">
+                    <div class="voffset2 et-purchasing-power-label">Day's Gain Unrealized</div>
+                    <div class="voffset2 et-purchasing-power-data">
+                        <span data-type="'dollar'" et-change="accountDetails[accountId].dayGainDollar" class="day"></span> <span data-type="'pairedPercent'" et-change="accountDetails[accountId].dayGainPercent"></span>
+                    </div>
+                </div>
+		<div class="clearfix" ng-if="accountId !== 'all'">
+                    <div class="voffset2 et-purchasing-power-label">Day's Gain Realized</div>
+                    <div class="voffset2 et-purchasing-power-data">
+                        <span class="day pos">$100.69 (0.69%)</span>
+                    </div>
+                </div>
+		<div class="clearfix" ng-if="accountId !== 'all'">
+                    <div class="voffset2 et-purchasing-power-label">Available for Withdrawal <span ng-if="accountId==accounts[1]._id" class="et-icon-help after" bs-popover data-template="/modules/portfolio/views/partials/margin-withdrawal.client.view.html" data-container="body"></span></div>
+                    <div class="voffset2 et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</div>
+                </div>
+            </div>
+	    <div class="col-xs-12 col-sm-4 margin-space-left" ng-if="accountId !== 'all'">
+                <h5 ng-if="accountId==accounts[1]._id">Purchasing Power <span class="et-icon-help after" bs-popover data-container="body" data-template="/modules/portfolio/views/partials/margin-purchase-power.client.view.html"></span></h5>
+                <div ng-if="accountId !== accounts[1]._id">
+                    <div class="clearfix">
+                        <div class="voffset2 et-purchasing-power-label">Purchasing Power<span class="et-icon-help after" bs-popover data-container="body" data-template="/modules/portfolio/views/partials/flyouts/purchasing-power.client.view.html"></span></div>
+                        <div class="voffset2 et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</div>
+                    </div>
+                </div>
+                <div ng-if="accountId == accounts[1]._id" class="">
+                    <div class="clearfix et-purchasing-power datapoint-md">
+                        <div class="voffset2 et-purchasing-power-label">Marginable Securities</div>
+                        <div class="voffset2 et-purchasing-power-data">$1,000.69</div>
+                    </div>
+                    <div class="clearfix et-purchasing-power datapoint-md">
+                        <div class="voffset2 et-purchasing-power-label">Non-Marginable Securities</div>
+                        <div class="voffset2 et-purchasing-power-data">$670.69</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">
+            {{position.lots[0].lotType}}
+            <!-- <span class="single-tab et-icon-chevron-down after" ng-init="showChart==false" ng-click="showChart = !showChart" ng-class="{rotate180:showChart}">Chart</span> -->
+        </div>
+        <!-- <img ng-show="showChart" src="/modules/portfolio/img/sampleChart.svg" style="max-width: 100%"> -->
+        <div class="row">
+            <ul class="nav nav-tabs">
+                <li ui-sref-active="active"><a ui-sref="#">Positions</a></li>
+                <li ui-sref-active="active"><a ui-sref="#">Gains & Losses</a></li>
+                <li ui-sref-active="active"><a ui-sref="#">Estimated Income</a></li>
+                <li ui-sref-active="active"><a ui-sref="portfolio.margin">Margin</a></li>
+                <li ui-sref-active="active"><a ui-sref="#">Analyzer</a></li>
+            </ul>
+        </div>
+        <!-- <div data-ui-view style="border: 1px solid rgb(192, 192, 192); border-top: none;"></div> -->
+        <div data-ui-view style="border-top: none;"></div>
+    </section>
+</div>

@@ -1,0 +1,25 @@
+<div class="popover green">
+    <div class="arrow"></div>
+    <div class="row">
+    <div class="pull-right" ng-click="$hide(); $event.stopPropagation()"><button class="close" aria-label="Close">×</button></div>
+        <div class="col-xs-12">
+            <div class="col-xs-12">
+                <header style="padding: 10px 0px">
+                    <h5>Cash Purchasing Power Summary</h5>
+                </header>
+                <table class="table-horizontal">
+                    <tbody>
+                        <tr>
+                            <th>Settled Cash</th>
+                            <td class="text-right">{{accountDetails[accountId].purchasingPower | currency}}</td>
+                        </tr>
+                        <tr>
+                            <th>Unsettled Cash</th>
+                            <td class="text-right">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

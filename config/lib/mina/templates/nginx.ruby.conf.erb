@@ -1,0 +1,62 @@
+<%
+# upstream style-guide-v2 {
+#   server unix:///home/deploy/ruby/style-guide-v2/shared/tmp/sockets/production.sock;
+# }
+#
+# server {
+#   listen 80;
+#   server_name styleguide.etradecreative.com;
+#   root /home/deploy/ruby/style-guide-v2/current/public;
+#   auth_basic "Restricted";
+#   auth_basic_user_file /home/deploy/ruby/style-guide-v2/shared/.htpasswd;
+#
+#   location / {
+#     proxy_pass http://style-guide-v2; # match the name of upstream directive which is defined above
+#     proxy_set_header Host $host;
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#   }
+#
+#   location ~* ^/assets/ {
+#     # Per RFC2616 - 1 year maximum expiry
+#     expires 1y;
+#     add_header Cache-Control public;
+#
+#     # Some browsers still send conditional-GET requests if there's a
+#     # Last-Modified header or an ETag header even if they haven't
+#     # reached the expiry date sent in the Expires header.
+#     add_header Last-Modified "";
+#     add_header ETag "";
+#     break;
+#   }
+# }
+%>
+upstream <%= app_name %> {
+  server unix:///<%= deploy_to %>/shared/tmp/sockets/production.sock;
+}
+
+server {
+  listen 80;
+  server_name <%= app_name %>.<%= nginx_server_name %>;
+  root <%= deploy_to %>/<%= current_path %>/public;
+  auth_basic "Restricted";
+  auth_basic_user_file /home/deploy/ruby/<%= app_name %>/shared/.htpasswd;
+
+  location / {
+    proxy_pass http://<%= app_name %>; # match the name of upstream directive which is defined above
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+  location ~* ^/assets/ {
+    # Per RFC2616 - 1 year maximum expiry
+    expires 1y;
+    add_header Cache-Control public;
+
+    # Some browsers still send conditional-GET requests if there's a
+    # Last-Modified header or an ETag header even if they haven't
+    # reached the expiry date sent in the Expires header.
+    add_header Last-Modified "";
+    add_header ETag "";
+    break;
+  }
+}

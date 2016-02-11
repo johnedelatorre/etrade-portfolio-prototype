@@ -1,0 +1,19 @@
+.container {
+  padding-bottom: 20px;
+  min-height: 500px; }
+
+table {
+  table-layout: fixed; }
+
+tr.ng-enter {
+  opacity: 0; }
+  tr.ng-enter td {
+    background-color: transparent;
+    border-color: transparent; }
+
+tr.ng-enter-stagger {
+  transition-delay: 0.1s;
+  transition-duration: 0; }
+
+tr.ng-enter.ng-enter-active {
+  opacity: 1; }

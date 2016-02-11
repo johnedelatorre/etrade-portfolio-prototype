@@ -1,0 +1,85 @@
+<div class="row confirmation">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-md-12 voffset3 jumbotron flex">
+                <img src="/modules/trade/img/placeholder-widget.png">
+                <div class="et-flex-center-horizontal">
+                    <div class="secondary">Your option order has been placed</div>
+                </div>
+            </div>
+        </div>
+        <div class="row flex">
+            <div class="col-xs-4 text-left">
+                <div class="text-muted">11/14/2015</div>
+                <div class="text-muted">Your Account Brokerage *5855</div>
+            </div>
+            <div class="col-xs-4 text-center secondary">Order #34534: <span class="pos">{{transaction.status}}</span></div>
+            <div class="col-xs-4"></div>
+        </div>
+        <table class="table table-bordered option-confirm voffset3" ng-show="transaction.orderType === 'buy'">
+            <thead>
+                <th colspan="2">Order Type</th>
+                <th>Qty.</th>
+                <th colspan="3">Symbol</th>
+                <th>Price Type</th>
+                <th colspan="2">Term</th>
+                <th colspan="2">Price Executed</th>
+                <th colspan="2">Status</th>
+                <th colspan="5" width="200" ng-if="transaction.status === 'Open'">Action</th>
+                <th colspan="2" width="100" ng-if="transaction.status === 'Executed'">Action</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="leg in transaction.optionData.legs">
+                    <td colspan="2">{{leg.orderType}}</td>
+                    <td>{{leg.contracts}}</td>
+                    <td colspan="3">{{leg.relatedStrikeInfo.displaySymbol}}</td>
+                    <td class="table-align-center" ng-if="$first" rowspan="{{transaction.optionData.legs.length}}">{{transaction.priceType}}</td>
+                    <td class="table-align-center" ng-if="$first" colspan="2" rowspan="{{transaction.optionData.legs.length}}">{{transaction.term}}</td>
+                    <td colspan="2">--</td>
+                    <td colspan="2">{{transaction.status}}</td>
+                    <td class="highlight-cell btn-cell actions-column">
+                        <a href="" class="et-icon-bell-alt alertpopover" data-template="/modules/portfolio/views/partials/symbol-alerts.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                    <td class="highlight-cell btn-cell actions-column">
+                        <a href="" class="et-icon-drip text-muted drippopover" data-template="/modules/trade/views/partials/flyouts/dividend-reinvestment.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                     <td class="highlight-cell" colspan="3" ng-if="transaction.status === 'Open'">
+                        <span><a href="">Change</a> <a href="">Cancel</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="transaction.orderType === 'sell'">
+            Transaction Total: {{response.transactionTotal}}<br>
+            Total Proceeds: {{response.totalProceeds}}
+        </div>
+        <div class="row" style="">
+            <div class="col-md-12">
+                <div class="panel panel-highlight">
+                    <span class="panel-highlight-item">
+                        <span class="label" ng-if="transaction.status === 'Open'">Estimated Commission:</span>
+                        <span class="label" ng-if="transaction.status === 'Executed'">Commission:</span>         
+                        <span class="data-poiint">{{transaction.commission | currency}}</span>
+                    </span>
+                    <span class="panel-highlight-item">
+                        <span class="label" ng-if="transaction.status === 'Open'">Estimated Fees:</span>
+                        <span class="label" ng-if="transaction.status === 'Executed'">Fees:</span>
+                        <span class="data-poiint">0.02</span>
+                    </span>
+                    <span class="panel-highlight-item" ng-if="transaction.orderType === 'buy'">
+                        <span class="label" ng-if="transaction.status === 'Open'">Estimated Total Cost:</span>
+                        <span class="label" ng-if="transaction.status === 'Executed'">Total Cost:</span>
+                        <span class="data-point">{{transaction.totalCost | currency}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 voffset3 flex et-flex-center">
+                <button class="btn btn-default text-center">View Order</button>
+                <a href="#!/portfolio" class="btn btn-default">View Portfolio</a>
+                <button class="btn btn-default text-center" ng-click="utils.newTrade()">Place Another Trade</button>
+            </div>
+        </div>
+    </div>
+</div>

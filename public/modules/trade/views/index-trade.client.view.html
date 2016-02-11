@@ -1,0 +1,132 @@
+<section class="trade" data-ng-controller="IndexTradeController">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="panel-warning panel clearfix global-messages" ng-show="alert.messages.length > 0">
+                <div class="col-md-1 col-xs-3 text-center"><span class="et-icon-exclamation-tri"></span>
+                </div>
+                <div class="col-xs-9 col-lg-11">
+                    <h5><b>Warning</b></h5>
+                    <p class="voffset" ng-repeat="message in alert.messages">{{message.type}} - {{message.description}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <header class="row">
+            <div class="page-header col-md-12 pull-left">
+                <div class="col-md-6 pull-right text-right">
+                    <time class="et-icon-refresh text-right text-muted">January 01, 1970 12:00 AM EST</time>
+                </div>
+                <h1 class="page-title" ng-if="step.current === 1 && transaction.type == 'stock' ">Stock Order</h1>
+                <h1 class="page-title" ng-if="step.current === 1 && transaction.type == 'option' ">Options Order</h1>
+                <h1 class="page-title" ng-if="step.current === 1 && transaction.type == 'mutual-fund' ">Mutual Funds Order</h1>
+                <h1 class="page-title" ng-if="step.current === 1 && transaction.type == 'conditional' ">Conditional Order</h1>
+                <h1 class="page-title" ng-if="step.current === 1 && transaction.type == 'bond' ">Bond Order</h1>
+                <h1 class="page-title" ng-show="step.current === 2">Place Your Order</h1>
+                <h1 class="page-title" ng-show="step.current === 3">Order Confirmation</h1>
+            </div>
+        </header>
+        <div class="col-xs-12 col-xs-auto">
+            <div class="et-select-wrapper" data-ng-controller="AccountSelectorController" ng-class=" {disabled: step.current === 2 || step.current === 3} ">
+                <select name="account" id="account" ng-model="accountId" ng-init="loadAccounts()" ng-disabled=" step.current === 2 || step.current === 3">
+                    <option ng-repeat="account in accounts" value="{{account._id}}">{{account.displayName}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-12 col-xs-auto" ng-if="step.current === 1">
+            <div class="et-select-wrapper">
+                <select name="orderType" ng-model="transaction.type">
+                    <option value="stock">Stocks</option>
+                    <option value="option">Options</option>
+                    <option value="mutual-fund">Mutual Funds</option>
+                    <option value="conditional">Conditional</option>
+                    <option value="bond">Bonds</option>
+                </select>
+            </div>
+                
+        </div>
+        <div class="col-xs-12 col-md-6 pull-right text-right control voffset3">
+            <div class="inline-block" style="position: relative;" dropdown>
+                <span type="button" style="cursor:pointer" class="text-muted dropdown-toggle et-icon-help after" data-toggle="dropdown" aria-expanded="false">
+                Help
+                </span>
+                <ul class="dropdown-menu" role="menu" style="left:-270%;">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Learn More (Video)</a></li>
+                    <li><a href="#">Learn More (Video 2)</a></li>
+                    <li><a href="#">Definition of Terms</a></li>
+                    <li><a href="#">Tour This Page</a></li>
+                </ul>
+            </div>
+            <!-- <div class="inline-block" style="position:relative;" dropdown>
+                <span type="button" style="cursor: pointer;" class="text-muted dropdown-toggle et-icon-print after" data-toggle="dropdown" aria-expanded="false">
+                Print
+                </span>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Print Collapsed</a></li>
+                    <li><a href="#">Print Expanded</a></li>
+                </ul>
+            </div>
+            <span href="javascript:;" ng-click="open()" class="et-icon-download after text-muted">Download </span>
+            <span class="et-icon-settings after text-muted" style="position:relative;" bs-popover data-placement="bottom-right" data-template="/modules/portfolio/views/partials/flyouts/settings.client.view.html">Settings </span> -->
+        </div>
+    </div>
+    
+    <div class="row" ng-if="step.current === 1">
+        <div  ng-include=" 'modules/trade/views/partials/purchasing-power-header.html' "></div>       
+    </div>
+    
+    <div ng-if="transaction.type === 'conditional'" >
+        <div class="row" ng-include=" 'modules/trade/views/partials/conditional-dropdown.html' "></div>
+    </div> 
+
+    <div ng-switch="step.current" ng-init="step.current = 1" ng-show="transaction.type === 'stock'">
+        <div ng-switch-when="1" class="step-transition">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/stock/trade.html'"></div>
+        </div>
+        <div ng-switch-when="2" class="step-transition preview">
+            <div class="trade-body" ng-include="'modules/trade/views/partials/stock/preview.html'"></div>
+        </div>
+        <div ng-switch-when="3" class="step-transition confirm">
+            <div class="trade-body" ng-include="'modules/trade/views/partials/stock/confirmation.html'"></div>
+        </div>
+    </div>
+
+    <div ng-switch="step.current" ng-init="step.current = 1" ng-show="transaction.type === 'option'" ng-controller="OptionsController">
+        <div ng-switch-when="1" class="step-transition">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/option/trade.html'"></div>
+        </div>
+        <div ng-switch-when="2" class="step-transition preview">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/option/preview.html'"></div>
+        </div>
+        <div ng-switch-when="3" class="step-transition confirm">
+            <div class="trade-body" ng-include="'modules/trade/views/partials/option/confirmation.html'"></div>
+        </div>
+    </div>
+
+    <div ng-switch="step.current" ng-init="step.current = 1" ng-show="transaction.type === 'conditional'" ng-controller="ConditionalController">
+        <div ng-switch-when="1" class="step-transition">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/conditional/trade.html'"></div>
+        </div>
+        <div ng-switch-when="2" class="step-transition preview">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/conditional/preview.html'"></div>
+        </div>
+        <div ng-switch-when="3" class="step-transition confirm">
+            <div class="trade-body conditional" ng-include="'modules/trade/views/partials/conditional/confirmation.html'"></div>
+        </div>
+    </div>
+
+    <div ng-switch="step.current" ng-init="step.current = 1" ng-show="transaction.type === 'mutual-fund'" ng-controller="MutualFundController">
+        <div ng-switch-when="1" class="step-transition">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/mutual-fund/trade.html'"></div>
+        </div>
+        <div ng-switch-when="2" class="step-transition preview">
+            <div class="trade-body clearfix" ng-include="'modules/trade/views/partials/mutual-fund/preview.html'"></div>
+        </div>
+        <div ng-switch-when="3" class="step-transition confirm">
+            <div class="trade-body" ng-include="'modules/trade/views/partials/mutual-fund/confirmation.html'"></div>
+        </div>
+    </div>
+
+</section>

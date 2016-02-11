@@ -1,0 +1,22 @@
+<div class="popover symbol-alerts">
+	<div class="arrow"></div>
+	<div class="panel">
+		<div class="panel-heading">
+			<div class="pull-right" ng-click="$hide(); $event.stopPropagation()">
+				<button class="close" aria-label="Close">×</button>
+			</div>
+		</div>
+		<div class="panel-body">
+			<div class="row">
+				<h4>Target Price ($)</h4>
+				<p>Alert me when {{position._id}} reaches:</p>
+				<div class="col-xs-6"><input type="number" ng-model="lowDollar" id="{{position._id}}-lowDollar"name="lowDollar"><label for="{{position._id}}-lowDollar">Low</label></div>
+			</div>
+			<div class="row">
+				<div class="text-center">
+					<button class="btn btn-success" ng-click="saveNote(note);$hide();">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

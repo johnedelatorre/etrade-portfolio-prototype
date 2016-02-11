@@ -1,0 +1,16 @@
+<ul class="list-news list-group">
+	<li class="list-group-item" ng-repeat="article in portfolioNews | limitTo: 10 | orderBy: sortNews" ng-controller="StoryController">
+	    <!-- TODO: create a new controller for the article scope, fetch the article story inside that -->
+	    <!-- {{article}} -->
+	    {{article.error}}
+	    <a class="symbol" href="">{{article.symbols.split(',')[0]}}</a>
+	    <div class="headline">
+		<div>
+		    <a class="ng-binding">{{article.headline}}</a>
+		</div>
+		<div ng-init="fetchStory(article.article)">{{story | limitTo: 320}}...</div>
+		<time datetime="article.time">{{article.dateTime*1000 | date: 'hh:mm a ET MM/dd/yy'}}</time>
+	    </div>
+	    <span class="source">{{article.provider}}</span>
+	</li>
+</ul>

@@ -1,0 +1,58 @@
+<div class="popover calculator col-xs-4 voffset3">
+    <div class="arrow"></div>
+    <div class="popover-content">
+        <button aria-label="Close Calculator" ng-click="$hide()" class="close">×</button>
+        
+        <div class="row voffset2"><div class="col-xs-12"><h5>Calculate Quantity</h5></div></div>
+        <div class="row voffset3">
+            <div class="col-xs-12 col-md-12 col-lg-6">
+                <label for="dollarAmount">Enter Dollar Amount</label>
+                <input type="text" name="dollarAmount" class="form-control" ng-model="calculate.dollarAmount">
+            </div>
+            
+            <div class="col-xs-12 col-md-12 col-lg-6"  ng-show="transaction.type === 'stock'">
+                <label for="basis">Calculate Shares Based On</label>
+                <input type="text" name="basis" class="form-control" ng-model="transaction.last">
+            </div>
+
+            <div class="col-xs-12 col-md-12 col-lg-6" ng-show="transaction.type === 'conditional'">
+                <label for="basis">Calculate Shares Based On</label>
+                <input type="text" name="basis" class="form-control" ng-model="transaction.conditional.step[$index].calculateLast" ng-init="transaction.conditional.step[$index].calculateLast = transaction.conditional.step[$index].last">
+            </div>
+
+        </div>
+        <div class="row voffset1">
+            <div class="col-xs-12">
+                <div class="panel-highlight" ng-if="calculate.dollarAmount && transaction.last" ng-value="calculate.shares">
+                    <div><strong>{{calculate.shares}}</strong></div>
+                    <div class="disclaimer">Shares</div>
+                </div>
+            </div>
+            <div class="col-xs-12 voffset1" ng-if="calculate.dollarAmount && transaction.conditional.step[$index]">
+                <div class="panel-highlight" ng-hide="transaction.last" ng-value="calculate.shares">
+                    <div><strong>{{ calculate.dollarAmount / transaction.conditional.step[$index].calculateLast }}</strong></div>
+                    <div class="disclaimer">Shares</div>
+                </div>
+            </div>
+        </div>
+        <div class="row voffset2">
+            <div class="col-xs-12">
+                <p class="disclaimer">NOTE: Due to commissions, fees, and price fluctuations, the calculated quantity may be more or less than the dollar amount you enter. Please use this quantity as an estimate only.</p>
+            </div>
+        </div>
+        <div class="row voffset3">
+            <div class="col-xs-6">
+                <a class="btn btn-default" style="width:100%;" href="" ng-click="$hide()">Cancel</a>
+            </div>
+            <div class="col-xs-6">
+                <a class="btn btn-success" style="width:100%;" href="" ng-click="setQuantityFromCalculator(); $parent.toggleCalculator = !$parent.toggleCalculator">Enter</a>
+            </div>
+
+            <!-- 
+                <a href="" ng-click="cancelCalculator($index); $parent.toggleCalculator = !$parent.toggleCalculator" class="btn btn-default">Cancel</a>
+                <a href="" ng-click="setQuantityFromCalculator($index); $parent.toggleCalculator = !$parent.toggleCalculator" class="btn btn-primary pull-right">Enter</a> 
+            -->
+
+        </div>
+    </div>
+</div>

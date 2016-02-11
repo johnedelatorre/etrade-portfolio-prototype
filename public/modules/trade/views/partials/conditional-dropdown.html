@@ -1,0 +1,25 @@
+<div class="col-xs-8">
+    <div class="row" ng-if="transaction.type === 'conditional'">
+        <div class="col-xs-12" ng-if="step.current === 1">
+            <div class="panel conditional-type">
+            <div class="row flex">
+                <div class="col-xs-12 col-md-4">
+                    <div class="et-select-wrapper">
+                        <select name="conditionalType" ng-model="transaction.conditional.type" ng-if="transaction.type === 'conditional'">
+                            <option value="bracketed">Bracketed</option>
+                            <option value="contingent">Contingent</option>
+                            <option value="one-cancels-all">One-Cancels-All</option>
+                            <option value="one-triggers-all">One-Triggers-All</option>
+                            <option value="one-triggers-one-cancels-all">One-Triggers-One-Cancels-All</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-5 et-center-horizontal voffset3">
+                    <a href="" data-template="/modules/trade/views/partials/flyouts/flyout-instructional.client.view.html" data-placement="bottom-left" data-animation="am-fade-and-slide-top" data-auto-close="1" bs-popover>Which Conditional ticket should I choose?</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+        

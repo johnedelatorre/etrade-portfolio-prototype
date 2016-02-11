@@ -1,0 +1,125 @@
+<table class="table table-expandable table-striped text-right voffset2" sortable-table>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup></colgroup>
+	<colgroup class="actions-column"></colgroup>
+    <thead>
+	<tr>
+	    <th style="width: 10px; padding: 7px 0"><span ng-class="expandIcon" ng-click="toggleAll()"></span></th>
+	    <th sort-column="'_id'">Symbol</th>
+	    <th class="text-right" sort-column="lastTrade">Price $</th>
+	    <th class="text-right" sort-column="changeClose" >Change $</th>
+	    <th class="text-right" sort-column="changeClosePercentage">Change %</th>
+	    <!-- <th class="text-center range-visual">52 Week Range</th> -->
+	    <!-- <th class="text-right" sort-column="changeClosePercentage">Change %</th> -->
+	    <th class="text-right" sort-column="quantity">Quantity #</th>
+	    <th class="text-right" sort-column="pricePaid">Price Paid $</th>
+	    <th class="text-right" sort-column="dayGainDollar" >Day Gain $</th>
+	    <th class="text-right" sort-column="dayGainDollar" >Day Gain %</th>
+	    <th class="text-right" sort-column="totalGainDollar" >Total Gain $</th>
+	    <th class="text-right" sort-column="totalGainDollar">Total Gain %</th>
+	    <th class="text-right" sort-column="value">Value $</th>
+	    <th class="text-center">Open</th>
+	    <th class="text-center">Actions</th>
+	</tr>
+    </thead>
+    <tbody ng-repeat="position in portfolio[accountId] | filter:{_id: filters.symbolsString} | orderBy:sortBy:reverse" ng-init="expandedRowsVisible[$index]=false; showQuote=false;" id="{{position._id}}-position">
+	<tr ng-click="toggleRow($event, $index)">
+	    <td class="arrows"><span class="arrow et-icon-chevron-right" ng-class="expandedRowsVisible[$index] ? 'rotate' : ''"></span></td>
+	    <td class="text-left">
+		<span ng-switch="$index%2">
+		<a ng-switch-when="0" ng-click="$parent.showQuote=!showQuote;">{{position._id}}</a>
+		<a ng-switch-when="1" et-quick-quote='position' symbol="position._id" href="">{{position._id}}</a>
+		</span>
+	</td>
+	    <td>{{position.lastTrade | number: 2}}</td>
+	    <td et-change="position.changeClose"></td>
+	    <td et-change="position.changeClosePercentage"></td>
+	    <!-- <td class="range-visual"><range-visual min="position.low52" max="position.high52" current="position.lastTrade"></range-visual></td> -->
+	    <td>{{position.quantity}}</td>
+	    <td>{{position.pricePaid | number: 2}}</td>
+	    <td et-change="position.dayGainDollar"></td>
+	    <td et-change="position.dayGainPercent"></td>
+	    <td et-change="position.totalGainDollar"></td>
+	    <td et-change="position.totalGainPercent"></td>
+	    <td>{{position.value | number:2}}</td>
+	    <td class="text-center">
+		<span ng-switch="$index%2">
+		    <a ng-switch-when="0" ng-if="openOrdersForSymbol(position._id).length" href="#" scroll-to="open-orders" callback-before="beforeScroll" callback-after="afterScroll" ng-click="filters.showOpenOrders=true; filters.openOrders=position._id;" class="badge badge-red">{{openOrdersForSymbol(position._id).length}}</a>
+		    <a ng-switch-when="1" class="badge badge-red" ng-click="filters.showOpenOrders=true; filters.openOrders=position._id;" ng-if="openOrdersForSymbol(position._id).length" href="" data-template="/modules/portfolio/views/partials/open-orders-modal.client.view.html" data-placement="bottom-right" data-animation="am-fade-and-slide-top" data-auto-close="1" bs-popover>{{openOrdersForSymbol(position._id).length}}</a>
+		    </span>
+	    </td>
+	    <td class="btn-cell"><!--TODO: refactor this into controller or something-->
+		    <span ng-click="bellToggle = !bellToggle;" ng-init="bellToggle = false" ng-class="{'et-icon-bell-alt':!bellToggle, 'et-icon-bell':bellToggle}" title="Set Alert"></span>
+			<span ng-click="documentToggle = !documentToggle;" ng-init="documentToggle = false" ng-class="{'et-icon-document-alt':!documentToggle, 'et-icon-document':documentToggle}" title="Add Note"></span>
+			<a ng-click="setTradeSegue(position)" ui-sref="trade" class="btn btn-success btn-xs">Trade</a>
+		</td>
+    </tr>
+    <tr class="panel panel-default" ng-if="expandedRowsVisible[$index]">
+	<td colspan="14" class="table-nested-content">
+	    <table class="table" style="background-color: transparent;">
+		<tbody>
+		    <tr ng-repeat="lot in position.lots">
+			<td class="arrows borderless"></td>
+			<td class="text-left" colspan="2">{{lot.created | date: 'MM/dd/yyyy'}}</td>
+			<td></td>
+			<!-- <td class="range-visual"></td> -->
+			<td></td>
+			<td>{{lot.quantity}}</td>
+			<td>{{lot.pricePaid | number:2 }}</td>
+			<td>{{lot.dayGainDollar | number:2}}</td>
+			<td>{{lot.dayGainPercent | number:2}}</td>
+			<td>{{lot.totalGainDollar | number: 2}}</td>
+			<td>{{lot.totalGainPercent | number: 2}}</td>
+			<td>{{lot.value | number: 2}}</td>
+			<td></td>
+			<td class="btn-cell text-right actions-column"><button class="btn btn-xs btn-default">Sell</button></td>
+		    </tr>
+		</tbody>
+	    </table>
+	</td>
+    </tr>
+	<tr ng-if="showQuote">
+		<td colspan="14">
+			<table>
+				<ng-include src="'/modules/portfolio/views/partials/quick-quote.client.view.html'"></ng-include>
+			</table>
+		</td>
+	</tr>
+</tbody>
+<tfoot>
+<tr>
+    <td class="arrows"></td>
+    <td colspan="10" class="text-left">Cash</td>
+    <td>{{accountDetails[accountId].purchasingPower | number:2}}</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr class="totals-row">
+    <td class="arrows"></td>
+    <td colspan="6" class="text-left">Total</td>
+    <td et-change="totals.visibleDayGainDollar" data-type="dollar"></td>
+    <td et-change="totals.visibleDayGainPercent" data-type="percent"></td>
+    <td et-change="totals.visibleTotalGainDollar" data-type="dollar"></td>
+    <td et-change="totals.visibleTotalGainPercent" data-type="percent"></td>
+    <td>{{totals.visiblePositionsAndCash | number:2}}</td>
+    <td></td>
+    <td></td>
+</tr>
+<tr>
+    <td colspan="14">
+	<div class="disclaimer text-right">Real Time Quotes *mutual fund quotes as of previous day</div>
+    </td>
+</tr>
+</tfoot>
+</table>

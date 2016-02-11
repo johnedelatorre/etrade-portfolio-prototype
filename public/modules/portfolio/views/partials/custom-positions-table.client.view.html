@@ -1,0 +1,103 @@
+<div class="table-scrollable">
+    <table class="table table-expandable table-striped text-right positions" sortable-table>
+        <thead>
+            <tr>
+                <th class="arrows"><span ng-class="expandIcon" ng-click="toggleAll()"></span></th>
+                <th sort-column="_id">Symbol</th>
+                <!-- <th>{{views[config.currentView]}}</th> -->
+                <th ng-repeat="column in views[config.currentView].fields" sort-column="{{column}}" ng-class="config.allOptions[column].align">{{config.allOptions[column].name}}</th>
+                <th class="text-center open-orders-column" >Open<br>Orders</th>
+                <th class="text-center actions-column" ng-class="{'all-accounts':accountId=='all'}">Actions</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="position in portfolio[accountId] | filter:{_id: filters.symbolsString} | orderBy:sortBy:reverse" ng-init="expandedRowsVisible[$index]=false; showQuote=false;" id="{{position._id}}-position" ng-class="position.lots[0].lotType">
+            <tr ng-click="toggleRow($event, $index)">
+                <td class="arrows"><span class="arrow et-icon-chevron-right" ng-class="expandedRowsVisible[$index] ? 'rotate' : ''"></span></td>
+                <td class="text-left">
+                    <a et-quick-quote='position' symbol="position._id" href="" ng-class="{'special-event':position._id==='AAPL'}">{{position._id}}</a>
+                </td>
+                <td ng-repeat="column in views[config.currentView].fields" ng-class="config.allOptions[column].align" class="{{column}}">
+                    <span et-change="position[column]" data-type="config.allOptions[column].changeFormat"></span>
+                    <span ng-if="column == 'allStar'" class="label label-success">NTF</span>
+                </td>
+                <td class="text-center">
+                    <!-- <a ng-switch-when="0" ng-if="openOrdersForSymbol(position._id).length" href="#" scroll-to="open-orders" callback-before="beforeScroll" callback-after="afterScroll" ng-click="filters.showOpenOrders=true; filters.openOrders=position._id;" class="badge badge-red">{{openOrdersForSymbol(position._id).length}}</a> -->
+                    <a class="" ng-click="filters.openOrders=position._id;" ng-if="openOrdersForSymbol(position._id).length" href="" data-template="/modules/portfolio/views/partials/open-orders-modal.client.view.html" data-placement="bottom-right" data-animation="am-fade-and-slide-top" data-auto-close="1" bs-popover>{{openOrdersForSymbol(position._id).length}}</a>
+                </td>
+                <td class="btn-cell actions-column"><!--TODO: refactor this into controller or something-->
+                <!-- This is wrapping the spans because of a nowrap/overflow issue coming into play with in the money background color not spanning the whole row -->
+                <div class="actions-column">
+                    <span ng-click="" symbol-alerts="{{position._id}}"></span>
+                    <span ng-click="" symbol-note="{{position._id}}"></span>
+                    <dropdown-trade-btn ng-if="accountId !=='all'" lot-Type="position.lots[0].lotType"></dropdown-trade-btn>
+                </div>
+            </td>
+        </tr>
+        <tr class="panel panel-default" ng-if="expandedRowsVisible[$index]">
+            <td colspan="{{views[config.currentView].fields.length + 4}}" class="table-nested-content">
+                <table class="table" style="background-color: transparent;">
+                    <tbody>
+                        <tr ng-repeat="lot in position.lots">
+                            <td class="arrows borderless"></td>
+                            <td class="text-left" ng-if="accountId!=='all'">{{lot.created | date: 'MM/dd/yyyy'}}<sup style="margin-right: 1em" ng-if="$parent.$index%3===0">†</sup></td>
+                            <td ng-if="accountId=='all'" class="text-right">{{getAccountNameById(lot.account)}}</td>
+                            <td ng-repeat="column in views[config.currentView].fields" ng-class="config.allOptions[column].align">
+                                <span et-change="lot[column]" data-type="config.allOptions[column].changeFormat"></span>
+                            </td>
+                            <td class="open-orders-column"></td>
+                            <td class="btn-cell text-right actions-column" ng-class="{'all-accounts':accountId=='all'}">
+                                <div ng-if="accountId !=='all'"><button ng-if="lot.lotType !=='option'" class="btn btn-xs btn-default">Sell</button>
+                                    <button class="btn btn-default btn-xs" ng-if="lot.lotType =='option'">Close</button><button class="btn btn-default btn-xs" ng-if="lot.lotType=='option'">Roll</button>
+                                </div>
+                                <div ng-if="accountId == 'all'">
+                                    <dropdown-trade-btn lot-Type="lot.lotType"></dropdown-trade-btn>
+                                </div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <tr ng-if="showQuote">
+                <td colspan="{{views[config.currentView].fields.length + 4}}">
+                    <table>
+                        <ng-include src="'/modules/portfolio/views/partials/quick-quote.client.view.html'"></ng-include>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr class='pagination-row'>
+            <td class="arrows"></td>
+            <td colspan="{{views[config.currentView].fields.length + 3}}">
+                <div class="pagination">
+                    <a class='btn btn-default' style='margin-right:16px'>View All</a>
+                </div>
+                <label>Viewing 50 of 60 Positions</label>
+            </td>
+        </tr>
+        <tr class="totals-row" ng-if="views[config.currentView].fields.indexOf('value') >= 0">
+            <td class="arrows"></td>
+            <td colspan="{{views[config.currentView].fields.indexOf('value') + 1}}" class="text-left">Cash</code></td>
+            <td colspan="1" class="text-right">{{accountDetails[accountId].purchasingPower | number:2}}</td>
+        </tr>
+        <tr class="totals-row">
+            <td class="arrows"></td>
+            <td colspan="" class="text-left">Total</td>
+            <td ng-repeat="column in views[config.currentView].fields" ng-controller="TableFooterController">
+                <span et-change="totals[visibleSumForColumn]" data-type="config.allOptions[column].type"></span>
+            </td>
+            <!--<td et-change="totals.visibledayGainDollar" data-type="dollar"></td>
+                            <td et-change="totals.visibledayGainPercent" data-type="percent"></td>
+                            <td et-change="totals.visibletotalGainDollar" data-type="dollar"></td>
+            <td et-change="totals.visibletotalGainPercent" data-type="percent"></td> -->
+            <!-- <td>{{totals.visiblepositionsAndCash | number:2}}</td> -->
+            <td></td>
+            <td></td>
+        </tr>
+        <!-- <tr> -->
+        <!-- <td colspan="{{views[config.currentView].fields.length + 4}}"> -->
+        <!-- </td> -->
+        <!-- </tr> -->
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,135 @@
+<div class="col-xs-8">
+    <div class="col-xs-12">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel">
+                    <table class="table table-horizontal">
+                        <thead>
+                            <th>Order Buy</th>
+                            <th>Investment Amount</th>
+                            <th colspan="2">Description</th>
+                            <th colspan="2">Reinvestment Dividends/Capital Gains</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{transaction.orderType}}</td>
+                                <td>{{transaction.investmentAmount}}</td>
+                                <td colspan="2">{{transaction.fundFamily}} ({{transaction.symbol}}) <p><a class="et-icon-file-pdf before" href="">View Prospectus</a></p></td>
+                                <td colspan="2">{{transaction.reinvestment}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+       <div class="col-xs-12">
+            <span class="label">Commission</span>
+            <p>This fund participates in the no-load, no-transaction fee program. You pay no sales charges or transaction fees for this order. E*TRADE Securities will charge an Early Redemption Fee of $49.99 on redemptions or exchanges of no-load, no transaction fee funds that are held less than 90 days.</p>
+        </div>
+    </div>
+    <div class="row voffset3">
+        <div class="col-xs-12">
+            <div class="panel panel-highlight">
+                <span ng-if="transaction.orderType === 'buy'">
+                <span class="label">Estimated Total Cost:</span> {{whenOrderPriceText}}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="voffset3 trade-tab">   
+        <div class="col-xs-12 col-md-5 col-lg-4">
+            <div class="nav" ng-click="togglePurchasingPower = !togglePurchasingPower">
+                <a class="trade-toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View impact to purchasing power</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default trade-toggle-link" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th colspan="2"></th>
+                                <th class="">Non-Marginable Securities/Options</th>
+                                <th class="">Marginable Securities</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="2" class="">Purchasing power before open orders:</td>
+                                <td class="">{{purchasingPower.beforeOpenOrders | currency}}</td>
+                                <td class="">$10,777.69</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="">Reserve for other open orders:</td>
+                                <td class="">{{purchasingPower.reserve | currency}}</td>
+                                <td class="">$10,777.69</td>
+                            </tr>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="">Purchasing power impact of this order:</td>
+                                <td class="">{{purchasingPowerImpactThisOrder | currency}}</td>
+                                <td class="">$10,777.69</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="2" class=""><strong>Purchasing power after this order:</strong></td>
+                                <td class=""><strong>{{purchasingPowerAfterThisOrder | currency}}</strong></td>
+                                <td class=""><strong>$10,777.69</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>    
+        </div>  
+    </div>
+     
+   
+    <div class="col-xs-12 trade-footer">
+        <div class="col-xs-12 col-md-5 col-lg-5 clear-padding voffset3">
+            <a href="" class="btn btn-default" ng-click="step.current = 1; clearItems();">Cancel Order</a>
+            <a href="" class="btn btn-default" ng-click="step.current = 1; startLiveUpdate();">Change Order</a>
+        </div>
+        <div class="col-xs-12 col-md-7 col-lg-7 voffset3">
+            <span class="text-muted col-xs-8">You are placing a firm order. Click only once to avoid placing multiple orders.</span>
+            <a href="" class="btn btn-primary pull-right" ng-click="createMutualFund()">Place Order</a>
+        </div>
+    </div>
+
+
+
+
+    <div class="col-xs-12"><a href="">Mutual Funds Terms and Conditions</a></div>
+</div>
+<div class="col-xs-4">
+    <div class="panel-default panel">
+        <div class="row fund-family">
+            <div class="col-xs-8">{{transaction.fundFamily}}</div>
+            <div class="col-xs-4 text-right fund-family-item">{{transaction.symbol}}</div>
+        </div>
+        <hr>
+        <div><strong>Minimum Purchase Requirements</strong></div>
+        <div><span class="text-left">Initial</span> <span class="pull-right">{{transaction.initialInvestment | currency}}</span></div>
+        <div><span class="text-left">Subsequent</span> <span class="pull-right">{{transaction.subsequentInvestment | currency}}</span></div>
+        <hr>
+        <div><strong>Front End Sales Charges</strong></div>
+        <table class="table table-horizontal">
+            <thead>
+                <th>Investment Amount</th>
+                <th class="text-right">Sales Charge</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="charge in transaction.frontEndSalesCharges">
+                    <td>{{charge.lowhigh}}</td>
+                    <td class="text-right">{{charge.percent}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div><strong>E*TRADE Details</strong></div>
+        <div><span class="text-left">Trading Cut-Off Time</span> <span class="pull-right">{{transaction.orderCutoffTime}} {{transaction.timeZone}}</span></div>
+        <div><span class="text-left">Transaction Fee</span> <span class="pull-right">{{transaction.fee}}</span></div>
+        <span class="disclaimer"><a href="">View Detailed Quote</a></span>
+    </div>
+</div>

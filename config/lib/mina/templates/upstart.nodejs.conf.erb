@@ -1,0 +1,51 @@
+<%
+# JUST AN EXAMPLE
+# #!upstart
+# description "rga-move-money"
+
+# start on startup
+# stop on shutdown
+
+# expect fork
+
+# env NODE_BIN_DIR="/home/deploy/.nvm/v0.10.26/bin"
+# env NODE_PATH="/home/deploy/.nvm/v0.10.26/lib/node_modules"
+# env APPLICATION_DIRECTORY="/home/deploy/nodejs/rga-move-money/current/dist"
+# env APPLICATION_START="server.js"
+# env LOG="/home/deploy/logs/rga-move-money.log"
+
+# script
+#     PATH=$NODE_BIN_DIR:$PATH
+#     exec forever --sourceDir $APPLICATION_DIRECTORY -a -l $LOG \
+#          --minUptime 5000 --spinSleepTime 2000 start --uid "rga-move-money" $APPLICATION_START
+# end script
+
+# pre-stop script
+#     PATH=$NODE_BIN_DIR:$PATH
+#     exec forever stop $APPLICATION_START >> $LOG
+# end script
+%>
+#!upstart
+description "<%= app_name %>"
+
+start on startup
+stop on shutdown
+
+expect fork
+
+env NODE_BIN_DIR="<%= nvm_path %>/v<%= nvm_version %>/bin"
+env NODE_PATH="<%= nvm_path %>/v<%= nvm_version %>/lib/node_modules"
+env APPLICATION_DIRECTORY="<%= deploy_to %>/<%= current_path %>/dist"
+env APPLICATION_START="server.js"
+env LOG="<%= deploy_to %>/shared/log/upstart.log"
+
+script
+    PATH=$NODE_BIN_DIR:$PATH
+    exec forever --sourceDir $APPLICATION_DIRECTORY -a -l $LOG \
+         --minUptime 5000 --spinSleepTime 2000 start --uid "<%= app_name %>" $APPLICATION_START
+end script
+
+pre-stop script
+    PATH=$NODE_BIN_DIR:$PATH
+    exec forever stop $APPLICATION_START >> $LOG
+end script

@@ -1,0 +1,64 @@
+<div class="row confirmation">
+    <div class="col-xs-12 col-md-12">
+        <div class="row">
+            <div class="col-md-12 voffset3 jumbotron flex">
+                <img src="/modules/trade/img/placeholder-widget.png">
+                <div class="et-flex-center-horizontal">
+                    <div class="secondary">Your mutual fund order has been placed</div>
+                </div>
+            </div>
+        </div>
+        <div class="row flex">
+            <div class="col-xs-4 text-left">
+                <div class="text-muted">11/14/2015</div>
+                <div class="text-muted">Your Account Brokerage *5855</div>
+            </div>
+            <div class="col-xs-4 text-center secondary">Order #34534: <span class="pos">{{transaction.status}}</span></div>
+            <div class="col-xs-4"></div>
+        </div>
+        <div class="voffset3">
+            <table class="table" ng-show="transaction.orderType === 'buy'">
+            <thead>
+                <th>Order Type</th>
+                <th>Qty.</th>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Price Type</th>
+                <th>Term</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{transaction.orderType}}</td>
+                    <td>{{transaction.investmentAmount}}</td>
+                    <td>{{transaction.symbol}}</td>
+                    <td>MKT</td>
+                    <td>{{transaction.priceType}}</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>{{transaction.status}}</td>
+                    <td class="text-left"><a href="">Cancel</a></td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        <div class="row" style="">
+            <div class="col-md-12">
+                <div class="panel" style="padding:20px 10px 10px 10px;background-color:#daedf5;">
+                    <span ng-if="transaction.orderType === 'buy'">
+                    <span class="label">Estimated Total Cost:</span> {{whenOrderPriceText}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 voffset3 flex et-flex-center">
+                <button class="btn btn-default text-center">Enroll in Auto-Invest</button>
+                <a href="#!/portfolio" class="btn btn-default">View Portfolio</a>
+                <button class="btn btn-default text-center" ng-click="utils.newTrade()">Place Another Trade</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,249 @@
+<div class="clearfix voffset3">
+    <div class="col-xs-12 col-sm-auto">
+        <label for="customViews">Your Positions View</label>
+        <div class="et-select-wrapper">
+	    <select name="customViews" id="customViews" ng-model="config.currentView">
+		<option ng-repeat="view in views track by $index" ng-value="{{$index}}" ng-selected="config.currentView === $index" ng-hide="view.name==='Create New View'">{{view.name}}</option>
+	    </select>
+        </div>
+        <!-- <a ng-click="localStorage.clear();">Clear Views (then</a> -->
+    </div>
+    <div class="col-xs-12 col-sm-auto">
+        <div class="form-control-labelless">
+	    <a ui-sref="portfolio.positions.customize" class="btn btn-default">Customize Views</a>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-auto">
+        <div class="form-control-static form-control-labelless">
+	    <a ng-click="filters.visible = !filters.visible" class="toggle-link et-icon-chevron-right" ng-class="{rotate:filters.visible}">Filters</a>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-auto pull-right">
+    	<button class="btn btn-default form-control-labelless" bs-modal="modal" data-template="modules/portfolio/views/modals/edit-lots-modal.client.view.html" data-animation="am-fade-and-slide-top" data-container="body" data-placement="center">Edit Lots</button>
+    </div>
+</div>
+<div class="clearfix animate-show-filters" ng-show="filters.visible">
+    <div class="col-xs-12 col-sm-6 col-md-2">
+        <label for="symbolFilter">Symbol / CUSIP</label>
+	<input type="text" name="symbolFilter" placeholder="Symbol" ng-model="filters.symbolsString" class="form-control">
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-2">
+    	<label for="securityTypes">Security Types</label>
+    	<div>
+    		<div class="btn-group btn-group-checkboxes" dropdown auto-close="disabled">
+    			      <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+    			        <div class="selected-items"><span class="selected-dropdown-item" ng-repeat="visibleType in securityTypes | visibleSecurities">{{visibleType}}</span></div><span class="caret"></span>
+    			      </button>
+    			      <ul class="dropdown-menu" role="menu">
+    			      <!-- This isn't necessarily the best markup, but I wanted to quickly hijack the existing bootstrap styling by wrapping the inputs in an `a` tag -->
+    			        <li ng-repeat="type in securityTypes"><div class="dropdown-checkbox"><input type="checkbox" ng-model="securityTypes[$index].visible" id="type-{{type.id}}"><label for="type-{{type.id}}">{{type.name}}</label></li>
+    			      </ul>
+    			    </div>
+    	</div>
+    </div>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-2" ng-show="accountId==='all'">
+    	<label for="groupBy">Group By</label>
+    	<div class="et-select-wrapper">
+    		<select name="groupBy" id="groupBy" class="form-control" ng-init="groupByFilter='security'" ng-model="groupByFilter">
+    			<option value="security">Symbol</option>
+    			<option value="account">Account</option>
+    		</select>
+    	</div>
+    </div>
+    <!-- <div class="col-xs-12 col-sm-6 col-md-2">
+		<label for="sector">Group By</label>
+		<div class="et-select-wrapper">
+			<select name="sector" id="sector" class="form-control" ng-init="groupByFilter = '!'" ng-model="groupByFilter">
+				<option value="!">All Holdings</option>
+				<option value="type">Security Type</option>
+				<option value="trade">Trade</option>
+			</select>
+		</div>
+        </div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<div class="label inline-block">&nbsp;</div>
+		<div class="form-control-static ">
+			<a href="" ng-init="showAdvanced=false" ng-click="showAdvanced = ! showAdvanced" class="et-icon-chevron-down after" ng-class="{rotate180:showAdvanced}">Advanced Filters</a>
+		</div>
+    </div> -->
+</div>
+<!--<div class="row" ng-show="showAdvanced">
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<label for="sector">Group By</label>
+		<div class="et-select-wrapper">
+		    <select name="sector" id="sector" class="form-control" ng-init="groupByFilter = '!'" ng-model="groupByFilter">
+			    <option value="!">All Holdings</option>
+			    <option value="trade">Trade</option>
+		    </select>
+		</div>
+        </div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<label for="sector">Sector</label>
+		<div class="et-select-wrapper">
+		    <select name="sector" id="sector" class="form-control" ng-init="sectorFilter = '!'" ng-model="sectorFilter">
+			    <option value="!">All</option>
+			    <option value="healthcare">Healthcare</option>
+			    <option value="tech">Tech</option>
+		    </select>
+		</div>
+        </div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<label for="marketCap">Market Cap</label>
+		<div class="et-select-wrapper">
+		    <select name="marketCap" id="marketCap" class="form-control" ng-init="marketCapFilter = '!'" ng-model="marketCapFilter">
+			    <option value="!">All</option>
+			    <option value="large">Large</option>
+			    <option value="medium">Medium</option>
+			    <option value="small">Small</option>
+		    </select>
+		</div>
+        </div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<label for="term">Term</label>
+		<div class="et-select-wrapper">
+		    <select name="term" id="term" class="form-control" ng-init="termFilter = '!'" ng-model="termFilter">
+			    <option value="!">All</option>
+			    <option value="shortTerm">Short Term</option>
+			    <option value="longTerm">Long Term</option>
+		    </select>
+		</div>
+        </div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+		<div class="label inline-block">&nbsp;</div>
+		<div class="form-control-static">
+		    <a class="et-icon-cancelx after" href="">Reset Filters</a>
+		</div>
+        </div>
+</div>-->
+<!--<div class="clearfix voffset3">
+	<div class="pull-right col-sm-auto" ng-init="change='dollar'"><span class="form-control-static">View Day's Gain and Total Gain by </span>
+	<et-toggle class="btn-group-sm" style="width:auto !important; margin-bottom: 0" ng-model="change" segments="[{value:'dollar',text:'$'},{value:'percent',text:'%'}]"></et-toggle>-->
+	<!-- <div class="btn-group segmented toggle">
+		    <div class="btn-group">
+			<button class="btn btn-default" ng-class="{active:change=='dollar'}" ng-click="change='dollar'">$</button>
+		    </div>
+		    <div class="switch"></div>
+		    <div class="btn-group">
+			<button class="btn btn-default" ng-class="{active:change=='percent'}" ng-click="change='percent'">%</button>
+		    </div>
+	</div> -->
+    <!--    </div>
+</div> -->
+<!-- <div ng-if="config.currentView == 0" ng-include="'modules/portfolio/views/partials/default-positions-table.client.view.html'" class="row"></div> -->
+
+<!-- Repeat tables if showing all accounts grouped by Account -->
+<div ng-if="!(groupByFilter ==='account' && accountId === 'all')" ng-include="'modules/portfolio/views/partials/custom-positions-table.client.view.html'" class="row"></div>
+<div ng-if="groupByFilter ==='account' && accountId === 'all'" ng-repeat="account in accounts" ng-init="accountId = account._id">
+	<h2 class="voffset2 secondary" ng-init="accountVisible = true" ng-click="accountVisible = !accountVisible"><span class="et-icon-chevron-right" ng-class="{rotate:accountVisible}"></span>{{account.displayName}}</h2>
+	<div ng-show="accountVisible" ng-include="'modules/portfolio/views/partials/custom-positions-table.client.view.html'" class="row"></div>
+</div>
+<div class="clearfix">
+    <div class="table-key col-xs-12">
+        <div class="disclaimer">15 Minute Delayed Quotes <a href="#">Upgrade to real-time quotes</a></div>
+        <div class="disclaimer">*Mutual Fund and Bond prices are updated at the end of each business day.</div>
+        <div class="disclaimer"><sup>†</sup> Lot Edited by Client</div>
+        <div class="disclaimer"><sup>‡</sup> Lot Edited by Firm</div>
+        <div class="disclaimer"><span class="in-the-money" style="display: inline-block; width: 10px; height: 10px;"></span> = Option in the money</div>
+        <div class="disclaimer"><span class="special-event"></span> = Special Event for position</div>
+    </div>
+</div>
+
+<section class="null-state-cta voffset2" ng-switch="config.currentView">
+	<div ng-switch-when="1">
+		<ng-include src="'modules/portfolio/views/partials/options-null-state.client.view.html'"></ng-include>
+	</div>
+	<div ng-switch-when="2">
+		<ng-include src="'modules/portfolio/views/partials/mutual-fund-null-state.client.view.html'"></ng-include>
+	</div>
+</section>
+
+<!-- <div class="row">
+    <div class="pull-right col-sm-auto">
+	    <label for="streaming">Streaming</label>
+	    <et-toggle class="btn-group-sm" style="width:auto !important; margin-bottom: 0" ng-model="streaming" segments="[{value:false,text:'Off'},{value:true,text:'On'}]"></et-toggle>
+    </div>
+</div> -->
+<div class="voffset3" ng-include="'modules/portfolio/views/partials/open-orders.client.view.html'"></div>
+<!-- <div class="clearfix voffset3">
+	<div class="panel panel-info">
+	    <div class="panel-body">
+		    <div class="col-xs-12 col-sm-auto pull-right">
+			<a href="" class="btn btn-default">Gains & Losses</a>
+			<a href="" class="btn btn-default">Transaction History</a>
+		    </div>
+		    <div class="panel-title">Net closed positions today: <span class="secondary">$500.00</span></div>
+		</div>
+        </div>
+</div> -->
+
+
+<section class="research row voffset3">
+    <div class="panel panel-default">
+	<!--        <header class="panel-heading">
+		<h2 class="panel-title">Research your positions</h2>
+	</header> -->
+        <div class="panel-body">
+	    <div class="col-xs-12">
+		<div class="pull-right">
+			<label for="sortNews">View By: </label>
+		    <div class="et-select-wrapper inline-block">
+			<select name="sortNews" id="sortNews" ng-model="sortNews" ng-init="sortNews='date'">
+			    <option value="date">Most Recent</option>
+			    <option value="symbol">Symbol</option>
+			</select>
+                    </div>
+                </div>
+		<header class="panel-heading">
+		    <h5 class="panel-title">Portfolio News</h5>
+		</header>
+		<div class="panel-body">
+					<div ng-if="sortNews==='date'" ng-include="'modules/portfolio/views/partials/recent-news.client.view.html'"></div>
+					<div ng-if="sortNews==='symbol'" ng-include="'modules/portfolio/views/partials/symbol-news.client.view.html'"></div>
+		    <div class="clearfix voffset2">
+			<div class="col-xs-6">
+			    <a href="#">More Portfolio News</a>
+			</div>
+			<div class="col-xs-6 text-right">
+			    <input type="checkbox" class="">
+			    <label for="subscribe">Subscribe to Portfolio News Digest?</label><!-- /input-group -->
+			</div>
+		    </div>
+                </div>
+            </div>
+	    <!-- <div class="col-xs-12 col-md-5 col-lg-4">
+			<div class="panel">
+			    <header class="panel-heading">
+				    <h5 class="panel-title">Events</h5>
+			    </header>
+			    <div class="panel-body">
+				    <ul class="list-news">
+					<li class="list-group-item clearfix" ng-repeat="earningReport in earnings.EarningsResponse.EarningsDetail">
+						<a class="symbol" href="">{{earningReport.product.symbol}}</a>
+						<div>
+						    <span class="col-xs-auto">Quarterly Earnings Report</span>
+						    <ul class="list-unstyled col-xs-4">
+							    <li class="label">Low</li>
+							    <li>{{earningReport.Period[1].low}}</li>
+						    </ul>
+						    <ul class="list-unstyled col-xs-4">
+							    <li class="label">Average</li>
+							    <li>{{earningReport.Period[1].estMean}}</li>
+						    </ul>
+						    <ul class="list-unstyled col-xs-4">
+							    <li class="label">High</li>
+							    <li>{{earningReport.Period[1].high}}</li>
+						    </ul>
+						    <p class="disclaimer col-xs-8">{{earningReport.Period[0].dateTime | date: "MM/dd/yy hh:mm a"}}</p>
+						</div>
+						<div>
+						    <span class="et-icon-calendar" style="font-size: 1.5em; color: #888;"></span>
+						</div>
+					</li>
+				    </ul>
+			    </div>
+			    </div>
+	    </div> -->
+	</div>
+    </div>
+</section>

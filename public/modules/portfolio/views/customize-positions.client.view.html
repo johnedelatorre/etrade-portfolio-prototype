@@ -1,0 +1,199 @@
+<section ng-init="loadTemplates()">
+<style>
+/*Hooray for hacks because the UX logic breaks the routing system*/
+.show-purchasing-power, .purchasing-power, .nav-tabs{
+    display: none !important;
+}
+</style>
+    <div class="panel">
+        <a ui-sref="portfolio.positions" class="pull-right">Back to Portfolios</a>
+        <div class="panel-title">Customize View</div>
+        <p>Customize your view by selecting security types and groupings you'd like to see. Choose from over 100 column options to see in your view</p>
+        <div class="row">
+            <div class="col-xs-12">
+                <p>1. Select from an existing view or create a new view</p>
+            </div>
+        </div>
+        <div class="row voffset2">
+            <div class="col-xs-12 col-sm-auto">
+                <label for="positionTemplate">Existing Views</label>
+                <div class="et-select-wrapper">
+                    <select name="Position-template" id="positionTemplate" ng-model="viewToEdit">
+                    	<optgroup label="Default views">
+                        <option ng-repeat="view in views track by $index" value="{{$index}}">{{view.name}}</option>
+                        </optgroup>
+                        <optgroup label="Custom views">
+                        	<option value="custom1">My custom view</option>
+                        </optgroup>
+                        <option value="new">Create New View</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-auto" ng-if="viewToEdit=='custom1'">
+            	<div class="form-control-labelless">
+            		<button class="btn btn-default" bs-modal data-template="/modules/portfolio/views/modals/name-view.client.view.html" data-placement="center"><span class="et-icon-edit"></span></button>
+            		<button class="btn btn-default">Remove View</button>
+            	</div>
+            </div>
+            <div class="pull-left inline-block form-control-labelless">
+                <div class="form-control-static">OR</div>
+            </div>
+            <div class="col-xs-12 col-sm-auto">
+                <div class="form-control-labelless">
+                    <button class="btn btn-default" ng-click="viewToEdit='new'">Create New View</button>
+                </div>
+                <!-- 		<div ng-repeat="view in views track by $index">
+                                <input ng-model="config.currentView" class="radio-button" type="radio" value="{{$index}}" checked name="Position-template" id="view-{{$index}}" data-view-Name="{{view.name}}" ng-click="nameView($event, $index)">
+                                <label for="view-{{$index}}">
+                                        <h5>{{view.name}}</h5>
+                                        <span>{{view.description}}</span>
+                                </label>
+                </div> -->
+                <!-- <input ng-model="templates.current" class="radio-button" type="radio" value="periodic" name="Position-template" id="periodic" data-view-Name="Periodic Check Up View" ng-click="nameView($event)">
+                                <label for="periodic">
+                                        <h5>Periodic Check Up</h5>
+                                        <span>A view when you havne't logged on for a while</span>
+                                </label>
+                                <input ng-model="templates.current" class="radio-button" type="radio" value="daily" name="Position-template" id="daily" data-view-Name="Daily View" ng-click="nameView($event)">
+                                <label for="daily">
+                                        <h5>Daily</h5>
+                                        <span>A view for when you actively monitor your positions</span>
+                                </label>
+                                <input ng-model="templates.current" class="radio-button" type="radio" value="optionsSpecific" name="Position-template" id="options-specific" data-view-Name="Options Specific View" ng-click="nameView($event)">
+                                <label for="options-specific">
+                                        <h5>Options-Specific</h5>
+                                        <span>Fields specific to your options holdings.</span>
+                                </label>
+                                <input ng-model="templates.current" class="radio-button" type="radio" value="custom" name="Position-template" id="custom">
+                                <label for="custom">
+                                        <h5>Create New View</h5>
+                                        <span>Create a new view by choosing which fields you prefer</span>
+                </label> -->
+            </div>
+        </div>
+        <div class="row voffset2 ">
+            <div class="col-xs-12">
+                <p>2. Select security types to display in view. Change the column order by dragging a column to its desired location</p>
+            </div>
+        </div>
+        <div class="row voffset2">
+            <div class="col-xs-12 col-sm-3">
+                <label for="displayTypes">Security Types to Display (Default)</label>
+                <div>
+                    <div class="btn-group btn-group-checkboxes" dropdown auto-close="disabled">
+                        <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+                        <div class="selected-items"><span class="selected-dropdown-item" ng-repeat="visibleType in securityTypes | visibleSecurities">{{visibleType}}</span></div><span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <!-- This isn't necessarily the best markup, but I wanted to quickly hijack the existing bootstrap styling by wrapping the inputs in an `a` tag -->
+                            <li ng-repeat="type in securityTypes">
+                                <div class="dropdown-checkbox">
+                                    <input type="checkbox" ng-model="securityTypes[$index].visible" id="type-{{type.id}}"><label for="type-{{type.id}}">{{type.name}}</label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="row voffset2">
+            <!-- This is a hack, we need to find a proper responsive table component -->
+                <div class="table-editable-container">
+                    <table class="table-striped table unscrollable-col">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="type in securityTypes | visibleSecurities:true">
+                                <td>{{type}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-striped table-editable">
+                        <thead>
+                            <tr>
+                                <th>Symbol</th>
+                                <th ng-repeat="col in enabledColumns(config.allOptions)" class="custom-column" ondragenter="this.classList.add('over')" ondragleave="this.classList.remove('over');"><span draggable="true" ondragstart="event.dataTransfer.setData('text/plain','dragged text')" class="draggable-column">{{col.name}}</span></th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="type in securityTypes | visibleSecurities:true">
+                                <td>{{type}}</td>
+                                <td ng-repeat="col in enabledColumns(config.allOptions)"></td>
+                                <td class="text-right actions-column"></td>
+                        </tr>
+                    </tbody>
+                            </table>
+                </div>
+        <div class="clearfix">
+        	<div class="col-xs-12">
+        		<div class="col-xs-12 text-right">
+        			<button class="btn btn-default" ui-sref="portfolio.positions">Cancel</button>
+        			<button class="btn btn-primary" bs-modal data-template="/modules/portfolio/views/modals/name-view.client.view.html" data-placement="center">Save</button>
+        		</div>
+        	</div>
+        </div>
+        <!-- <table class="table table-striped" ng-if="positionTemplate !== 'custom'">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="column in templates.current">{{column.name}}</th>
+                            <th></th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="position in portfolio[accountId]">
+                            <td ng-repeat="column in templates.current">{{position[column.key]}}</td>
+                            <td>TODO: refactor this into controller or something
+                                <span ng-click="bellToggle = !bellToggle; $event.stopPropagation();" ng-init="bellToggle = false" ng-class="{'et-icon-bell-alt':!bellToggle, 'et-icon-bell':bellToggle}"></span>
+                            <span ng-click="documentToggle = !documentToggle; $event.stopPropagation();" ng-init="documentToggle = false" ng-class="{'et-icon-document-alt':!documentToggle, 'et-icon-document':documentToggle}"></span></td>
+                            <td class="btn-cell text-right"><a href="#" class="btn btn-success btn-xs">Trade</a></td>
+                        </tr>
+                    </tbody>
+        </table> -->
+    </div>
+</div>
+</div>
+<div class="panel">
+	<div class="col-xs-12">
+		<p>Want more? Customize up to 16 columns in your view using the list below.</p>
+		<div class="voffset3">
+	    <div class="allOptions">
+            <div class="checkbox" ng-repeat="(fieldKey, fieldData) in config.allOptions| orderObjectBy:'name'" ng-hide="fieldKey === '_id'">
+                <input type="checkbox" ng-model="fieldData.enabled" ng-value="fieldKey" id="{{fieldData.name}}" ng-disabled="enabledColCount > 15 && !fieldData.enabled">
+                <label for="{{fieldData.name}}" ng-click="config.currentView = 4;">
+                    {{fieldData.name}}
+                </label>
+            </div>
+        </div>
+	    <div class="clearfix voffset2">
+	        <!-- <div class="col-xs-12 col-md-2" ng-show="views[config.currentView].type==='custom' || views[config.currentView].name==='Create New View'">
+	            <label for="view-name">Name Your View</label>
+	            <input ng-model="viewName" type="text" class="form-control" id="view-name" placeholder="View Name">
+	        </div> -->
+	        <div class="col-xs-12 col-md-auto">
+	            <div class="label inline-block">&nbsp;</div>
+	            <!-- 	<div class="form-control-static" ng-init="loadView()">
+	                                <input type="checkbox" id="set-default" ng-model="setDefaultView">
+	                                <label for="set-default">Set this as your default Portfolio view?</label>
+	            </div> -->
+	        </div>
+	        <div class="text-right">
+	            <div class="label">&nbsp;</div>
+	            <div>
+	                <a class="" ng-if="views[config.currentView].type==='custom'" ui-sref="portfolio.positions" ng-click="deleteView()">Delete view</a>
+	                <!-- <a ng-if="views[config.currentView].type==='default'" ng-click="restoreTemplate()">Reset to original settings</a> -->
+	                <a class="btn btn-default" ui-sref="portfolio.positions">Cancel</a>
+	                <!-- <button class="btn btn-primary" ng-click="saveView();" ui-sref="portfolio.positions">Save</button> -->
+	                <button class="btn btn-primary" bs-modal data-template="/modules/portfolio/views/modals/name-view.client.view.html" data-placement="center">Save</button>
+	            </div>
+	        </div>
+	    </div>
+		</div>
+	</div>
+</div>
+</section>

@@ -1,0 +1,44 @@
+<%
+# STATIC EXAMPLE
+# 
+# server {
+#   listen 80;
+#   server_name rga-move-money.dev.etradecreative.com;
+#   root /home/deploy/nodejs/rga-move-money/current;
+#   index index.html index.htm;
+#   gzip on;
+#   gzip_types text/plain text/xml application/xml application/xml+rss
+#              text/css text/javascript application/javascript application/json;
+#   location / {
+#        proxy_pass http://127.0.0.1:9000;
+#        if ($request_filename ~* ^.*?/([^/]*?)$) {
+#            set $filename $1;
+#        }
+#        if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)$) {
+#            add_header Access-Control-Allow-Origin *;
+#        }
+#    }
+# }
+%>
+# <%= app_name %>
+server {
+  listen 80;
+  server_name <%= app_name %>.<%= nginx_server_name %>;
+
+  root <%= deploy_to %>/<%= current_path %>;
+  index index.html index.htm;
+  
+  gzip on;
+  gzip_types text/plain text/xml application/xml application/xml+rss
+             text/css text/javascript application/javascript application/json;
+
+  location / {
+      proxy_pass http://127.0.0.1:9003;
+      if ($request_filename ~* ^.*?/([^/]*?)$) {
+         set $filename $1;
+      }
+      if ($filename ~* ^.*?\.(eot)|(ttf)|(woff)$) {
+          add_header Access-Control-Allow-Origin *;
+      }
+  }
+}

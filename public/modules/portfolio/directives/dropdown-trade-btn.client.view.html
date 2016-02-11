@@ -1,0 +1,16 @@
+<div class="btn-group" dropdown>
+    <!-- There are a few extra unassigned ng-clicks below to prevent the lot row from expanding. See  $scope.toggleRow in portfolio.client.controller.js't  -->
+    <button type="button" class="btn btn-success btn-xs" ng-click="setTradeSegue(position)" ui-sref="trade">Trade</button>
+    <button type="button" class="btn btn-success btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-click>
+    <span class="caret" ng-click></span>
+    <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        <li ng-if="lotType!=='option'"><a ng-click="setTradeSegue(position, 'buy')" ui-sref="trade">Buy</a></li>
+        <li ng-if="lotType!=='option'"><a ng-click="setTradeSegue(position, 'sell')" ui-sref="trade">Sell</a></li>
+        <li ng-if="lotType=='option'"><a ng-click="setTradeSegue(position, 'add')" ui-sref="trade">Add</a></li>
+        <li ng-if="lotType=='option'"><a ng-click="setTradeSegue(position, 'roll')" ui-sref="trade">Roll</a></li>
+        <li ng-if="lotType=='option'"><a ng-click="setTradeSegue(position, 'closeOut')" ui-sref="trade">Close Out</a></li>
+        <li ng-if="lotType=='mutual-fund' && lotType!=='option'"><a ng-click="setTradeSegue(position, 'exchange')" ui-sref="trade">Exchange</a></li>
+    </ul>
+</div>

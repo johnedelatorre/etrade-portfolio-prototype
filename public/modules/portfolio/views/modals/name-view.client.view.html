@@ -1,0 +1,50 @@
+<div class="modal am-fade-and-slide-top" tabindex="-1" role="dialog" style="display: block; text-align: left;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+<div class="modal-header">
+	<h3 class="modal-title">
+		[Modal Title]
+	</h3>
+</div>
+            <span class="close" ng-click="$hide()">×</span>
+            <div class="modal-body">
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<label for="nameView">[Field Label]</label>
+						<input type="text" id="nameview" class="form-control focus-tip" ng-model="customName" maxlength="32" placeholder="" rel="tooltip" data-placement="right" data-trigger="focus" data-original-title="Maximum length is 32 characters" data-toggle="tooltip">
+            <span class='disclaimer'>Maximum length is 32 characters</span>
+					</div>
+				</div>
+                <div class="row">
+                	<div class="col-xs-12 text-right">
+                		<button type="button" class="btn btn-success" ng-click="$hide()">
+                		Save</button>
+                	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+    /*This needs to get into Etrade-bootstrap*/
+	.modal .modal-dialog{
+		max-width: 1170px !important;
+	}
+	.panel-info .et-icon-circle-info:before{
+		color: #1e88de;
+		padding: 0 .25em;
+		float: left;
+		margin-top: .25em;
+	}
+	.modal .close{
+	  z-index: 100;
+	  position: absolute;
+	  top: 5px;
+	  right: 10px;
+	  font-size: 20px;
+	  font-size: 3rem;
+	}
+	.modal-header{
+		border: none;
+	}
+    </style>
+</div>

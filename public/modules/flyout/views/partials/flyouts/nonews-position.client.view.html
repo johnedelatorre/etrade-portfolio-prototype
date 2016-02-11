@@ -1,0 +1,127 @@
+<div class="arrow"></div>
+<div class="panel">
+    <div class="panel-body">
+        <button ng-click="$hide(); $event.stopPropagation();" class="close" aria-label="close"><span aria-hidden="true">×</span></button>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <h5 class="secondary">AAPL <span class="text-muted">APPLE INC COM</span></h5>
+            </div>
+        </div>
+
+        <div class="row voffset2">
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Last Price</div>
+                <div class="secondary">$127.10</div>
+            </div>
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Today's Change</div>
+                <div class="secondary pos"> $0.54 (0.43%)</div>
+            </div>
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Volume</div>
+                <div class="secondary">26,250,847</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-4 voffset2">
+                <div ng-include="'modules/flyout/views/partials/chart.html'"></div>
+            </div>
+            
+            <div class="col-xs-12 col-md-4 flyout-data voffset2">
+                <table class="table-horizontal">
+                    <tbody>
+                        <tr>
+                            <th>Bid (Size)</th>
+                            <td class="text-right">$127 <small>x13,900</small></td>
+                        </tr>
+                        <tr>
+                            <th>Ask (Size)</th>
+                            <td class="text-right">$127.01 <small>x4,500</small></td>
+                        </tr>
+                        <tr>
+                            <th>52 Week Range</th>
+                            <td class="text-right">53.75 - 54.98</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-horizontal voffset2">
+                    <tbody>
+                        <tr>
+                            <th>P/E</th>
+                            <td class="text-right">8.83x</td>
+                        </tr>
+                        <tr>
+                            <th>EPS</th>
+                            <td class="text-right">6.121</td>
+                        </tr>
+                        <tr>
+                            <th>Next Earnings Date</th>
+                            <td class="text-right"><span>3/1/2015 </span><a href="" class="et-icon-calendar-new"></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-horizontal voffset2">
+                    <tbody>
+                        <tr>
+                            <th>Ex-Dividend Date</th>
+                            <td class="text-right">3/22/2015 </td>
+                        </tr>
+                        <tr>
+                            <th>Dividend Payable Date</th>
+                            <td class="text-right">3/22/2015 </span><a href="" class="et-icon-calendar-new"></a></td>
+                        </tr>
+                        <tr>
+                            <th>Dividend Yeild/Amount</th>
+                            <td class="text-right">0.90%/25.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table-horizontal voffset2">
+                    <tbody>
+                        <tr>
+                            <th class="special-event-before"><span>Special Event </span></th>
+                            <td class="text-right">2:1 Split</td>
+                        </tr>
+                        <tr>
+                            <th class="special-event-addition">Effective Date </th>
+                            <td class="text-right"><span>2/11/15 </span><a href="" class="et-icon-calendar-new"></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-xs-12 col-md-4 flyout-news voffset2">
+                <ul class="list-unstyled">
+                    <li class="alert alert-info">There is no news to display for AAPL</li>
+                </ul>    
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel-footer">    
+        <div class="row">
+            <div class="pull-left voffset3">
+                <div class="col-sm-auto"><time>As of 11:00 AM ET 12/31/14</time></div>
+            </div>
+            <div class="pull-right">
+                <div class="col-xs-12 col-sm-auto">
+                    <div class="checkbox">
+                      <input type="checkbox" value="" id="check1">
+                      <label for="check1">
+                        Enroll in Dividend Reinvestment
+                      </label>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-auto">
+                    <button class="btn btn-default">Quote Detail</button>
+                </div>
+                <div class="col-xs-12 col-sm-auto">
+                    <button class="btn btn-success">Trade</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    

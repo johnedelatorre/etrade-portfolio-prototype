@@ -1,0 +1,5 @@
+<section data-ng-controller="TransactionsController" data-ng-init="find()">
+	<ul>
+    <li ng-repeat="transaction in transactions">{{transaction.symbol}} - {{transaction.lastTrade}}</li>
+  </ul>
+</section>

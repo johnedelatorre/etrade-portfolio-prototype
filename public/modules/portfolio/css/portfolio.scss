@@ -1,0 +1,990 @@
+@import "../../../lib/etrade-bootstrap/src/variables";
+$light-blue:  #d4e8f7;
+
+//Why is this not already somewhere?
+img{
+    max-width: 100%;
+}
+
+.table{
+    position: relative;
+}
+
+.table-editable-container{
+    overflow: scroll;
+}
+
+.table-editable{
+    table-layout: auto;
+    width: auto;
+    min-width: 100%;
+    max-width: none;
+    th, td{
+    border-right: 1px dashed $table-border-color;
+    white-space: nowrap;
+        &:first-child{
+            border-right-style: solid;
+            width: 100px;
+        }
+    }
+    th:last-child, td:last-child{
+        border-right: none;
+        border-left: 1px solid $table-border-color;
+    }
+    tr:last-child td{
+    border-bottom: 1px solid $table-border-color;
+    }
+    td.actions-column{
+        width: auto;
+        background-color: $gray-lightest !important;
+    }
+}
+
+.table-scrollable{
+    overflow: scroll;
+}
+.table-scrollable .table{
+    width: auto;
+    max-width: none;
+}
+.table-scrollable th{
+    white-space: nowrap;
+}
+
+.flex-center{
+    align-items: center;
+    justify-content: center;
+}
+
+.actions-column{
+    width: 164px;
+    white-space: nowrap;
+    .btn-group{
+        margin-bottom: 0;
+    }
+    .dropdown-menu{
+        min-width: 100%;
+    }
+    &.all-accounts{
+        width: 105px;
+    }
+}
+.open-orders-column{
+    width: 60px;
+    width: 6rem;
+}
+
+.btn-group-checkboxes, .btn-group-checkboxes .btn{
+    width: 100%;
+}
+
+[dropdown]{
+    max-width: 100%;
+    .selected-items{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        width: calc(100% - 10px);
+        float: left;
+        text-align: left;
+    }
+}
+
+.dropdown-checkbox{
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.75;
+  color: #808080;
+  white-space: nowrap;
+  &:hover{
+    //to match bootstrap
+    background: #f5f5f5;
+  }
+  label{
+    margin: 0;
+  }
+}
+
+.selected-dropdown-item + .selected-dropdown-item:before{
+    content: ', ';
+}
+
+.btn-default.dropdown-toggle{
+    background:linear-gradient(to top, #eee, #ffffff);
+}
+
+.hackToHideTableContent tbody td:not(:first-child){
+    color: white;
+}
+
+//I have to find a better way to do this
+.form-control-labelless{
+    margin-top: 23px;
+}
+
+.et-icon-chevron-down:before, .et-icon-chevron-down.after:after{
+    line-height: 1;
+}
+
+//This needs more work, no borders when an item is 12columns wide
+.separated-columns{
+    display: flex;
+    & > [class *= "col-"]:not(:first-child){
+    border-left: 1px solid $gray-light;
+    }
+    // @media (max-width: $screen-xs) {
+    .col-xs-12{
+        border-left: none;
+    }
+    // }
+}
+.popover{
+    padding: 10px;
+}
+.popover.open-orders{
+    max-width: 75%;
+}
+.popover.quote{
+    max-width: 100%;
+    margin-right: 28px;
+    small{
+    font-size: 70%;
+    }
+    .arrow{
+    left: 20px;
+    }
+}
+.popover.margin-summary{
+    min-width: 300px;
+    max-width: 440px;
+    .table{
+    table-layout: auto;
+    }
+}
+
+.popover.symbol-alerts{
+    max-width: 300px;
+    .form-control{
+        margin-bottom: 0;
+    }
+}
+[symbol-alerts]:hover:before{
+    content:"\f0ae";
+    cursor: pointer;
+}
+[symbol-note]:hover:before{
+    color: $text-color;
+    cursor: pointer;
+}
+
+.popover.ng-animate{
+    overflow: hidden;
+    &>.arrow{
+    opacity: 0;
+    top:0;
+    }
+}
+.popover > .arrow{
+    transition: all .25s;
+}
+.popover .close{
+    z-index: 100;
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    font-size: 3rem;
+}
+
+.positions .popover>.panel, .popover>.panel:last-child>.panel-body{
+    margin-bottom:0;
+    padding: 0;
+}
+
+td>label{
+    margin-bottom: 0;
+}
+
+.colgroup-wrapped {
+    border-left: 1px solid $gray-light;
+    border-right: 1px solid $gray-light;
+    border-top: 1px solid $gray-light;
+}
+
+.positions {
+    &.table > tbody:nth-last-child(-n+2) > tr > td {
+        //border-bottom: 1px solid $gray-dark;
+    }
+    &.table > tfoot > tr > td {
+        border-top: 1px solid $gray-dark;
+        border-bottom: 1px solid $gray-dark;
+    }
+}
+.in-the-money {
+    background-color: $light-blue;
+}
+.global-header {
+    .table-horizontal {
+        th,td {
+            padding:2px 0 !important;
+            //vertical-align: bottom;
+        }
+    }
+    .et-icon-help.after:after {
+        padding: 0;
+    }
+    .panel {
+        overflow:visible;
+        margin-bottom:0;
+    }
+    .table {
+        margin-bottom: 0;
+        .table {
+            background: none;
+        }
+    }
+    .table > tbody tr td,
+    .table > tbody tr th {
+        border: none;
+    }
+    .table > tfoot:nth-last-child(-n+2) > tr > td,
+    .panel .table-horizontal > tfoot > tr > th,
+    .panel .table-horizontal > tfoot > tr > td {
+        border-top: 1px solid $gray-dark;
+        color: $gray-dark;
+        //font-weight: bold;
+    }
+        .et-purchasing-power-data {
+        font-size: 14px;
+    }
+}
+.popover {
+    .table > tbody > tr > td {
+        padding: 4px 8px;
+    }
+}
+.datapoint-sm {
+    .et-purchasing-power-label {
+        min-width: 9em;
+    }
+    .et-purchasing-power-data {
+        min-width: 6em;
+    }
+}
+.datapoint-md {
+    .et-purchasing-power-label {
+        min-width: 12em;
+    }
+}
+.datapoint-lg {
+    .et-purchasing-power-label {
+        min-width: 13em;
+    }
+}
+.datapoint-xl {
+    .et-purchasing-power-label {
+        min-width: 14em;
+    }
+    .et-purchasing-power-data {
+        min-width: 10em;
+    }
+}
+.datapoint-xxl {
+    .et-purchasing-power-label {
+        min-width: 17em;
+    }
+    .et-purchasing-power-data {
+        min-width: 7em;
+    }
+}
+.totals-row {
+    td {
+        font-weight: bold;
+    }
+}
+
+.positions.table > tfoot > .pagination-row{
+  border-top: none;
+  td{
+    border-top: none;
+    text-align: left;
+  }
+}
+
+.gains-losses{
+    .panel+.panel, .panel+.table{
+    border-top: 1px solid $gray-light;
+    }
+    // th[colspan]:not(:first-child),
+    [class *="transaction"]{
+    border-left: 1px solid $gray-light;
+    }
+    .closing-transaction{
+    border-right: 1px solid $gray-light;
+    ~ thead{
+        border-top: 1px solid $gray-light;
+    }
+    }
+    .table-horizontal td{
+    padding-left: 1em;
+    }
+    .lot-details{
+    padding: 2.5em 0
+    }
+    .firm-edit{
+    background: #ee5a36;
+    color: white;
+    width: 1em;
+    }
+}
+
+.lot-note{
+    display: inline-block;
+    color: white;
+    text-align: center;
+    line-height: 1;
+    min-width: 13px;
+    margin-right: 5px;
+}
+.firm-edit2{
+    background: green;
+    font-weight: bold;
+}
+.wash-sales{
+    background: red;
+}
+.replacement-share{
+    background: blue;
+}
+.average-cost{
+    background: rebeccapurple;
+    font-size: 8px;
+}
+
+.row-checkbox{
+    width: 35px;
+}
+
+table .actions{
+    width: 140px;
+}
+
+table .maintenance{
+    width: 75px;
+}
+
+thead tr:first-child:not(:last-child){
+    th{
+    border-bottom: none !important;
+    }
+    ~tr th{
+    border-top: none !important;
+    }
+}
+
+.toggle-link{
+    display: inline-block;
+    margin-bottom: .5em;
+}
+
+.toggle-link:hover{
+    text-decoration: none;
+}
+
+.open-orders{
+    margin: 0 auto;
+}
+
+section .panel-default, section .panel-default .panel-heading{
+    background: $off-white;
+}
+
+.suggested-links > a{
+    padding-left: 2em;
+    &:first-child{
+        padding-left: 0;
+    }
+}
+
+.panel-filters{
+    border-bottom: 1px solid $gray-light;
+}
+
+.animate-show-filters{
+    transition-property: all;
+    transition-duration: .5s;
+    &.ng-hide-add {
+        overflow: hidden;
+        max-height: 6em;
+        opacity: 1;
+    }
+    &.ng-hide-add-active {
+        max-height: 0;
+        opacity: 0;
+        // padding-top: 0;
+        // padding-bottom: 0;
+    }
+    &.ng-hide-remove {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        // padding-top: 0;
+        // padding-bottom: 0;
+    }
+    &.ng-hide-remove-active {
+        max-height: 6em;
+        opacity: 1;
+    }
+}
+
+.control [class *="et-icon-"]:after{
+    padding-left: 0;
+}
+
+.single-tab{
+    border: 1px solid $gray-light;
+    border-bottom: none;
+    padding: 0 .5em;
+    color: $link-color;
+    background: $gray-lightest;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    display: inline-block;
+    &:after{
+        font-size: .5em;
+    }
+}
+
+//This is probably dead
+td.range-visual{
+    padding-bottom: 0 !important;
+}
+.range-visual{
+    width: 130px;
+    .range-slider{
+        border-top: 3px solid gray;
+        position:relative;
+        margin-top: 8px;
+        padding-top: 3px;
+    }
+    .range-indicator{
+        border-left: 3px solid blue;
+        position: absolute;
+        top: -10px;
+        height: 10px;
+        // This transition doesn't get triggered for some reason. Maybe digest cycle doesn't change number immediately?
+        // transition: left .5s;
+    }
+}
+
+td.allStar{
+    min-width: 87px;
+}
+td.allStar span:first-of-type{
+    text-align: center;
+    background-image: url("/modules/portfolio//img/allstarfunds.gif");
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    height: 23px;
+    width: 34px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+.template-select{
+    div{
+    width: 20%;
+    float: left;
+    padding: 0 .5em;
+    margin-bottom: 1em;
+    }
+    label{
+    margin: 0 .5em;
+    width: 100%;
+    }
+}
+
+.radio-button{
+    & + label{
+    padding: .5em;
+    border: 1px solid $gray;
+    border-radius: 5px;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+    & > h5{
+    font-size: 1.5em;
+    margin: 0 0 .5em;
+    }
+    &:hover{
+    cursor: pointer;
+    }
+    &:before{
+        content: none !important;
+    }
+    }
+    &:checked + label{
+    border: 1px solid transparent;
+    box-shadow: 0 0 0 2px $brand-green;
+
+    //background: $brand-green;
+    //color: white !important;
+    & > h5{
+        color: inherit;
+    }
+    }
+}
+
+.table-auto{
+    table-layout: auto;
+}
+
+.table .nested-arrows{
+    padding-left: 20px;
+}
+
+.scrollTo{
+    transition: background 1.5s ease;
+}
+
+.scrollTo:not(.scrollTo-active){
+    transition-delay: .5s;
+}
+
+.scrollTo-active{
+    background: #9c0;
+}
+
+[class *="et-icon-"].after:after{
+    font-size: 1em;
+}
+
+.special-event{
+    // color: orange;
+}
+.special-event-addition {
+  padding-left: 18px;
+}
+a.special-event:after, th.special-event:after, .table-key .special-event:before {
+    font-family: "ETradeIcons";
+    content: ' \f09e';
+    color: $brand-green;
+}
+a.special-event-before:before, th.special-event-before:before{
+    font-family: "ETradeIcons";
+    content: ' \f09e';
+    color: $brand-green;
+    padding-right:5px;
+}
+
+//This is kind of a hack
+.et-icon-calendar-new:before{
+    content: '\f026 \f07e';
+    font-size: 1em;
+    padding: 0;
+    letter-spacing: 2px;
+}
+
+.input-sm + .et-icon-calendar:before{
+    color: $text-color;
+    margin-top: 5px;
+}
+
+.actions-column [class *="et-icon"]{
+    color: $gray-dark;
+}
+.actions-column .et-icon-bell{
+    color: #eec400;
+}
+//Ugh specificity requirements because bootstrap
+.table td.actions-column.btn-cell{
+    vertical-align: top;
+    padding-top: 5px;
+}
+
+tbody.bond, tbody.option, tbody.mutual-fund{
+    td.dayGainDollar:after,
+    td.dayGainPercent:after{
+       content:'*';
+       position: absolute;
+    }
+}
+
+//This should actually be for in-the-money options, not all options. And in that case, it's probably actually OK to use !important
+tbody.option td{
+    background: #D4E8F7 !important;
+}
+
+.badge{
+    background: #d8321d;
+    vertical-align: text-bottom;
+}
+
+
+// .nav-tabs-lg > li a{
+//     padding: 20px 16px;
+//     font-size: 40px;
+// }
+
+/*
+ * I'm lazy. this is a port from the flyouts on ETrade Bootstrap.
+ * At some point I'll do this the correct way. Sorry.
+ * 
+ */
+
+.popover-sm {
+    max-width: 410px;
+}
+.popover-auto {
+    max-width: 100%;
+    margin-right: 2.452375739%
+}
+.popover.top-left {
+    margin-top: -10px;
+    .arrow {
+      margin-left: -11px;
+      border-bottom-width: 0;
+      border-top-color: #999999;
+      border-top-color: rgba(0, 0, 0, 0.25);
+      bottom: -11px;
+      left: 5%;
+    }
+    .arrow:after {
+        content: " ";
+        bottom: 1px;
+        margin-left: -10px;
+        border-bottom-width: 0;
+        border-top-color: #ffffff;
+    }
+}
+.popover.top-right {
+    margin-top: -10px;
+    .arrow {
+        margin-left: -11px;
+        border-bottom-width: 0;
+        border-top-color: #999999;
+        border-top-color: rgba(0, 0, 0, 0.25);
+        bottom: -11px;
+        left: 90%;
+    }
+    .arrow:after {
+        content: " ";
+        bottom: 1px;
+        margin-left: -10px;
+        border-bottom-width: 0;
+        border-top-color: #ffffff;
+    }
+}
+.popover.bottom-left {
+    margin-top: 10px;
+    margin-left: -10px;
+    .arrow {
+        margin-left: 0;
+        border-top-width: 0;
+        border-bottom-color: #999999;
+        border-bottom-color: rgba(0, 0, 0, 0.25);
+        top: -11px;
+        left: 2%;
+    }
+    .arrow:after {
+        content: " ";
+        top: 1px;
+        margin-left: -10px;
+        border-top-width: 0;
+        border-bottom-color: #ffffff;
+    }
+}
+.popover.bottom-right {
+    margin-top: 10px;
+    margin-left: 20px;
+    .arrow {
+        margin-left: -11px;
+        border-top-width: 0;
+        border-bottom-color: #999999;
+        border-bottom-color: rgba(0, 0, 0, 0.25);
+        top: -11px;
+        right: 12px;
+        border-top-right-radius: 0px;
+    }
+    .arrow:after {
+        content: " ";
+        top: 1px;
+        margin-left: -10px;
+        border-top-width: 0;
+        border-bottom-color: #ffffff;
+    }
+}
+.popover {
+    padding: 10px;
+    img {
+        max-width: 100%;
+    }
+    .table-horizontal+.table-horizontal {
+        border: none;
+    }
+    .panel {
+        padding: 10px!important;
+        margin-bottom: 0;
+    }
+    .panel-body {
+        padding-top: 0;
+    }
+    .panel-footer {
+        border-top-width: 1px;  
+        padding: 20px 0 0 0;  
+        .checkbox, time {
+            margin: 8px 0 0;
+        }
+        .drip {
+            padding-left: 0;
+        }
+    }
+    .close {
+        z-index: 100;
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        font-size: 20px;
+        font-size: 3rem;
+    }
+    .et-icon-star-alt:before, 
+    .et-icon-star-alt.after:after {
+        padding: 0;
+        position: relative;
+        top: 2px;
+        color: $gray;
+    }
+    .et-icon-star:before,
+    .et-icon-star.after:after {
+        padding: 0;
+        position: relative;
+        top: 2px;
+        color: gold;
+    }
+}
+.popover-data {
+    padding-right: 20px;
+    border-right: 1px solid $gray-lighter;
+}
+.popover-news {
+    padding-left: 20px;
+}
+.popover-chart {
+    background-color: $off-white;
+    padding-bottom: 10px;
+    border: 1px solid $gray-lighter;
+    .pagination {
+        margin: 10px 0 5px 15px;
+    }
+    .et-icon-expand-window {
+        line-height: 50px;
+        margin-right: 10px;
+    }
+}
+.key-one,
+.key-two {
+    width: 12px;
+    height: 12px;
+    margin-top: 20px;
+    margin-left: 15px;
+    display: inline-block;
+    border: 1px solid $gray-light;
+}
+.key-one {
+    background: #8f2bfa;
+}
+.key-two {
+    background: #4e92df;
+}
+.allstar {
+    .label-success {
+        color: #fff;
+        padding: 6px 8px;
+    }
+}
+.in-progress {
+    color:$gray!important;
+}
+.quote h5.secondary {
+    text-transform: uppercase;
+}
+
+.quick-nav li:last-child{
+    padding-right: 0;
+}
+
+//Minor hack. Maybe to bootstrap?
+.list-news .headline > div{
+    line-height: 2;
+}
+
+.page-refresh{
+    position: relative;
+    top: -1em;
+}
+/*
+* global header tearsheet
+*/
+.global-header.popover {
+    max-width: 650px;
+}
+.global-header {
+    .label {
+        color: #fff;
+        padding: 6px 10px;
+    }
+}
+
+.allOptions{
+    columns: 5;
+    .checkbox{
+        margin-bottom: 10px;
+    }
+    .checkbox:first-child{
+        margin-top: 0;
+    }
+    .checkbox input + label{
+        padding: .25em .5em .25em 2em;
+        border-radius: 2px;
+        transition: background 1s;
+    }
+    .checkbox input:checked + label{
+        background: $gray-lighter;
+    }
+    .checkbox input:disabled + label{
+        color: $text-muted;
+    }
+}
+
+td > input ~ .error{
+    margin-top: 0;
+}
+.modal-content td input{
+    margin-bottom: 0;
+}
+
+//This fixes a really weird chrome bug where the modal goes invisible
+.modal.center .modal-dialog{
+     position: absolute !important;
+}
+
+.unscrollable-col{
+    position: absolute;
+    z-index: 2;
+    background: white;
+    width: 100px;
+    border-right: 1px solid $table-border-color;
+    td{
+        background-color: $gray-lightest !important; //Ugh bootstrap specificity war
+    }
+}
+
+th.custom-column{
+    transition: background 1s 1s;
+    text-align: center;
+    .draggable-column{
+        background: $gray-lighter;
+        border-radius: 2px;
+        color: $text-color;
+        cursor: move;
+        padding: .25em .5em;
+        transition: 1s 2s;
+    }
+    &.over{
+        border-left: 2px solid $brand-green;
+        position: relative;   
+    }
+    &.ng-enter .draggable-column{
+        transition: background 1s 0s;
+        background: transparent;
+    }
+    &.ng-enter.ng-enter-active .draggable-column{
+        background: #b6dbed;
+    }
+    &.ng-leave{
+        transition-duration: 0s;
+    }
+}
+// .btn-state{
+//     margin: .5em;
+//     input + label.btn:before{
+//         content: none;
+//     }
+//     input:checked + .btn{
+//         color: white;
+//     }
+//     input:not(:checked) + .btn-primary{
+//         background: transparent linear-gradient(to top, #EEE, #FFF) repeat scroll 0% 0%;
+//         border-color: #cacaca;
+//     }
+//     .btn{
+//         width: 100%;
+//     }
+// }
+/*
+ *------------------
+ * PAGINATION
+ *------------------
+ * eventually this will make it into ETRADE Bootstrap as the default behavior. and then it can be removed from here
+ */
+.popover {
+    .pagination>li>a, 
+    .pagination>li>span {
+        background-color: $gray-lighter;
+        border-color: $gray-light;
+    }
+    .pagination>.active>a, 
+    .pagination>.active>a:hover, 
+    .pagination>.active>a:focus, 
+    .pagination>.active>span, 
+    .pagination>.active>span:hover, 
+    .pagination>.active>span:focus {
+        background-color: #fff;
+        color: $link-color;
+    }
+    .pagination>li>a:hover, 
+    .pagination>li>a:focus, 
+    .pagination>li>span:hover, 
+    .pagination>li>span:focus {
+        background: $off-white;
+        color: $gray-darkest;
+    }
+}
+
+
+/*
+ *------------------
+ * Margin Calculator Modal
+ *------------------
+ * eventually this will make it into ETRADE Bootstrap as the default behavior. and then it can be removed from here
+ */
+
+.margin-calculator {
+    border: none !important;
+    margin: 0;
+ }
+
+.column-separator {
+  border-right: 1px solid $gray-lighter;
+  margin-left: 30px !important;
+}
+
+.margin-space-left {
+    margin-left: 30px;
+}
+
+.panel, .global-message {
+    padding: 20px 10px !important;
+}
+
+.et-purchasing-power {
+    margin-right: 20px !important;
+}
+
+.top-horizontal-break {
+    width: 1170px;
+    border-top: 5px solid $brand-green;
+    margin: 20px 0 0;
+    margin-left: -10px;
+}

@@ -1,0 +1,18 @@
+<div>
+	<ul class="list-news">
+		<li class="list-group-item clearfix" ng-repeat="symbol in portfolio[accountId] | limitTo: 10 | orderBy: sortNews" ng-controller="StoryController" ng-init="fetchStories(symbol._id)" ng-hide="!stories.NewsResponse.News">
+		    <!-- TODO: create a new controller for the article scope, fetch the article story inside that -->
+		    <a class="symbol ng-binding" href="">{{symbol._id}}</a>
+		    <div class="headline">
+			<div ng-repeat="article in stories.NewsResponse.News">
+			    <a class="ng-binding">{{article.headline}}</a>
+				<div class="pull-right">
+					<time datetime="article.time">{{article.dateTime*1000 | date: 'hh:mm a ET MM/dd/yy'}} </time>
+				    <span class="text-muted">| {{article.provider}}</span>
+				</div>
+			</div>
+			<div class="voffset2"><a href="#">See All {{symbol._id}} News</a></div>
+		    </div>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,96 @@
+<div class="row confirmation">
+    <div class="col-xs-12 col-md-12">
+        <div class="row">
+            <div class="col-md-12 voffset3 jumbotron flex et-flex-center">
+                <img src="/modules/trade/img/placeholder-widget.png">
+                <span class="secondary et-center-horizontal">Your {{transaction.conditional.type}} order has been placed</span>
+            </div>
+        </div>
+        <div class="row voffset3">
+            <div class="col-xs-4">
+                <div class="disclaimer">11/14/2015</div>
+                <div class="disclaimer">Your Account Brokerage *5855</div>
+            </div>
+            <div class="col-xs-4 text-center">
+                <h4 class="text-muted">Order # 34534: <span class="pos">{{transaction.conditional.step[0].status}}</span></h4>
+            </div>
+        </div>
+        <div class="voffset3">
+            <table class="table table-bordered" ng-show="transaction.orderType === 'buy'">
+            <thead>
+                <th colspan="2">Type</th>
+                <th>Order Type</th>
+                <th>Qty.</th>
+                <th>Symbol</th>
+                <th>Price Type</th>
+                <th ng-if="transaction.conditional.step[0].status === 'Open'">Limit Price</th>
+                <th>Term</th>
+                <th>Price</th>
+                <th>Price Executed</th>
+                <th>Status</th>
+                <th colspan="5" width="200" ng-show="transaction.conditional.step[0].status === 'Open' ">Action</th>
+                <th colspan="2" width="100" ng-show="transaction.conditional.step[0].status === 'Executed' ">Action</th>
+            </thead>
+            <tbody>
+                <tr ng-repeat="order in transaction.conditional.step">
+                    <td colspan="2" ng-show="transaction.conditional.type === 'one-triggers-all' " rowspan="2" ng-if="$first">{{transaction.conditional.type}}</td>
+                    <td colspan="2" ng-show="transaction.conditional.type === 'bracketed' " ng-if="$first">{{transaction.conditional.type}}</td>
+                    <td>{{order.orderType}}</td>
+                    <td>{{order.shares}}</td>
+                    <td>{{order.symbol}}</td>
+                    <td>{{order.priceType}}</td>
+                    <td ng-if="transaction.conditional.step[0].status === 'Open'">{{order.limitPrice}}</td>
+                    
+                    <td>{{order.term}}</td>
+                    <td>{{order.subTotalCost | currency}}</td>
+                    <td ng-if="order.status === 'Executed'">{{order.last | currency}}</td>
+                    <td ng-if="order.status === 'Open'">- -</td>
+                    
+                    <td>{{order.status}}</td>
+                    <td class="highlight-cell btn-cell actions-column" ng-show="transaction.conditional.step[0].status === 'Open' ">
+                        <a href="" class="et-icon-bell-alt alertpopover" data-template="/modules/portfolio/views/partials/symbol-alerts.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                    <td class="highlight-cell btn-cell actions-column" ng-show="transaction.conditional.step[0].status === 'Open' ">
+                        <a href="" class="et-icon-drip drippopover" data-template="/modules/trade/views/partials/flyouts/dividend-reinvestment.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                    <td class="highlight-cell btn-cell actions-column" colspan="3" ng-show="transaction.conditional.step[0].status === 'Open' ">
+                        <span><a href="">Change</a> <a href="">Cancel</a></span>
+                    </td>
+                    <td class="highlight-cell btn-cell actions-column" ng-show="transaction.conditional.step[0].status === 'Executed' ">
+                        <a href="" class="et-icon-bell-alt alertpopover" data-template="/modules/portfolio/views/partials/symbol-alerts.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                    <td class="highlight-cell btn-cell actions-column" ng-show="transaction.conditional.step[0].status === 'Executed' ">
+                       <a href="" class="et-icon-drip drippopover" data-template="/modules/trade/views/partials/flyouts/dividend-reinvestment.client.view.html" data-placement="bottom-right" data-animation="am-collapse" data-auto-close="1" bs-popover></a>
+                    </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-highlight">
+                    <span class="panel-highlight-item">
+                        <span class="label">Commission:</span>
+                        <span class="data-point">{{transaction.commission | currency}}</span>
+                    </span>
+                    <span class="panel-highlight-item">
+                        <span class="label">Total Cost:</span> 
+                        <span class="data-point">{{transaction.estimatedTotalCost | currency}}</span>
+                    </span>
+                    <span class="panel-highlight-item">
+                        <span class="label">Proceed:</span> 
+                        <span class="data-point">{{transaction.estimatedProceed | currency}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row voffset3">
+            <div class="col-md-12 text-center">
+                <button class="btn btn-default text-center">View order</button>
+                <a href="#!/portfolio" class="btn btn-default">View Portfolio</a>
+                <button class="btn btn-default" ng-click="utils.newTrade()">Place Another Trade</button>
+            </div>
+        </div>
+    </div>
+</div>
+

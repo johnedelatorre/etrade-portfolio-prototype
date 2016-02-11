@@ -1,0 +1,47 @@
+<div class="arrow"></div>
+<div class="panel">
+     <div class="panel-body">
+        <button ng-click="$hide(); $event.stopPropagation();" class="close" aria-label="close"><span aria-hidden="true">×</span></button>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <h5 class="secondary"><span>DJIND</span> <span class="text-muted">DOW JONES INDUSTRIAL AVERAGE</span></h5>
+            </div>
+        </div>
+        <div class="row voffset2">
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Last Price</div>
+                <div class="secondary">17,883.06</div>
+            </div>
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Today's Change</div>
+                <div class="secondary neg"> -152.47 (-0.85%)</div>
+            </div>
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">Volume</div>
+                <div class="secondary">59,180,973</div>
+            </div>
+        </div>
+        <div class="row voffset3">
+            <div class="col-xs-12 col-md-12 voffset2">
+                <div ng-include="'modules/flyout/views/partials/chart.html'"></div>
+            </div>
+        </div>
+        <div class="row voffset3">
+            <div class="col-xs-4 col-sm-auto">
+                <div class="label">52 Week Range</div>
+                <span>15,855 - 18,289</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">    
+        <div class="row">
+            <div class="pull-right">
+                <div class="col-xs-12 col-sm-auto">
+                    <button class="btn btn-default">View Quote Details</button>
+                </div>
+            </div>
+            <div class="col-sm-12 voffset2"><time>As of 11:00 AM ET 12/31/14</time></div>
+        </div>
+    </div>
+</div>

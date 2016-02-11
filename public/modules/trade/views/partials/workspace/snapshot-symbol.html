@@ -1,0 +1,98 @@
+
+<table ng-if="transaction.companyName !== undefined " style="width:100%;border-bottom:1px solid #dbdbdb">
+    <tr>
+        <td colspan="2" class="tertiary text-left">{{transaction.companyName}}</td>
+        <td class="text-muted text-right">{{transaction.symbol}}:NYSE</td>
+    </tr>
+</table>
+<div class="row voffset2" ng-if="transaction.companyName !== undefined ">
+    <div class="col-xs-5">
+        <table>
+            <thead>
+                <tr>
+                    <th>Last</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="secondary">{{transaction.last}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-left">${{transaction.changeClose}} ({{transaction.changeClosePercentage}})%</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-xs-7">
+        <table class="voffset2">
+            <tbody>
+                <tr>
+                    <th colspan="2" width="100">Bid (Size)</th>
+                    <td class="text-right">{{transaction.bid}} </td>
+                    <td class="text-right">({{transaction.bidSize}})</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Ask (Size)</th>
+                    <td class="text-right">{{transaction.ask}} </td>
+                    <td class="text-right">({{transaction.askSize}})</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Volume</th>
+                    <td>&nbsp;</td>
+                    <td class="text-right">{{transaction.totalVolume | million}}M</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<table ng-if="order.companyName !== undefined " style="width:100%;border-bottom:1px solid #dbdbdb">
+    <tr>
+        <td class="tertiary text-left">{{order.companyName}}</td>
+        <td class="text-muted text-right">{{order.symbol}}:NYSE</td>
+    </tr>
+</table>
+<div class="row voffset2" ng-if="order.companyName !== undefined ">
+    <div class="col-xs-5">
+        <table>
+            <thead>
+                <tr>
+                    <th>Last</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="secondary">{{order.last}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-left">${{order.changeClose}} ({{order.changeClosePercentage}})%</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="col-xs-7">
+        <table class="voffset2">
+            <tbody>
+                <tr>
+                    <th colspan="2" width="100">Bid (Size)</th>
+                    <td class="text-right">{{order.bid}} </td>
+                    <td class="text-right">({{order.bidSize}})</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Ask (Size)</th>
+                    <td class="text-right">{{order.ask}} </td>
+                    <td class="text-right">({{order.askSize}})</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Volume</th>
+                    <td>&nbsp;</td>
+                    <td class="text-right">{{order.totalVolume | million}}M</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

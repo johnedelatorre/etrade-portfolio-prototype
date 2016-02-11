@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-xs-12">
+        Order Confirmation
+    </div>
+</div>
+<div class="col-xs-8">
+    Your stock order has been placed.
+    <br>
+    <br> Trade executed in 0.15 seconds.
+    <br>
+    <br>
+    <div>
+        11/05/2014 Order #345345
+        <hr>
+        <table>
+            <thead>
+                <th>Order Type</th>
+                <th>Qty.</th>
+                <th>Symbol</th>
+                <th>Price Type</th>
+                <th>Term</th>
+                <th>Price</th>
+                <th>Bid</th>
+                <th>Ask</th>
+                <th>Last Price</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{transaction.orderType}}</td>
+                    <td>{{transaction.quantity}}</td>
+                    <td>{{transaction.symbol}}</td>
+                    <td>{{transaction.priceType}}</td>
+                    <td>{{transaction.term}}</td>
+                    <td>{{transaction.price}}</td>
+                    <td>{{transaction.bid}}</td>
+                    <td>{{transaction.ask}}</td>
+                    <td>{{transaction.last}}</td>
+                    <td>{{transaction.status}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div ng-show="transaction.orderType === 'sell'">
+            Transaction Total: {{response.transactionTotal}}<br>
+            Total Proceeds:{{response.totalProceeds}}
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-4">
+    Track This Trade
+    <br>
+    <br> [Set a price alert widget]
+    <br>
+    <br>
+
+    <ul>
+        <li>Your Trade To-Do List</li>
+        <li>Apply for Margin</li>
+        <li>Learn how to trade Options</li>
+        <li>Apply for Options Level 1</li>
+    </ul>
+
+</div>

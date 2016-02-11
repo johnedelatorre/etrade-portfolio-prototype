@@ -1,0 +1,38 @@
+{
+  "name": "trading-portfolios",
+  "version": "0.0.3",
+  "author": {
+    "name": "Patrick Ng",
+    "email": "patrick.ng@etrade.com"
+  },
+  "description": "Trading & Portfolios Prototype",
+  "dependencies": {
+    "bootstrap": "~3",
+    "angular": "~1.3",
+    "angular-resource": "~1.3",
+    "angular-mocks": "~1.3",
+    "angular-touch": "~1.3",
+    "angular-bootstrap": "~0.13",
+    "angular-ui-utils": "~0.1.1",
+    "angular-ui-router": "~0.2.11",
+    "angular-animate": "~1.3",
+    "modernizr": "~2.8.3",
+    "etrade-bootstrap": "git@bitbucket.org:etradecreative/etrade-bootstrap.git#1.0.4",
+    "etrade-prototype-nav": "git@bitbucket.org:etradecreative/bella-nav.git#master",
+    "etrade-angular-components": "git@bitbucket.org:etradecreative/etrade-angular-components.git#trading-portfolio",
+    "jquery": "~2.1.1",
+    "angular-busy": "~4.1.3",
+    "underscore": "~1.7.0",
+    "highcharts-ng": "~0.0.7",
+    "moment": "~2.9.0",
+    "ngSmoothScroll": "~1.7.1",
+    "angular-moment": "~0.9.0",
+    "angular-strap": "~2.1.6",
+    "angular-motion": "~0.3.4",
+    "bootstrap-additions": "~0.3.1",
+    "angular-spinners": "~3.0.2"
+  },
+  "resolutions": {
+    "angular-bootstrap": "~0.13"
+  }
+}

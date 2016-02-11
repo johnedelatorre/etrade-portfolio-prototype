@@ -1,0 +1,107 @@
+<div data-ng-controller="PortfolioController" data-ng-init="loadPortfolio('all')">
+    <!-- {{customViews}} -->
+    <header class="page-header row ng-scope">
+    <ul class="list-horizontal pull-right">
+        <li  ng-dblclick="clearLocalStorage();"><strong>Portfolios</strong></li>
+        <li><a href="">Orders</a></li>
+        <li><a href="">Transaction History</a></li>
+        <li><a href="">Balances</a></li>
+        <li><a href="">Watch Lists</a></li>
+    </ul>
+        <h1 class="page-title" ng-dblclick="clearLocalStorage();">Portfolios</h1>
+    </header>
+    <div class="clearfix col-xs-12">
+        <div class="col-xs-12 col-sm-auto">
+            <div class="et-select-wrapper" data-ng-controller="AccountSelectorController">
+                <select name="account" id="account" ng-model="accountId" ng-init="loadAccounts()">
+                    <option ng-repeat="account in accounts" value="{{account._id}}">{{account.displayName}}</option>
+                    <option value="all">All US Brokerage Accounts</option>
+                </select>
+            </div>
+        </div>
+    <div class="col-xs-12 col-md-6 pull-right text-right control">
+        <span href="javascript:;" class="et-icon-help text-muted">Help</span>
+        <span href="javascript:;" class="et-icon-print text-muted">Print</span>
+        <span href="javascript:;" ng-click="open()" class="et-icon-download text-muted">Download</span>
+    </div>
+    </div>
+    <section class="clearfix" ng-init="purchasingPowerOpen = true" >
+    <div><a class="toggle-link et-icon-chevron-right" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">Purchasing Power</a></div>
+    <div class="panel purchasing-power row" ng-show="portfolioLoaded && purchasingPowerOpen">
+        <button class="close" ng-click="purchasingPowerOpen=false" aria-label="Hide Purchasing Power">&times;</button>
+        <div class="col-xs-12">
+        <div class="col-xs-12 col-sm-4">
+            <div class="clearfix">
+            <div class="et-purchasing-power-label">Net Account Value</div>
+            <div class="primary inline-block">
+                {{accountDetails[accountId].value | currency}}
+            </div>
+            </div>
+            <div class="clearfix">
+            <div class="et-purchasing-power-label">Total gain</div>
+            <div class="et-purchasing-power-data secondary">
+                <span et-change="accountDetails[accountId].totalGainDollar" data-type="dollar" ></span> <span data-type="'pairedPercent'" et-change="accountDetails[accountId].totalGainPercent"></span>
+            </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <div class="clearfix">
+            <div class="et-purchasing-power-label">Day's Gain Unrealized</div>
+            <div class="et-purchasing-power-data">
+                <span data-type="dollar" et-change="accountDetails[accountId].dayGainDollar" class="day"></span> <span data-type="'pairedPercent'" et-change="accountDetails[accountId].dayGainPercent"></span>
+            </div>
+            </div>
+            <div class="clearfix">
+            <div class="et-purchasing-power-label">Day's Gain Realized</div>
+            <div class="et-purchasing-power-data">
+                <span class="day pos">$100.69 (0.69%)</span>
+            </div>
+            </div>
+            <div class="clearfix">
+            <div class="et-purchasing-power-label">Available for Withdrawal <span ng-if="accountId==accounts[1]._id" class="et-icon-help after" bs-popover data-template="/modules/portfolio/views/partials/withdrawal-summary.client.view.html"></span></div>
+            <div class="et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+            <h5>Purchasing Power <span ng-if="accountId==accounts[1]._id" class="et-icon-help after" bs-popover data-template="/modules/portfolio/views/partials/margin-summary.client.view.html"></span></h5>
+            <div ng-if="accountId !== accounts[1]._id">
+                <div class="clearfix voffset1">
+                    <div class="et-purchasing-power-label">Settled Cash</div>
+                    <div class="et-purchasing-power-data">{{accountDetails[accountId].purchasingPower | currency}}</div>
+                </div>
+                <div class="clearfix">
+                    <div class="et-purchasing-power-label">Unsettled Cash</div>
+                    <div class="et-purchasing-power-data">$0.00</div>
+                </div>
+            </div>
+            <div ng-if="accountId == accounts[1]._id">
+                <div class="clearfix voffset1">
+                    <div class="et-purchasing-power-label">Marginable Securities</div>
+                    <div class="et-purchasing-power-data">$1,000.69</div>
+                </div>
+                <div class="clearfix">
+                    <div class="et-purchasing-power-label">Non-Marginable Securities</div>
+                    <div class="et-purchasing-power-data">$670.69</div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+        <div class="clearfix">
+        <!-- <span class="single-tab et-icon-chevron-down after" ng-init="showChart==false" ng-click="showChart = !showChart" ng-class="{rotate180:showChart}">Chart</span> -->
+        </div>
+    
+    <div class="row">
+        <ul class="nav nav-tabs nav-tabs-lg nav-justified">
+        <li class="active"><a ui-sref="portfolio.positions">Positions</a></li>
+        <li ui-sref-active="active"><a ui-sref="portfolio.gains-losses">Gains/Losses</a></li>
+        <li ui-sref-active="active"><a ui-sref="portfolio.income">Estimated Income</a></li>
+        <li ui-sref-active="active"><a ui-sref="portfolio.margin">Margin</a></li>
+        <li ui-sref-active="active"><a ui-sref="portfolio.analysis">Analysis</a></li>
+        </ul>
+    </div>
+    
+    <div data-ui-view style="border-top: none;"></div>
+    </section>
+</div>
+<div ng-include="'modules/flyout/views/partials/custom-positions-table.client.view.html'" class="row"></div>

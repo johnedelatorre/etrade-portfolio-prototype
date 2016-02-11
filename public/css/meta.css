@@ -1,0 +1,36 @@
+.meta-banner{
+  background-color: rgba(250,35,18,0.6);
+  color: white;
+  cursor: default;
+  padding: 8px 20px;
+  position: fixed;
+  z-index: 9999999;
+  font-weight: bold;
+  top: 0px;
+  left: 0px;
+  width: 200px;
+  display: none;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+.meta-banner.active{
+  display: block;
+}
+
+.meta-banner.mute{
+  opacity: 0;
+  pointer-events: none;
+}
+
+.meta-banner a{
+  color: white;
+}
+
+/*
+rgb(133,20,75) // maroon
+rgb(255,220,0) // yellow
+rgb(0,116,217) // blue
+rgb(240,18,190) // pink
+rgb(46,204,64) // green
+*/

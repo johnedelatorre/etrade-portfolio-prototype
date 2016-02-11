@@ -1,0 +1,94 @@
+<div>
+    <style>
+    .or:before,.or:after {
+        content: '';
+        border-left: 1px solid gray;
+        position: absolute;
+        height: 30%;
+        left: 50%;
+    }
+    .or {
+        position: relative;
+    }
+    .or:before {
+        top: 0;
+    }
+    .or:after {
+        bottom: 0;
+    }
+    </style>
+    <div class="col-xs-12 col-md-auto">
+        <label>Time Period</label>
+        <div class="et-select-wrapper">
+            <select name="" id="" ng-model="rangeLabel">
+                <option ng-repeat="range in ranges" ng-value="range.value">{{range.name}}</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+    </div>
+    <div class="pull-left form-control-labelless form-control-static or">or</div>
+    <!-- <div class="col-xs-6 col-md-auto">
+        
+    </div> -->
+    <div class="col-xs-6 col-md-auto">
+        <label for="startDate">Start Date</label>
+        <!-- <input type="date" class="form-control" ng-model="stringDates.startDate" ng-focus="rangeLabel='custom'"> -->
+        <div class="datepicker-wrapper input-group" style="width: 210px">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="stringDates.startDate" is-open="startOpened"  datepicker-options="dateOptions" date-disabled="disabledDays(date, mode)" close-text="Close" ng-init="startOpened = false" ng-focus="rangeLabel='custom'"/>
+            <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="togglePopover('startOpened', $event)"><i class="et-icon-calendar"></i></button>
+            </span>
+        </div>
+    </div>
+    <div class="col-xs-6 col-md-auto">
+        <label for="endDate">End Date</label>
+        <!-- <input type="date" ng-model="stringDates.endDate" class="form-control" ng-focus="rangeLabel='custom'"> -->
+        <div class="datepicker-wrapper input-group" style="width: 210px">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="stringDates.endDate" is-open="endOpened"  datepicker-options="dateOptions" date-disabled="disabledDays(date, mode)" close-text="Close" ng-init="endOpened = false" ng-focus="rangeLabel='custom'"/>
+            <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="togglePopover('endOpened', $event)"><i class="et-icon-calendar"></i></button>
+            </span>
+        </div>
+    </div>
+    <!-- Old version, uses same controller code as of Feb 10, 2015 -->
+    <!-- <div>
+        <style>
+            /*This needs to go into etrade_bootstrap*/
+            /*And I need a more specific way to target the first button*/
+            .btn-group>input[type="radio"]:first-child+label.btn.btn-default{
+            border-radius: 4px;
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+            }
+            .btn-group>input[type="radio"]+label:before{
+            display: none;
+            }
+            .btn-group>input[type="radio"]+label{
+            border-left-width: 0;
+            }
+            .btn-group>input[type="radio"]:first-child+label{
+            border-left-width: 1px;
+            }
+            .btn-group>input[type="radio"]:checked+label{
+            background-color: white;
+            }
+        </style>
+        <div class="col-xs-12 col-md-auto">
+            <label>Time Period</label>
+            <div>
+                <div class="btn-group">
+                    <input ng-repeat-start="range in ranges" type="radio" ng-value="range.value" id="{{range.name}}" ng-model="$parent.rangeLabel" name="timerange"><label ng-repeat-end class="btn btn-default" for="{{range.name}}">{{range.name}}</label>
+                    <input type="radio" value="custom" id="custom" name="timerange" ng-model="rangeLabel"><label class="btn btn-default" for="custom">Custom</label>
+                </div>
+            </div>
+        </div>
+        <div ng-show="rangeLabel == 'custom'" class="col-xs-6 col-md-auto">
+            <label for="startDate">Start Date</label>
+            <input type="date" class="form-control" ng-model="stringDates.startDate">
+        </div>
+        <div ng-show="rangeLabel == 'custom'" class="col-xs-6 col-md-auto">
+            <label for="endDate">End Date</label>
+            <input type="date" ng-model="stringDates.endDate" class="form-control">
+        </div>
+    </div> -->
+</div>

@@ -1,0 +1,154 @@
+<div class="" ng-repeat="order in transaction.conditional.step">
+    <div class="panel-conditional">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row conditional-step" ng-if="order.instruction">
+                    <div class="col-xs-12">
+                        <div class="tertiary"><span class="badge">{{$index+1}} </span> <strong>Step {{$index+1}}:</strong> {{order.instruction}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel">
+                <table class="table">
+                    <thead>
+                        <th>Order Type</th>
+                        <th>Quantity</th>
+                        <th>Description</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{order.orderType}}</td>
+                            <td>{{order.shares}}</td>
+                            <td>{{order.symbol}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="panel">
+                <table class="table">
+                    <thead>
+                        <th>Price Type</th>
+                        <th ng-if="order.priceType === 'limit'">Limit Price</th>
+                        <th ng-if="!order.upperStopValue || !order.lowerStopValue">Your Price</th>
+                        <th ng-if="order.upperStopValue">Upper Trigger Value</th>
+                        <th ng-if="order.lowerStopValue">Lower Trigger Value</th>
+                        <th>Term</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{order.priceType}}</td>
+                            <th ng-if="order.priceType === 'limit'">{{order.limitPrice}}</th>
+                            <td ng-if="!order.upperStopValue || !order.lowerStopValue">{{order.last | currency}}</td>
+                            <td ng-if="order.upperStopValue">{{order.upperStopValue | currency}}</td>
+                            <td ng-if="order.lowerStopValue">{{order.lowerStopValue | currency}}</td>
+                            <td>{{order.term}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4 panel panel-default" style="margin-bottom:0;">
+            
+            <div class="snapshot-symbol voffset4" ng-include="'modules/trade/views/partials/workspace/snapshot-symbol.html'"></div>
+            
+            <div class="voffset3 disclaimer text-right">
+                <time>Real Time Quote - Last Trade 1:06 PM ET 10/8/15</time>
+            </div>
+            <div class="disclaimer text-right"><a href="">View Margin Maintence Requirement</a></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel voffset3">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-highlight">
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Commission:</span>
+                            <span class="data-point">{{transaction.commission | currency}}</span>
+                        </span>
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Total Cost:</span> 
+                            <span class="data-point">{{transaction.estimatedTotalCost | currency}}</span>
+                        </span>    
+                        <span class="panel-highlight-item">
+                            <span class="label">Estimated Proceed:</span> 
+                            <span class="data-point">{{transaction.estimatedProceed | currency}}</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 voffset3">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-5 col-lg-4">
+                            <div class="nav" ng-click="togglePurchasingPower = !togglePurchasingPower">
+                                <a class="trade-toggle-link et-icon-chevron-right et-trigger-link" ng-class="{rotate:purchasingPowerOpen}" ng-click="purchasingPowerOpen = !purchasingPowerOpen" aria-label="Toggle Purchasing Power">View impact to purchasing power</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel panel-default trade-toggle-link" ng-show="purchasingPowerOpen" ng-init="calculatePurchasingPower()">
+                                <table class="table table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th>Non-Marginable Securities/Options</th>
+                                            <th>Marginable Securities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-left" colspan="2">Purchasing power before open orders:</td>
+                                            <td>{{purchasingPower.beforeOpenOrders | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="2">Reserve for other open orders:</td>
+                                            <td>{{purchasingPower.reserve | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="2">Purchasing power impact of this order:</td>
+                                            <td>{{purchasingPowerImpactThisOrder | currency}}</td>
+                                            <td>$10,777.69</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-left" colspan="2"><strong>Purchasing power after this order:</strong></td>
+                                            <td><strong>{{purchasingPowerAfterThisOrder | currency}}</strong></td>
+                                            <td><strong>$10,777.69</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 trade-footer">
+                    <div class="col-xs-12 col-md-5 col-lg-5 voffset3">
+                        <a href="" class="btn btn-default" ng-click="step.current = 1; clearItems();">Cancel Order</a>
+                        <a href="" class="btn btn-default" ng-click="step.current = 1; startLiveUpdate();">Change Order</a>
+                    </div>
+                    <div class="col-xs-12 col-md-6 col-lg-7 voffset3 pull-right">
+                        <a href="" class="btn btn-primary pull-right" ng-click="createStock()">Place Order</a>
+                        <span class="text-muted col-xs-8 pull-right">You are placing a firm order. Click only once to avoid placing multiple orders.</span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

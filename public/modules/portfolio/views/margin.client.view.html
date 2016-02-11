@@ -1,0 +1,345 @@
+<section data-ng-controller="MarginController">
+    <div class="clearfix voffset2 separated-columns">
+	<div class="col-md-2">
+	    <div class="label">Total Margin Requirements</div>
+	    <div class="secondary">${{requirementsTotal(requirements) | number: 2}}</div>
+	</div>
+	<div class="col-md-10">
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Equities</div>
+		<div class="secondary">${{requirementsTotal(requirements) | number: 2}}</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Bonds</div>
+		<div class="secondary">$0.00</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Options</div>
+		<div class="secondary">$0.00</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Money Market & Mutual Funds</div>
+		<div class="secondary">$0.00</div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix separated-columns voffset3">
+	<div class="col-md-2">
+	    <div class="label">Total Margin Equity</div>
+	    <div class="secondary">${{requirementsTotal(requirements)*5 | number: 2}}</div>
+	</div>
+	<div class="col-md-10">
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Margin Market Value Long</div>
+		<div class="secondary">${{requirementsTotal(requirements)*3 | number: 2}}</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Margin Market Value Short</div>
+		<div class="secondary">$0.00</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Short Reserve</div>
+		<div class="secondary">$0.00</div>
+	    </div>
+	    <div class="col-xs-12 col-md-2">
+		<div class="label">Net Cash/Margin Balance</div>
+		<div class="secondary">${{requirementsTotal(requirements)*4 | number: 2}}</div>
+	    </div>
+
+	    <div class="col-md-2 margin-calculator">
+	    	<h4>Margin Tools</h4>
+	    	<!-- You can use a custom html template with the `data-template` attr -->
+	    	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+		    <div class="col-xs-12 col-sm-auto pull-right">
+	    		<button class="btn btn-default form-control-labelless" ng-click="showModal()" bs-modal="modal" content="default" data-template="/modules/portfolio/views/margin-calculator-modal.view.html" contentTemplate="/modules/portfolio/views/margin-calculator-modal.view.html" data-animation="am-fade" data-container="body" data-placement="center">Margin Tools</button>
+    		</div>
+		</div>
+
+	</div>
+    </div>
+    <div class="top-horizontal-break">
+    &nbsp;
+    </div>
+    <div class="clearfix">
+	<div class="form-control-static col-xs-12">
+	    <a class="et-icon-chevron-right toggle-link" ng-click="showFilters= !showFilters" ng-init="showFilters = false" ng-class="{rotate:showFilters}">Filters</a>
+	</div>
+    </div>
+    <div class="clearfix" ng-show="showFilters">
+	<div class="col-xs-12 col-sm-6 col-md-2">
+	    <label for="symbolFilter">Symbol</label>
+	    <input type="text" placeholder="Symbol" name="symbolFilter" ng-model="filters.symbolFilter" class="form-control">
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-2">
+	    <label for="securityTypeFilter">Security Type</label>
+	    <div class="et-select-wrapper">
+		<select name="securityTypeFilter" ng-model="filters.securityTypeFilter">
+		    <option value="!">All</option>
+		    <option value="stocks">Stocks</option>
+		    <option value="options">Options</option>
+		    <option value="bonds">Bondss</option>
+		</select>
+	    </div>
+        </div>
+    </div>
+    <div class="row">
+	<table class="table table-expandable table-striped">
+	    <colgroup class="row-checkbox"></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup></colgroup>
+	    <colgroup class="maintenance" span="2"></colgroup>
+	    <colgroup class="actions-column"></colgroup>
+	    <thead>
+		<tr class="top-thead-row">
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th></th>
+		    <th colspan="2" class="text-center">Maintenance Requirement</th>
+		    <th></th>
+		</tr>
+		<tr>
+		    <th></th>
+		    <th>Symbol</th>
+		    <th>Security Type</th>
+		    <th class="text-right">Qty #</th>
+		    <th class="text-right">Price $</th>
+		    <th class="text-right">Value $</th>
+		    <th class="text-center">Marginable?</th>
+		    <th class="text-center">Strategy</th>
+		    <th class="text-left">%</th>
+		    <th class="text-right">$</th>
+		    <th class="text-center">Actions</th>
+		</tr>
+	    </thead>
+	    <tfoot>
+	    <tr class="totals-row">
+		<td></td>
+		<td colspan="7">Total Margin Requirement</td>
+		<td></td>
+		<td class="text-right">{{visibleRequirementsTotal() | number: 2}}</td>
+		<td></td>
+	    </tr>
+	    <tr>
+		<td colspan="11">
+		    <div class="disclaimer text-left">Real Time Quotes *mutual fund quotes as of previous day</div>
+		</td>
+	    </tr>
+	    <tr>
+		<td colspan="11">
+		    <div class="col-xs-12">
+			<a scroll-to="calculator" class="btn btn-primary">Calculate</a>
+		    </div>
+		</td>
+	    </tr>
+	    </tfoot>
+	    <tbody ng-repeat="position in portfolio[accountId] | filter:{_id:filters.symbolFilter}">
+		<tr>
+		    <td>
+			{{symbolFilter}} <input type="checkbox" value="{{position._id}}" id="check-{{position._id}}"><label for="check-{{position._id}}">&nbsp;</label>
+		    </td>
+		    <td><a href="" et-quick-quote="position" symbol="position._id">{{position._id}}</a></td>
+		    <td style="text-transform: capitalize">{{position.lots[0].lotType}}</td>
+		    <td class="text-right">{{position.quantity}}</td>
+		    <td class="text-right">{{position.lastTrade}}</td>
+		    <td class="text-right">{{position.value}}</td>
+		    <td class="text-center">No</td>
+		    <td>{{position.lots[0].strategy}}</td>
+		    <td>{{[20,25][$index%2]}}</td>
+		    <td class="text-right" ng-init="requirements[position._id]=([20,25][$index%2] * .01 * position.value)">{{requirements[position._id] | number:2}}</td>
+		    <td class="btn-cell actions-column"><!--TODO: refactor this into controller or something-->
+		    <span symbol-alerts></span>
+		    <span symbol-note></span>
+		    <dropdown-trade-btn></dropdown-trade-btn>
+		</td>
+	    </tr>
+	</tbody>
+    </table>
+</div>
+<div class="clearfix voffset2">
+    <div class="col-xs-12">
+	<p class="disclaimer">Whenever your Margin Equity falls below the $2,000 minimum equity required in a margin accountm your available Purchasing Power for Marginable Securities and Non-Marginable Securities/Options will be limited to your net cash.</p>
+	<p class="disclaimer">
+	Please note that E*TRADE Securities reserves the right to increase the marign requirement at any moment without prior notice.
+	</p>
+	<p class="disclaimer">Long options are not marginable and do not have a margin loan value and as such they do not contribute to margin equity or to the total margin requirement. However short options - even though non-marginable - do have a margin requirement.</p>
+    </div>
+</div>
+
+<!-- Margin Calculator Starts -->
+<!--
+<div class="clearfix">
+    <div class="panel panel-default">
+	<div class="clearfix">
+	    <div class="col-xs-12">
+		<div class="clearfix panel" id="research">
+		    <div class="panel-heading">
+			<div class="panel-title">Research margin maintenance requirements</div>
+		    </div>
+		    <div class="panel-body">
+			<div class="col-xs-11 col-md-5">
+			    <input type="text" class="form-control" ng-model="research.symbolsString" ng-change="updateResearch()" placeholder="Enter symbol(s) or CUSIP(s)">
+			</div>
+			<label class="form-control-static" for="">Enter multiple symbols separated by commas</label>
+			<table class="table table-striped table-auto" ng-if="research.symbols.length && research.symbols[0] !==''">
+			    <colgroup span="2"></colgroup>
+			    <colgroup class="colgroup-wrapped" span="3"></colgroup>
+			    <colgroup></colgroup>
+			    <thead>
+				<tr class="top-thead-row">
+				    <th colspan="2"></th>
+				    <th colspan="3" class="text-center">Requirements</th>
+				    <th></th>
+				</tr>
+				<tr>
+				    <th>Symbol</th>
+				    <th>Description</th>
+				    <th>Long %</th>
+				    <th>Short %</th>
+				    <th>Naked Options %</th>
+				    <th class="actions-column text-center">Actions</th>
+				</tr>
+			    </thead>
+			    <tfoot>
+			    <tr>
+				<td class="disclaimer" colspan="6">Real Time Quotes *mutual fund quotes as of previous day</td>
+			    </tr>
+			    </tfoot>
+			    <tbody>
+				<tr ng-repeat="position in research.symbols">
+				    <td>{{position}}</td>
+				    <td>{{position}} Description</td>
+				    <td>25</td>
+				    <td>30</td>
+				    <td>20</td>
+				    <td class="btn-cell actions-column text-center"><span symbol-alerts="{{position}}"></span><button class="btn btn-success btn-xs">Trade</button><span class="et-icon-cancelx"></span></td>
+				</tr>
+			    </tbody>
+			</table>
+		    </div>
+		</div>
+	    </div>
+	</div>
+	<div class="clearfix">
+	    <div class="col-xs-12">
+		<div class="clearfix panel" id="calculator">
+		    <div class="panel-heading">
+			<h3 class="panel-title"><strong>What If?</strong> Calculate the impact of prospective trades on your balances</h3>
+		    </div>{{showData}}
+		    <div class="panel-body" ng-init="symbol=''; hideData = true;">
+			<div ng-include="'/modules/portfolio/views/margin-calculator.client.view.html'"></div>
+			
+			<table class="table voffset3" ng-class="{'hackToHideTableContent':(hideData || symbol.length===0)}">
+			    <colgroup></colgroup>
+			    <colgroup></colgroup>
+			    <colgroup span="2" class="colgroup-wrapped"></colgroup>
+			    <thead>
+				<tr class="top-thead-row">
+				    <th></th>
+				    <th></th>
+				    <th colspan="2" class="text-center">Order(s) Impact</th>
+				</tr>
+				<tr>
+				    <th></th>
+				    <th class="text-right">Current Balances and Purchasing Power $</th>
+				    <th class="text-right">Change in Account Balance $</th>
+				    <th class="text-right">Projected Balance $</th>
+				</tr>
+			    </thead>
+			    <thead>
+				<tr>
+				    <th colspan="4"><h4>Purchasing Power</h4></th>
+				</tr>
+			    </thead>
+			    <tbody>
+				<tr>
+				    <td>Marginable Securities</td>
+				    <td class="text-right">215.71</td>
+				    <td class="neg text-right">-34.01</td>
+				    <td class="text-right">181.70</td>
+				</tr>
+				<tr>
+				    <td>Non-Marginable Securities</td>
+				    <td class="text-right">415.11</td>
+				    <td class="neg text-right">-38.42</td>
+				    <td class="text-right">376.69</td>
+				</tr>
+				<tr>
+				    <td>Margin Equity</td>
+				    <td class="text-right">135.41</td>
+				    <td class="neg text-right">35.72</td>
+				    <td class="text-right">99.69</td>
+				</tr>
+				<tr>
+				    <td>Margin Maintenance Requirement</td>
+				    <td class="text-right">3,114.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">2,880.70</td>
+				</tr>
+				<tr>
+				    <td>House Excess</td>
+				    <td class="text-right">315.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">81.70</td>
+				</tr>
+				<tr>
+				    <td>SMA</td>
+				    <td class="text-right">315.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">81.70</td>
+				</tr>
+			    </tbody>
+			    <thead>
+				<tr>
+				    <th>
+					<h4>Available for Withdrawal</h4>
+				    </th>
+				</tr>
+			    </thead>
+			    <tbody>
+				<tr>
+				    <td>Cash Available for Withdrawal</td>
+				    <td class="text-right">315.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">81.70</td>
+				</tr>
+				<tr>
+				    <td>Margin Available for Withdrawal</td>
+				    <td class="text-right">315.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">81.70</td>
+				</tr>
+			    </tbody>
+			    <thead>
+				<tr>
+				    <th><h4>Margin/Lverage</h4></th>
+				</tr>
+			    </thead>
+			    <tbody>
+				<tr>
+				    <td>Net Cash Margin/Margin Balance</td>
+				    <td class="text-right">315.71</td>
+				    <td class="neg text-right">-234.01</td>
+				    <td class="text-right">81.70</td>
+				</tr>
+			    </tbody>
+			</table>
+		    </div>
+		</div>
+	    </div>
+	</div>
+    </div>
+</div>
+-->
+<!-- Margin Calculator Starts -->
+
+</section>
